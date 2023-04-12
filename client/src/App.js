@@ -1,58 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
-
+import "./App.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Login from "./components/authentication/login/login";
+import Signup from "./components/authentication/signup/signup-step-one";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
+import theme from "./theme";
+import Toggle from "./components/toggle";
+import SplashScreenOne from "./components/splash/splashScreenOne";
+import SplashScreenTwo from "./components/splash/splashScreenTwo";
+import SplashScreenThree from "./components/splash/splashScreenThree";
+import GetOTP from "./components/authentication/signup/getotp";
+import CreateAccount from "./components/authentication/signup/createAccount";
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    return (
+        <ChakraProvider>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+            {/* <Navbar /> */}
+            <Routes>
+                <Route path="/" element={<Navigate to="/welcome" />} />
+                <Route path="/welcome" element={<SplashScreenOne />} />
+                <Route path="splashtwo" element={<SplashScreenTwo />} />
+                <Route path="splashthree" element={<SplashScreenThree />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/otpverification" element={<GetOTP />} />
+                <Route path="/createAccount" element={<CreateAccount />} />
+            </Routes>
+            {/* <Footer /> */}
+            <Toggle />
+        </ChakraProvider>
+    );
 }
 
 export default App;
