@@ -3,6 +3,8 @@ const router = Router();
 //***import controller */
 const controller = require('../controllers/appController');
 const { authMiddleware, localVariables } = require('../middlewares/auth');
+const registerMail = require('../controllers/mailer');
+router.route('/registerMail').post(registerMail);
 // POST Method
 router.route('/register').post(controller.register); // register user
 // router.route('/registerMail').post(); // send the email
