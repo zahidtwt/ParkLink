@@ -2,7 +2,26 @@ const UserModel = require('../model/User.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const ENV = require('../config');
+
 module.exports = controller = {
+  /*** Middleware for verify user */
+
+  verifyUser: async function (req, res, next) {
+    try {
+      const { username } = req.method === 'GET' ? req.query : req.body;
+
+      // Check if the user exists
+      const user = await UserModel.findOne({ username });
+      if (!user) return res.status(404).send({ error: "Can't find user 😒" });
+
+      // User exists, proceed to the next middleware/controller
+      next();
+    } catch (error) {
+      // Authentication error occurred
+      return res.status(401).send({ error: 'Authentication error' });
+    }
+  },
+
   /** POST: http://localhost:8080/api/register 
  * @param : {
   "username" : "example123",
@@ -101,20 +120,63 @@ module.exports = controller = {
     }
   },
 
-  /** GET: http://localhost:8080/api/user/example123 */
-  getUser: async function (req, res) {},
+  /** GET: http://localhost:8080/api/user/example123
+   * Get user by username
+   */
+  getUser: async function (req, res) {
+    try {
+      const { username } = req.params;
 
-  /** PUT: http://localhost:8080/api/updateuser 
- * @param: {
-  "header" : "<token>"
-}
-body: {
-    firstName: '',
-    address : '',
-    profile : ''
-}
-*/
-  updateUser: async function (req, res) {},
+      // Check for valid username
+      if (!username) {
+        return res.status(400).send({ error: 'Invalid username' });
+      }
+
+      // Find user by username
+      const user = await UserModel.findOne({ username });
+      if (!user) {
+        return res.status(404).send({ error: "Couldn't find the user" });
+      }
+
+      // Remove password from user object
+      const { password, ...userData } = user.toJSON();
+
+      return res.status(200).send(userData);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send({ error: 'Internal server error' });
+    }
+  },
+
+  /** PUT: http://localhost:8080/api/updateuser */
+  updateUser: async function (req, res) {
+    try {
+      // Get user ID from authentication middleware
+      const { userId } = req.user;
+
+      if (userId) {
+        const body = req.body;
+
+        // Check if there are any changes made to user data
+        if (Object.keys(body).length === 0) {
+          return res
+            .status(400)
+            .send({ error: 'No changes made to User Data!' });
+        }
+
+        // Update the user data
+        const result = await UserModel.updateOne({ _id: userId }, body);
+
+        return res.status(201).send({ msg: 'Record Updated...!' });
+      } else {
+        // User not found
+        return res.status(401).send({ error: 'User Not Found...!' });
+      }
+    } catch (error) {
+      // Error occurred while updating user data
+      return res.status(401).send({ error });
+    }
+  },
 
   /** GET: http://localhost:8080/api/generateOTP */
   generateOTP: async function (req, res) {},
