@@ -14,6 +14,7 @@ const userSchema = new Schema(
         /^[a-zA-Z0-9_-]{3,20}$/,
         'Username can only contain letters, numbers, underscores, and hyphens.',
       ],
+      lowercase: true,
     },
     password: {
       type: String,
@@ -58,6 +59,8 @@ const userSchema = new Schema(
     },
   },
   { timestamps: true }
+  // automatically adds two fields to the schema: createdAt and updatedAt. These fields
+  // track when a document was created and when it was last updated.
 );
 
 const User = mongoose.model('User', userSchema);
