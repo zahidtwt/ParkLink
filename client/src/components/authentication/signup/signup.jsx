@@ -1,3 +1,4 @@
+import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import {
     Flex,
     Input,
@@ -5,27 +6,27 @@ import {
     Button,
     InputGroup,
     FormControl,
-    WrapItem,
-    Avatar,
+    InputLeftAddon,
     Box,
     AlertIcon,
     AlertTitle,
     Alert,
     InputRightElement,
     Text,
+    Heading,
 } from "@chakra-ui/react";
 
-import avatar from "./avatar.svg";
 import { useFormik } from "formik";
 import { useState } from "react";
-import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
-export default function Login() {
+export default function Signup() {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
-
     const formik = useFormik({
         initialValues: {
+            number: "1953534243",
+            name: "",
+            email: "",
             password: "",
         },
         validate: async (values) => {
@@ -43,7 +44,7 @@ export default function Login() {
             console.log(values);
         },
     });
-    // formik setup for form validation
+
     return (
         <FormControl isRequired>
             <Flex
@@ -51,30 +52,34 @@ export default function Login() {
                 justifyContent={"center"}
                 justifyItems={"center"}
                 alignItems={"center"}>
-                <VStack
-                    shadow={"md"}
-                    w="350px"
-                    p="10px"
-                    spacing={10}
-                    borderRadius={10}>
-                    <WrapItem>
-                        <Avatar size="2xl" name="Segun Adebayo" src={avatar} />{" "}
-                    </WrapItem>
+                <VStack shadow={"md"} w="350px" p="10px" borderRadius={10}>
                     <VStack h={15}></VStack>
-
                     <form onSubmit={formik.handleSubmit}>
-                        <Box h={"50px"} mb={5}>
-                            {formik.errors.password && (
-                                <Alert status="error">
-                                    <AlertIcon />
-                                    <AlertTitle>
-                                        {formik.errors.password}
-                                    </AlertTitle>
-                                </Alert>
-                            )}
-                        </Box>
+                        <VStack spacing={5}>
+                            <Heading mb={10}>Welcome to ParkLink</Heading>
 
-                        <Box mb={5}>
+                            <InputGroup>
+                                <InputLeftAddon children="+880" />
+                                <Input
+                                    {...formik.getFieldProps("number")}
+                                    type="tel"
+                                    placeholder="Phone number"
+                                    name="number"
+                                    disabled
+                                />
+                            </InputGroup>
+                            <Input
+                                {...formik.getFieldProps("name")}
+                                type="text"
+                                placeholder="Full Name"
+                                id="name"
+                            />
+                            <Input
+                                {...formik.getFieldProps("email")}
+                                type="email"
+                                id="email"
+                                placeholder="Email Address"
+                            />
                             <InputGroup>
                                 <Input
                                     {...formik.getFieldProps("password")}
@@ -84,6 +89,7 @@ export default function Login() {
                                     // variant={"filled"}
                                     id="password"
                                 />
+
                                 <InputRightElement>
                                     <Text
                                         h="1.75rem"
@@ -93,15 +99,24 @@ export default function Login() {
                                     </Text>
                                 </InputRightElement>
                             </InputGroup>
-                        </Box>
-
-                        <Button
-                            size="lg"
-                            colorScheme="purple"
-                            w={"100%"}
-                            type="submit">
-                            Next
-                        </Button>
+                            <Box>
+                                {formik.errors.password && (
+                                    <Alert status="error">
+                                        <AlertIcon />
+                                        <AlertTitle>
+                                            {formik.errors.password}
+                                        </AlertTitle>
+                                    </Alert>
+                                )}
+                            </Box>
+                            <Button
+                                size="lg"
+                                colorScheme="purple"
+                                w={"100%"}
+                                type="submit">
+                                Sign up
+                            </Button>
+                        </VStack>
                     </form>
                 </VStack>
             </Flex>

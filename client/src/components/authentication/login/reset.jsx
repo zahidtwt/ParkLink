@@ -5,33 +5,32 @@ import {
     Button,
     InputGroup,
     FormControl,
-    WrapItem,
-    Avatar,
     Box,
     AlertIcon,
     AlertTitle,
     Alert,
     InputRightElement,
     Text,
+    Heading,
 } from "@chakra-ui/react";
 
-import avatar from "./avatar.svg";
 import { useFormik } from "formik";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
-export default function Login() {
+export default function Reset() {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
 
     const formik = useFormik({
         initialValues: {
             password: "",
+            confirm_password: "",
         },
         validate: async (values) => {
             const errors = {};
-            if (!values.password) {
-                errors.password = "Can't leave empty";
+            if (values.password !== values.confirm_password) {
+                errors.password = "Password doesn't match!";
             } else if (values.password.length <= 6) {
                 errors.password = "Minimum 6 characters required.";
             }
@@ -57,13 +56,10 @@ export default function Login() {
                     p="10px"
                     spacing={10}
                     borderRadius={10}>
-                    <WrapItem>
-                        <Avatar size="2xl" name="Segun Adebayo" src={avatar} />{" "}
-                    </WrapItem>
-                    <VStack h={15}></VStack>
+                    <Heading>Reset Password</Heading>
 
                     <form onSubmit={formik.handleSubmit}>
-                        <Box h={"50px"} mb={5}>
+                        <Box h={""} mb={5}>
                             {formik.errors.password && (
                                 <Alert status="error">
                                     <AlertIcon />
@@ -80,9 +76,31 @@ export default function Login() {
                                     {...formik.getFieldProps("password")}
                                     pr="4.5rem"
                                     type={show ? "text" : "password"}
-                                    placeholder="Password"
+                                    placeholder="Enter New Password"
                                     // variant={"filled"}
                                     id="password"
+                                />
+
+                                <InputRightElement>
+                                    <Text
+                                        h="1.75rem"
+                                        size="sm"
+                                        onClick={handleClick}>
+                                        {show ? <ViewOffIcon /> : <ViewIcon />}
+                                    </Text>
+                                </InputRightElement>
+                            </InputGroup>
+                            <Box mb={5}></Box>
+                            <InputGroup>
+                                <Input
+                                    {...formik.getFieldProps(
+                                        "confirm_password"
+                                    )}
+                                    pr="4.5rem"
+                                    type={show ? "text" : "password"}
+                                    placeholder="Repeat Password"
+                                    // variant={"filled"}
+                                    id="confirm_password"
                                 />
                                 <InputRightElement>
                                     <Text

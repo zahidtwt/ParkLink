@@ -6,6 +6,7 @@ import {
     VStack,
     Button,
     Text,
+    Heading,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 function GetOTP() {
@@ -21,6 +22,7 @@ function GetOTP() {
                 p="10px"
                 spacing={10}
                 borderRadius={10}>
+                <Heading>OTP Verification</Heading>
                 <HStack>
                     <PinInput size="lg" otp colorScheme="blue">
                         <PinInputField />

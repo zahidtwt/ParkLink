@@ -20,7 +20,7 @@ import { useFormik } from "formik";
 import { useState } from "react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 
-export default function Login() {
+export default function Recovery() {
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
 

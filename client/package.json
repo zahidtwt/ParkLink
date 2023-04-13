@@ -11,6 +11,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
+    "formik": "^2.2.9",
     "framer-motion": "^10.11.6",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.1",
