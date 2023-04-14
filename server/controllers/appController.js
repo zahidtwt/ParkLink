@@ -82,10 +82,10 @@ module.exports = controller = {
       await user.save();
 
       // Send a success response
-      res.status(201).send({ msg: 'User Registered Successfully' });
+      res.status(201).send(user);
     } catch (error) {
       // Handle any errors
-      res.status(500).send({ error: error });
+      res.status(500).send({ error: error.message });
     }
   },
   /** POST: http://localhost:8080/api/login 

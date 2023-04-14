@@ -17,7 +17,9 @@ import {
   HStack,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRegisterMutation } from '../../../features/auth/authApi';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [show, setShow] = useState(false);
@@ -25,12 +27,43 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
+  const [signup, { data, isLoading, error, isError }] = useRegisterMutation();
+  const navigate = useNavigate(); // add this
+
   const onSubmit = async (values) => {
-    console.log(values);
+    try {
+      await signup({
+        // wait for the signup to complete
+        email: values.email,
+        password: values.password,
+        mobile:
+          values.number.length > 10
+            ? values.number.substring(values.number.length - 10)
+            : values.number,
+        username:
+          values.firstName + values.number.substring(values.number.length - 4),
+      });
+      reset();
+    } catch (err) {
+      console.log(err);
+    }
   };
+  useEffect(() => {
+    if (error?.data) {
+      console.log(error.data);
+    }
+    if (data) {
+      navigate('/login', {
+        state: { signup: true, mobile: data?.user?.mobile },
+      });
+    }
+  }, [error, data, navigate]);
+
+  useEffect(() => {}, [error]);
 
   return (
     <FormControl isRequired>
@@ -44,6 +77,14 @@ export default function Signup() {
           <form onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={5}>
               <Heading mb={10}>Welcome to ParkLink</Heading>
+              <Box>
+                {isError && (
+                  <Alert status='error'>
+                    <AlertIcon />
+                    <AlertTitle>{error?.data?.error}</AlertTitle>
+                  </Alert>
+                )}
+              </Box>
               <InputGroup>
                 <InputLeftAddon children='+880' />
                 <Input
@@ -54,13 +95,12 @@ export default function Signup() {
                 />
               </InputGroup>
               <HStack>
-                {' '}
                 <Input
                   {...register('firstName')}
                   type='text'
                   placeholder='First Name'
                   id='firstName'
-                />{' '}
+                />
                 <Input
                   {...register('lastName')}
                   type='text'
@@ -68,7 +108,7 @@ export default function Signup() {
                   id='lastName'
                 />
               </HStack>
-              =
+
               <Input
                 {...register('email')}
                 type='email'
@@ -105,7 +145,13 @@ export default function Signup() {
                   </Alert>
                 )}
               </Box>
-              <Button size='lg' colorScheme='purple' w={'100%'} type='submit'>
+              <Button
+                isLoading={isLoading}
+                size='lg'
+                colorScheme='purple'
+                w={'100%'}
+                type='submit'
+                loadingText='Signing up'>
                 Sign up
               </Button>
             </VStack>

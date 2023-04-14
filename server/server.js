@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.status(201).json('Home get request');
 });
 // api routers
-app.use('/api', router);
+app.use('/auth', router);
 
 app.listen(port, () => {
   console.log(`🚀  http://localhost:${port}`);

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { verifyMobiles } from './authAPI';
+import { verifyMobiles } from './verifyNumberAuthAPI';
 const initialState = {
   username: undefined,
   mobile: '',
@@ -16,7 +16,7 @@ export const verifyMobile = createAsyncThunk(
 );
 
 //create Slice
-const userSlice = createSlice({
+const verifyMobileSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {},
@@ -37,4 +37,4 @@ const userSlice = createSlice({
       });
   },
 });
-export default userSlice.reducer;
+export default verifyMobileSlice.reducer;

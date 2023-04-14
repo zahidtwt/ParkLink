@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Flex,
@@ -21,11 +21,13 @@ import {
 import avatar from './avatar.svg';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useLoginMutation } from '../../../features/auth/authApi';
 
 export default function Login() {
-  const { username, mobile } = useSelector((state) => state.user);
-
+  const { username, mobile } = useSelector((state) => state.verifyMobile);
+  const Navigate = useNavigate();
+  const [login, { data, isLoading, error }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const {
     handleSubmit,
@@ -33,9 +35,22 @@ export default function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    try {
+      await login({
+        username,
+        password: values.password,
+      });
+    } catch (err) {}
   };
+  useEffect(() => {
+    if (error?.data) {
+      console.log(error.data);
+    }
+    if (data) {
+      Navigate('/profile');
+    }
+  }, [error, data, Navigate]);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -54,6 +69,12 @@ export default function Login() {
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box h={'20px'} mb={10}>
+              {error?.data?.error && (
+                <Alert status='error' mb={5} borderRadius={10}>
+                  <AlertIcon />
+                  <AlertTitle>{error?.data?.error}</AlertTitle>
+                </Alert>
+              )}
               {errors.password && (
                 <Alert status='error'>
                   <AlertIcon />
@@ -65,6 +86,7 @@ export default function Login() {
               <InputGroup>
                 <InputLeftAddon children='+880' />
                 <Input
+                  value={mobile}
                   type='tel'
                   placeholder={mobile}
                   name='number'
@@ -100,8 +122,14 @@ export default function Login() {
               </InputGroup>
             </Box>
 
-            <Button size='lg' colorScheme='purple' w={'100%'} type='submit'>
-              Next
+            <Button
+              size='lg'
+              isLoading={isLoading}
+              colorScheme='purple'
+              w={'100%'}
+              type='submit'
+              loadingText='Signing in...'>
+              Sign in
             </Button>
           </form>
           <Text fontSize={'lg'}>

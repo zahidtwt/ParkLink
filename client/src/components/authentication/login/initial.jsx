@@ -23,30 +23,45 @@ import {
 import avatar from './avatar.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { verifyMobile } from '../../../features/authentication/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { verifyMobile } from '../../../features/verifyNumber/verifyNumberAuthSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
-
 export default function InitialCheck() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
   const dispatch = useDispatch();
-  const { username, error } = useSelector((state) => state.user);
+  const { username, error, isLoading } = useSelector(
+    (state) => state.verifyMobile
+  );
+  // get signup true from url param
+  const { state } = useLocation();
+  const isSignupSuccess = state?.signup;
+  const signedMobile = state?.mobile || '';
+
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = async (data) => {
-    await dispatch(verifyMobile(data.number));
+  const onSubmit = async (values) => {
+    try {
+      let inputNumber =
+        values.number.length > 10
+          ? values.number.substring(values.number.length - 10)
+          : values.number;
+      await dispatch(verifyMobile(inputNumber));
+    } catch (err) {
+      console.log(err);
+    }
+    onOpen();
   };
   function handleClick() {
     navigate('/signup');
   }
   useEffect(() => {
     if (username) {
-      navigate('/loginpass');
+      navigate('pass');
     }
     if (error) {
       onOpen();
@@ -62,8 +77,14 @@ export default function InitialCheck() {
         alignItems={'center'}>
         <VStack shadow={'md'} w='350px' p='10px' spacing={10} borderRadius={10}>
           <WrapItem>
-            <Avatar size='2xl' name='Segun Adebayo' src={avatar} />
+            <Avatar size='2xl' name='?' src={avatar} />
           </WrapItem>
+          {isSignupSuccess && (
+            <Alert status='success'>
+              <AlertIcon />
+              Sign Up Successful, Please Login!
+            </Alert>
+          )}
           <VStack h={15}></VStack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box h={'30'}></Box>
@@ -77,8 +98,9 @@ export default function InitialCheck() {
               <InputGroup>
                 <InputLeftAddon fontSize={'lg'} children='+880' />
                 <Input
+                  {...(signedMobile ? { value: signedMobile } : {})}
                   fontSize={'lg'}
-                  type='tel'
+                  type='number'
                   placeholder='Mobile number'
                   name='number'
                   {...register('number', {
@@ -92,6 +114,8 @@ export default function InitialCheck() {
               </InputGroup>
             </Box>
             <Button
+              isLoading={isLoading}
+              loadingText='Checking'
               size='lg'
               colorScheme='purple'
               w={'100%'}
