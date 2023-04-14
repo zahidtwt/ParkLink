@@ -14,6 +14,7 @@ router.route('/authenticate').post((req, res) => {
 router.route('/login').post(controller.verifyUser, controller.login); // login in app
 
 // Get Method
+router.route('/verifymobile/').get(controller.verifyMobile);
 router.route('/user/:username').get(controller.getUser); // user with number
 router
   .route('/generateOTP')

@@ -24,7 +24,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function Login() {
-  const { username, mobileNo } = useSelector((state) => state.user);
+  const { username, mobile } = useSelector((state) => state.user);
+
   const [showPassword, setShowPassword] = useState(false);
   const {
     handleSubmit,
@@ -65,7 +66,7 @@ export default function Login() {
                 <InputLeftAddon children='+880' />
                 <Input
                   type='tel'
-                  placeholder={mobileNo}
+                  placeholder={mobile}
                   name='number'
                   disabled
                   fontSize={'xl'}

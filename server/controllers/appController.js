@@ -5,6 +5,22 @@ const ENV = require('../config');
 module.exports = controller = {
   /*** Middleware for verify user */
 
+  verifyMobile: async function (req, res) {
+    try {
+      const { mobile } = req.method === 'GET' ? req.query : req.body;
+
+      // Check if the user exists
+      const user = await UserModel.findOne({ mobile });
+      if (!user) return res.status(404).send({ error: "Can't find user 😒" });
+      return res
+        .status(200)
+        .send({ mobile: user.mobile, username: user.username });
+    } catch (error) {
+      // Authentication error occurred
+      return res.status(401).send({ error: 'Authentication error' });
+    }
+  },
+
   verifyUser: async function (req, res, next) {
     try {
       const { username } = req.method === 'GET' ? req.query : req.body;

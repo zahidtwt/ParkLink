@@ -2,13 +2,13 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { verifyMobiles } from './authAPI';
 const initialState = {
   username: undefined,
-  mobileNo: '',
+  mobile: '',
   status: 'idle',
   error: null,
 };
 
 export const verifyMobile = createAsyncThunk(
-  'user/VerifyMobilee',
+  'user/VerifyMobile',
   async (mobile) => {
     const response = await verifyMobiles(mobile);
     return response;
@@ -22,14 +22,14 @@ const userSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(verifyMobile.pending, (state) => {
-        state.status = 'loading';
-        state.error = null;
-      })
+      // .addCase(verifyMobile.pending, (state) => {
+      //   state.status = 'loading';
+      //   state.error = null;
+      // })
       .addCase(verifyMobile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.username = action.payload.username;
-        state.mobileNo = action.payload.mobileNo;
+        state.mobile = action.payload.mobile;
       })
       .addCase(verifyMobile.rejected, (state, action) => {
         state.status = 'failed';
