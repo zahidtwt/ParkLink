@@ -28,7 +28,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
 export default function InitialCheck() {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const cancelRef = React.useRef();
+
   const dispatch = useDispatch();
   const { username, error, isLoading } = useSelector(
     (state) => state.verifyMobile
@@ -54,7 +54,9 @@ export default function InitialCheck() {
     } catch (err) {
       console.log(err);
     }
-    onOpen();
+    if (error) {
+      onOpen();
+    }
   };
   function handleClick() {
     navigate('/signup');
@@ -63,9 +65,9 @@ export default function InitialCheck() {
     if (username) {
       navigate('pass');
     }
-    if (error) {
-      onOpen();
-    }
+    // if (error) {
+    //   onOpen();
+    // }
   }, [username, error, navigate, onOpen]);
 
   return (
@@ -127,11 +129,7 @@ export default function InitialCheck() {
         </VStack>
       </Flex>
       <>
-        <AlertDialog
-          isOpen={isOpen}
-          leastDestructiveRef={cancelRef}
-          onClose={onClose}
-          isCentered>
+        <AlertDialog isOpen={isOpen} onClose={onClose} isCentered>
           <AlertDialogOverlay>
             <AlertDialogContent m={5}>
               <AlertDialogHeader fontSize='2xl' fontWeight='bold'>
@@ -143,9 +141,7 @@ export default function InitialCheck() {
               </AlertDialogBody>
 
               <AlertDialogFooter>
-                <Button ref={cancelRef} onClick={onClose}>
-                  Try Again
-                </Button>
+                <Button onClick={onClose}>Try Again</Button>
                 <Button colorScheme='green' onClick={handleClick} ml={3}>
                   Create Account
                 </Button>

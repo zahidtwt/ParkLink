@@ -11,7 +11,9 @@ function SplashScreenOne() {
       textAlign={'center'}
       h={'100vh'}
       alignItems={'center'}
-      justifyContent={'space-between'}>
+      justifyContent={'space-between'}
+      bgGradient='linear(to-r, purple.500, pink.500)'
+      bgClip='text'>
       <VStack h={20}></VStack>
       <GirlWithCarSVG />
       <Text as='b' fontSize={'2xl'}>

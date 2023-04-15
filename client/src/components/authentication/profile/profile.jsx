@@ -11,32 +11,25 @@ import {
   Select,
 } from '@chakra-ui/react';
 
-import { useFormik } from 'formik';
+import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 
 export default function Profile() {
-  const formik = useFormik({
-    initialValues: {
-      number: '1953534243',
-      name: '',
-      email: '',
-      dob: '',
-      gender: '',
-    },
-    // validate: async (values) => {
-    //     const errors = {};
-    //     if (!values.password) {
-    //         errors.password = "Can't leave empty";
-    //     } else if (values.password.length <= 6) {
-    //         errors.password = "Minimum 6 characters required.";
-    //     }
-    //     return errors;
-    // },
-    validateOnBlur: false,
-    validateOnChange: false,
-    onSubmit: async (values) => {
-      console.log(values);
+  const { user } = useSelector((state) => state.auth);
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      number: user.mobile,
+      firstName: user.firstname,
+      lastName: user.lastname,
+      email: user.email,
+      dob: user.dob,
+      gender: user.gender,
     },
   });
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   return (
     <FormControl isRequired>
@@ -47,28 +40,34 @@ export default function Profile() {
         alignItems={'center'}>
         <VStack shadow={'md'} w='350px' p='10px' borderRadius={10}>
           <VStack h={15}></VStack>
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={5}>
               <Heading mb={10}>Update Your Profile</Heading>
 
               <InputGroup>
                 <InputLeftAddon children='+880' />
                 <Input
-                  {...formik.getFieldProps('number')}
+                  {...register('number')}
                   type='tel'
                   placeholder='Phone number'
                   name='number'
-                  disabled
+                  // disabled
                 />
               </InputGroup>
               <Input
-                {...formik.getFieldProps('name')}
+                {...register('firstName')}
                 type='text'
-                placeholder='Full Name'
-                id='name'
+                placeholder='First Name'
+                id='firstName'
               />
               <Input
-                {...formik.getFieldProps('email')}
+                {...register('lastName')}
+                type='text'
+                placeholder='Last Name'
+                id='lastName'
+              />
+              <Input
+                {...register('email')}
                 type='email'
                 id='email'
                 placeholder='Email Address'
@@ -78,19 +77,14 @@ export default function Profile() {
                 <FormLabel htmlFor='dob' textAlign='left' mr={4}>
                   Date of Birth
                 </FormLabel>
-                <Input
-                  {...formik.getFieldProps('dob')}
-                  type='date'
-                  id='dob'
-                  name='dob'
-                />
+                <Input {...register('dob')} type='date' id='dob' name='dob' />
               </Flex>
               <Flex alignItems='left'>
                 <FormLabel htmlFor='gender' textAlign='left' mr={4}>
                   Gender
                 </FormLabel>
                 <Select
-                  {...formik.getFieldProps('gender')}
+                  {...register('gender')}
                   id='gender'
                   name='gender'
                   placeholder='Select gender'>

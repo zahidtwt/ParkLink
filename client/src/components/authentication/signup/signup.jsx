@@ -44,8 +44,9 @@ export default function Signup() {
           values.number.length > 10
             ? values.number.substring(values.number.length - 10)
             : values.number,
-        username:
-          values.firstName + values.number.substring(values.number.length - 4),
+        username: values.username,
+        firstName: values.firstName,
+        lastName: values.lastName,
       });
       reset();
     } catch (err) {
@@ -85,6 +86,12 @@ export default function Signup() {
                   </Alert>
                 )}
               </Box>
+              <Input
+                {...register('username')}
+                type='text'
+                placeholder='Username'
+                id='username'
+              />
               <InputGroup>
                 <InputLeftAddon children='+880' />
                 <Input

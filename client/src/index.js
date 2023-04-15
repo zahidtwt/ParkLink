@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import { ChakraProvider } from '@chakra-ui/react';
-import Toggle from './components/toggle';
+import Toggle from './components/common/switchDarkMode';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -15,7 +15,6 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ChakraProvider>
-        <Toggle />
         <App />
       </ChakraProvider>
     </Provider>

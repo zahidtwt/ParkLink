@@ -50,7 +50,8 @@ module.exports = controller = {
 */
   register: async function (req, res) {
     try {
-      const { username, password, email, mobile } = req.body;
+      const { username, password, email, mobile, firstName, lastName } =
+        req.body;
 
       // Check for existing user and email
       const existingUser = await UserModel.findOne({ username });
@@ -76,6 +77,8 @@ module.exports = controller = {
         password: hashedPassword,
         email,
         mobile,
+        firstName,
+        lastName,
       });
 
       // Save the user to the database
@@ -125,9 +128,15 @@ module.exports = controller = {
 
       // Return success response with user data and token
       return res.status(200).send({
-        msg: 'Login Successful...!',
-        username: user.username,
         token,
+        msg: 'Successfully logged in',
+        username: user.username,
+        firstname: user.firstName,
+        lastname: user.lastName,
+        email: user.email,
+        mobile: user.mobile,
+        dob: user.dob,
+        gender: user.gender,
       });
     } catch (error) {
       // Return error response for any unhandled error

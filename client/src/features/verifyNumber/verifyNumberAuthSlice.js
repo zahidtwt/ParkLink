@@ -22,10 +22,10 @@ const verifyMobileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // .addCase(verifyMobile.pending, (state) => {
-      //   state.status = 'loading';
-      //   state.error = null;
-      // })
+      .addCase(verifyMobile.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
       .addCase(verifyMobile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.username = action.payload.username;

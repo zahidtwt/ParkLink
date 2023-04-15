@@ -20,48 +20,53 @@ import Profile from './components/authentication/profile/profile';
 import useAuthCheck from './hooks/useAuthCheck';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
+import MobileBottomNavbar from './components/common/mobileNav';
 function App() {
   const authChecked = useAuthCheck();
 
   return !authChecked ? (
     <div>Checking authentication....</div>
   ) : (
-    <Router>
-      <Routes>
-        <Route
-          path='/'
-          element={
-            <PublicRoute>
-              <Navigate to='/welcome' />
-            </PublicRoute>
-          }
-        />
-        <Route path='/welcome' element={<SplashScreenOne />} />
-        <Route path='/splashtwo' element={<SplashScreenTwo />} />
-        <Route path='/splashthree' element={<SplashScreenThree />} />
-        <Route
-          path='/login/'
-          element={
-            <PublicRoute>
-              <InitialCheck />
-            </PublicRoute>
-          }></Route>
-        <Route path='/login/pass' element={<Login />} />
-        <Route path='/recovery' element={<Recovery />} />
-        <Route path='/reset' element={<Reset />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/otpverification' element={<GetOTP />} />
-        <Route
-          path='/profile'
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route path='*' element={<PageNotFound />} />
-      </Routes>
-    </Router>
+    <>
+      <Router>
+        <Routes>
+          <Route
+            path='/'
+            element={
+              <PublicRoute>
+                <Navigate to='/welcome' />
+              </PublicRoute>
+            }
+          />
+          <Route path='/welcome' element={<SplashScreenOne />} />
+          <Route path='/splashtwo' element={<SplashScreenTwo />} />
+          <Route path='/splashthree' element={<SplashScreenThree />} />
+          <Route
+            path='/login/'
+            element={
+              <PublicRoute>
+                <InitialCheck />
+              </PublicRoute>
+            }></Route>
+          <Route path='/login/pass' element={<Login />} />
+          <Route path='/recovery' element={<Recovery />} />
+          <Route path='/reset' element={<Reset />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/otpverification' element={<GetOTP />} />
+          <Route
+            path='/profile'
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+
+          <Route path='*' element={<PageNotFound />} />
+        </Routes>
+        <MobileBottomNavbar />
+      </Router>
+    </>
   );
 }
 
