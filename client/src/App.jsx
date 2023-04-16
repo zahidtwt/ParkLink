@@ -21,6 +21,8 @@ import useAuthCheck from './hooks/useAuthCheck';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import MobileBottomNavbar from './components/common/mobileNav';
+import Dashboard from './components/dashboard/Dashboard';
+import ParkingMap from './components/dashboard/ParkingMap';
 function App() {
   const authChecked = useAuthCheck();
 
@@ -53,6 +55,8 @@ function App() {
           <Route path='/reset' element={<Reset />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/otpverification' element={<GetOTP />} />
+          <Route path='/dashboard' element={<Dashboard />} />
+          <Route path='/parkingkoi' element={<ParkingMap />} />
           <Route
             path='/profile'
             element={

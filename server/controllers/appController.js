@@ -200,6 +200,7 @@ module.exports = controller = {
       // Error occurred while updating user data
       return res.status(400).send(error.toJSON());
     }
+    return res.status(200).send({ msg: 'User Updated' });
   },
 
   /** GET: http://localhost:8080/api/generateOTP */

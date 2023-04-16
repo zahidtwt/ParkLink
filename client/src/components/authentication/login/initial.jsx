@@ -30,7 +30,7 @@ export default function InitialCheck() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const dispatch = useDispatch();
-  const { username, error, isLoading } = useSelector(
+  const { username, error, isError, isLoading } = useSelector(
     (state) => state.verifyMobile
   );
   // get signup true from url param
@@ -52,9 +52,10 @@ export default function InitialCheck() {
           : values.number;
       await dispatch(verifyMobile(inputNumber));
     } catch (err) {
+      onOpen();
       console.log(err);
     }
-    if (error) {
+    if (isError) {
       onOpen();
     }
   };
@@ -65,9 +66,9 @@ export default function InitialCheck() {
     if (username) {
       navigate('pass');
     }
-    // if (error) {
-    //   onOpen();
-    // }
+    if (error) {
+      onOpen();
+    }
   }, [username, error, navigate, onOpen]);
 
   return (
@@ -102,7 +103,7 @@ export default function InitialCheck() {
                 <Input
                   {...(signedMobile ? { value: signedMobile } : {})}
                   fontSize={'lg'}
-                  type='number'
+                  type='tel'
                   placeholder='Mobile number'
                   name='number'
                   {...register('number', {

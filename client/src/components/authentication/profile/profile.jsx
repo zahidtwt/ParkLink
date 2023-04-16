@@ -13,26 +13,41 @@ import {
 
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { useUpdateUserInfoMutation } from '../../../features/auth/authApi';
 
 export default function Profile() {
   const { user } = useSelector((state) => state.auth);
+  const [updateUser, { isLoading, error }] = useUpdateUserInfoMutation();
   const { register, handleSubmit } = useForm({
     defaultValues: {
       number: user.mobile,
       firstName: user.firstname,
       lastName: user.lastname,
       email: user.email,
-      dob: user.dob,
+      dob: user.dob ? new Date(user.dob).toISOString().slice(0, 10) : '',
       gender: user.gender,
     },
   });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    try {
+      await updateUser({
+        mobile: data.number,
+        firstname: data.firstName,
+        lastname: data.lastName,
+        email: data.email,
+        dob: data.dob,
+        gender: data.gender,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+    console.log('error', error);
     console.log(data);
   };
 
   return (
-    <FormControl isRequired>
+    <FormControl>
       <Flex
         height={'90vh'}
         justifyContent={'center'}
@@ -80,7 +95,7 @@ export default function Profile() {
                 <Input {...register('dob')} type='date' id='dob' name='dob' />
               </Flex>
               <Flex alignItems='left'>
-                <FormLabel htmlFor='gender' textAlign='left' mr={4}>
+                <FormLabel htmlFor='gender' textAlign='left' mr={'90px'}>
                   Gender
                 </FormLabel>
                 <Select
@@ -94,7 +109,13 @@ export default function Profile() {
                   <option value='other'>Other</option>
                 </Select>
               </Flex>
-              <Button size='lg' colorScheme='purple' w={'100%'} type='submit'>
+              <Button
+                isLoading={isLoading}
+                loadingText='Updating'
+                size='lg'
+                colorScheme='purple'
+                w={'100%'}
+                type='submit'>
                 Update Profile
               </Button>
             </VStack>

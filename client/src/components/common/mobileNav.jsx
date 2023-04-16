@@ -32,10 +32,12 @@ function MobileBottomNavbar() {
   const activeRoute = location.pathname;
   const data = Cookies.get('auth');
   useEffect(() => {}, [data]);
+
   let content = null;
   if (data)
     content = (
       <Flex
+        zIndex={10}
         pos='fixed'
         bottom={0}
         left={0}
@@ -47,7 +49,7 @@ function MobileBottomNavbar() {
         borderRadius='30px 30px 0 0'
         bgColor={bgColor}
         boxShadow={boxShadowColor}>
-        <Link to='/'>
+        <Link to='/dashboard'>
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             <IconButton
               aria-label='Home'
@@ -95,28 +97,26 @@ function MobileBottomNavbar() {
             />
           </motion.div>
         </Link>
-        <Link to='/profile'>
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-            <IconButton
-              onClick={onOpen}
-              aria-label='Profile'
-              icon={<AiOutlineMenuFold size={28} />}
-              variant='ghost'
-              size='lg'
-              colorScheme={activeRoute === '/menu' ? 'gray' : 'blue'}
-              color={activeRoute === '/menu' ? selectedColor : activeColor}
-              transform={activeRoute === '/menu' ? 'scale(1.2)' : 'scale(1.0)'}
-              bg={activeRoute === '/menu' ? selectedBgColor : 'transparent'}
-              _active={{
-                bg: selectedBgColor,
-              }}
-              _hover={{
-                bg: selectedBgColor,
-              }}
-              isRound
-            />{' '}
-          </motion.div>
-        </Link>
+        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+          <IconButton
+            onClick={onOpen}
+            aria-label='Profile'
+            icon={<AiOutlineMenuFold size={28} />}
+            variant='ghost'
+            size='lg'
+            colorScheme={activeRoute === '/menu' ? 'gray' : 'blue'}
+            color={activeRoute === '/menu' ? selectedColor : activeColor}
+            transform={activeRoute === '/menu' ? 'scale(1.2)' : 'scale(1.0)'}
+            bg={activeRoute === '/menu' ? selectedBgColor : 'transparent'}
+            _active={{
+              bg: selectedBgColor,
+            }}
+            _hover={{
+              bg: selectedBgColor,
+            }}
+            isRound
+          />{' '}
+        </motion.div>
         <NavDrawer isOpen={isOpen} onClose={onClose} />
       </Flex>
     );

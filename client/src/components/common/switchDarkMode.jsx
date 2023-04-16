@@ -5,7 +5,10 @@ import {
   FormLabel,
   Switch,
   Flex,
+  IconButton,
 } from '@chakra-ui/react';
+import { FaMoon, FaSun } from 'react-icons/fa';
+
 function SwitchDarkMode() {
   const { colorMode, toggleColorMode } = useColorMode();
   const toast = useToast();
@@ -21,23 +24,19 @@ function SwitchDarkMode() {
     });
   };
   return (
-    <Flex py={3}>
-      <FormControl
-        display='flex'
-        alignItems='center'
-        justifyContent={'space-between'}>
-        <FormLabel htmlFor='dark-mode-toggle' mb='0'>
-          Enable dark mode?
-        </FormLabel>
-        <Switch
-          id='dark-mode-toggle'
-          onChange={handleClick}
-          isChecked={colorMode === 'dark'}
-          size='md'
-          colorScheme='purple'
-          ml='2'
-        />
-      </FormControl>
+    <Flex justifyContent={'end'}>
+      <IconButton
+        // border={'1px solid lightgray'}
+        aria-label='Toggle light dark mode'
+        onClick={handleClick}
+        icon={
+          colorMode === 'dark' ? (
+            <FaSun color='orange' />
+          ) : (
+            <FaMoon color='black' />
+          )
+        }
+      />
     </Flex>
   );
 }

@@ -23,10 +23,10 @@ import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { useLoginMutation } from '../../../features/auth/authApi';
-
+import Cookies from 'js-cookie';
 export default function Login() {
-  const { username, mobile } = useSelector((state) => state.verifyMobile);
   const Navigate = useNavigate();
+  const { username, mobile } = useSelector((state) => state.verifyMobile);
   const [login, { data, isLoading, error }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -37,6 +37,22 @@ export default function Login() {
 
   const onSubmit = async (values) => {
     try {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          Cookies.set(
+            'location',
+            JSON.stringify({
+              location: { latitude, longitude },
+            }),
+            { expires: 1 } // 1 day
+          );
+        },
+        (error) => {
+          console.error(error);
+        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
+      );
       await login({
         username,
         password: values.password,
@@ -48,7 +64,7 @@ export default function Login() {
       console.log(error.data);
     }
     if (data) {
-      Navigate('/profile');
+      Navigate('/dashboard');
     }
   }, [error, data, Navigate]);
 
