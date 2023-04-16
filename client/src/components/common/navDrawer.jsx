@@ -39,9 +39,11 @@ function NavDrawer({ isOpen, onClose }) {
                 <Text fontSize={'lg'} mr={10}>
                   {firstname} {lastname}
                 </Text>{' '}
-                <Text fontSize={'sm'} fontWeight={400}>
-                  Edit Profile
-                </Text>
+                <Link to='/profile'>
+                  <Text fontSize={'sm'} fontWeight={400}>
+                    Edit Profile
+                  </Text>
+                </Link>
               </VStack>
               <SwitchDarkMode />
             </HStack>
@@ -85,8 +87,8 @@ function NavDrawer({ isOpen, onClose }) {
               fontSize={'md'}
               fontWeight={400}
               pl={5}>
-              <Link to={'/'}>Nearby</Link>
-              <Link to={'/'}>Saved</Link>
+              <Link to={'/'}>Manage Listing</Link>
+              <Link to={'/'}>Bookmarks</Link>
               <Link to={'/'}>History</Link>
               <Link to={'/'}>Payment</Link>
               <Link to={'/'}>Withdraw</Link>

@@ -24,6 +24,22 @@ code {
   cursor: pointer;
   padding: 0;
 }
-.mapboxgl-ctrl {
+.mapboxgl-ctrl,
+.slick-arrow {
   display: none !important;
+}
+.slick-dots {
+  bottom: 0 !important;
+}
+/* .slick-dots li button {
+  color: purple !important;
+} */
+.rdrCalendarWrapper {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.rdrDefinedRangesWrapper {
+  margin-top: 10px;
 }

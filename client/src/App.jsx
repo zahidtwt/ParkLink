@@ -22,7 +22,8 @@ import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 import MobileBottomNavbar from './components/common/mobileNav';
 import Dashboard from './components/dashboard/Dashboard';
-import ParkingMap from './components/dashboard/ParkingMap';
+import BookParking from './components/parking/booking/BookParking';
+import ParkingForm from './components/parking/ParkingForm/ParkingForm';
 function App() {
   const authChecked = useAuthCheck();
 
@@ -55,13 +56,35 @@ function App() {
           <Route path='/reset' element={<Reset />} />
           <Route path='/signup' element={<Signup />} />
           <Route path='/otpverification' element={<GetOTP />} />
-          <Route path='/dashboard' element={<Dashboard />} />
-          <Route path='/parkingkoi' element={<ParkingMap />} />
+          <Route
+            path='/dashboard'
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
           <Route
             path='/profile'
             element={
               <PrivateRoute>
                 <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/booking'
+            element={
+              <PrivateRoute>
+                <BookParking />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/listparking'
+            element={
+              <PrivateRoute>
+                <ParkingForm />
               </PrivateRoute>
             }
           />
