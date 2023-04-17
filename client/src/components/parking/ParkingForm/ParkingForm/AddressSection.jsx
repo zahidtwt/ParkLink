@@ -36,7 +36,7 @@ function AddressSection({
       <FormControl isRequired>
         <FormLabel>Address</FormLabel>
         <DebouncedAddress
-          setLocationValue={handleLocation}
+          settLocationValue={handleLocation}
           addressValue={'zahid'}
         />
         {/* <Input

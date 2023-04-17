@@ -3,8 +3,9 @@ import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 import axios from 'axios';
 import AddressInput from './AddressInput';
 import { useDispatch } from 'react-redux';
+import { setLocationValue } from '../../../../features/LocationSlice';
 
-function DebouncedAddress({ setLocationValue, addressValue }) {
+function DebouncedAddress({ settLocationValue, addressValue, parkingInfo }) {
   const [searchValue, setSearchValue] = useState('');
   const [locations, setLocations] = useState([]);
   const [isOpen, setIsOpen] = useState(true);
@@ -14,12 +15,9 @@ function DebouncedAddress({ setLocationValue, addressValue }) {
   const searchIcon = useColorModeValue('purple', 'lighgray');
   const dispatch = useDispatch();
   const handleSelect = (selectedItem) => {
-    setLocationValue(selectedItem); // console.log(selectedItem);
+    settLocationValue(selectedItem); // console.log(selectedItem);
     setIsOpen(false);
-    dispatch({
-      type: 'SET_ADDRESS',
-      payload: selectedItem.address,
-    });
+    dispatch(setLocationValue(selectedItem.address));
   };
   const showResults = () => {
     setIsOpen(true);
@@ -43,6 +41,7 @@ function DebouncedAddress({ setLocationValue, addressValue }) {
         value={addressValue}
         delay={1000}
         // addressValue={address}
+
         showResults={showResults}
         onChange={(value) => setSearchValue(value)}
       />
