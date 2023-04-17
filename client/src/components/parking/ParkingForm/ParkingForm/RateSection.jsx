@@ -20,12 +20,12 @@ function RateSection({ parkingInfo, handleNumberInputChange }) {
   const showTimePicker = parkingInfo.bikeHourly || parkingInfo.carHourly;
 
   return (
-    <VStack spacing={4}>
+    <VStack spacing={4} w={'100%'}>
       {parkingInfo.bike && (
         <>
           <FormControl>
             <FormLabel>Bike Parking Rates</FormLabel>
-            <HStack>
+            <HStack w={'100%'}>
               {renderRateCheckbox('bikeHourly', 'Hourly')}
               {renderRateCheckbox('bikeMonthly', 'Monthly')}
             </HStack>

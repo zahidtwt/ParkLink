@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Input } from '@chakra-ui/react';
-import { useSelector } from 'react-redux';
 
 const AddressInput = ({
   addressValue,
@@ -17,7 +16,6 @@ const AddressInput = ({
 
     return () => clearTimeout(timerId);
   }, [inputValue, onChange, delay, addressValue]);
-  let localAddress = useSelector((state) => state.location);
   const handleChange = (event) => {
     setInputValue(event.target.value);
   };
@@ -26,10 +24,10 @@ const AddressInput = ({
     <Input
       {...rest}
       name='address'
-      value={localAddress.locationValue || inputValue}
+      value={inputValue}
       onFocus={showResults}
       onChange={handleChange}
-      placeholder='Address'
+      placeholder='Search Location'
     />
   );
 };

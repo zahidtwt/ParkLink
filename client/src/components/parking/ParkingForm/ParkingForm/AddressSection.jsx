@@ -1,6 +1,6 @@
 // AddressSection.js
 import React, { useState } from 'react';
-import { FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import { FormControl, FormLabel, Input, Text, VStack } from '@chakra-ui/react';
 import DebouncedAddress from './DebouncedAddress';
 
 function AddressSection({
@@ -10,7 +10,7 @@ function AddressSection({
   setParkingInfo,
   // handleLocation,
 }) {
-  const [locationValue, setLocationValue] = useState({});
+  const [, setLocationValue] = useState({});
   const handleLocation = (location) => {
     setLocationValue(location);
     setParkingInfo((prevState) => ({
@@ -27,24 +27,27 @@ function AddressSection({
       },
     }));
   };
-  console.log(parkingInfo);
 
-  // handleLocationChange();
-  // console.log(locationValue);
   return (
-    <VStack spacing={4}>
-      <FormControl isRequired>
-        <FormLabel>Address</FormLabel>
+    <VStack spacing={4} w={'100%'}>
+      <FormControl>
+        <FormLabel>Search Your Place</FormLabel>
+        <Text fontSize={'sm'} fontStyle={'italic'} mb={1}>
+          Search your place and select from the list
+        </Text>
         <DebouncedAddress
-          settLocationValue={handleLocation}
+          setLocationValue={handleLocation}
           addressValue={'zahid'}
         />
-        {/* <Input
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Address</FormLabel>
+        <Input
           name='address'
-          value={parkingInfo.address}
-          onChange={handleInputChange}
+          value={parkingInfo.location.address}
+          onChange={handleLocationChange}
           placeholder='Address'
-        /> */}
+        />
       </FormControl>
       <FormControl isRequired>
         <FormLabel>Area</FormLabel>

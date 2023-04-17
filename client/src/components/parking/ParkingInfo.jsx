@@ -9,9 +9,6 @@ import {
   Box,
   Image,
   HStack,
-  Tag,
-  TagRightIcon,
-  Flex,
   Heading,
   Text,
   VStack,
@@ -25,12 +22,14 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import DistanceCalculator from './DistanceCalculator';
 import InfoCheap from './InfoCheap';
-import { GrMapLocation, GrAlarm, GrUserPolice } from 'react-icons/gr';
+import { GrMapLocation, GrAlarm } from 'react-icons/gr';
 import { FaMotorcycle, FaCar } from 'react-icons/fa';
 import { ImClock } from 'react-icons/im';
 import { BiCctv } from 'react-icons/bi';
 import { CiWarning } from 'react-icons/ci';
 import { MdBookmarkAdd } from 'react-icons/md';
+import { GiPoliceOfficerHead } from 'react-icons/gi';
+
 import PriceBox from './PricerBox';
 
 const settings = {
@@ -54,7 +53,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   const properties = msg?.properties;
   const time = properties?.time ? properties?.time.toUpperCase() : '24H';
   const selectedBgColor = useColorModeValue('purple.100', 'gray.700');
-  const selectedColor = useColorModeValue('purple.600', 'purple.200');
+  // const selectedColor = useColorModeValue('purple.600', 'purple.200');
 
   return (
     <>
@@ -143,7 +142,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                 <InfoCheap
                   text='Guard'
                   color={'blue'}
-                  icon={GrUserPolice}
+                  icon={GiPoliceOfficerHead}
                   size={'md'}
                 />
               ) : null}

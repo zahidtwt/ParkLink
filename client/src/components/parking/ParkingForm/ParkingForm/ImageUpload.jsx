@@ -5,7 +5,6 @@ import {
   FormControl,
   FormLabel,
   Image,
-  Progress,
   Text,
   useToast,
 } from '@chakra-ui/react';
@@ -15,8 +14,9 @@ import { FiUpload } from 'react-icons/fi';
 import { AiOutlineClose } from 'react-icons/ai';
 
 function ImageUpload({ uploadedImages, handleImageUpload, handleImageRemove }) {
-  const [uploadProgress, setUploadProgress] = useState(0);
+  const [, setUploadProgress] = useState(0);
   const toast = useToast();
+  const [numImages, setNumImages] = useState(uploadedImages.length);
 
   const onDrop = async (acceptedFiles) => {
     try {
@@ -39,7 +39,7 @@ function ImageUpload({ uploadedImages, handleImageUpload, handleImageRemove }) {
         }
       );
       await handleImageUpload(`${res.data.secure_url}`);
-
+      setNumImages(numImages + 1);
       toast({
         title: 'Upload successful',
         description: `${acceptedFiles.length} image${
@@ -64,9 +64,10 @@ function ImageUpload({ uploadedImages, handleImageUpload, handleImageRemove }) {
       });
     }
   };
-
   const handleRemoveImage = (imageUrl) => {
     handleImageRemove(imageUrl);
+    setNumImages(numImages - 1);
+
     toast({
       title: 'Image removed',
       description: 'The image has been successfully removed.',
@@ -95,18 +96,7 @@ function ImageUpload({ uploadedImages, handleImageUpload, handleImageRemove }) {
         transition='all 0.3s ease-in-out'
         _hover={{ bg: 'gray.50' }}>
         <input {...getInputProps({ name: 'file' })} />
-        {uploadProgress > 0 && (
-          <Progress
-            mr={5}
-            hasStripe
-            colorScheme='red'
-            isAnimated
-            value={uploadProgress}
-            w='100%'
-            mb={2}
-            displ
-          />
-        )}
+
         {isDragActive ? (
           <Text fontSize='sm'>Drop the files here ...</Text>
         ) : (
@@ -145,7 +135,9 @@ function ImageUpload({ uploadedImages, handleImageUpload, handleImageRemove }) {
                   top='2'
                   right='2'
                   cursor='pointer'
-                  onClick={() => handleRemoveImage(imageUrl)}>
+                  onClick={() => {
+                    handleRemoveImage(imageUrl);
+                  }}>
                   <AiOutlineClose size='20px' />
                 </Box>
               </Box>

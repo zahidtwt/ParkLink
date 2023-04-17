@@ -9,7 +9,7 @@ import {
 import { FaSearchLocation } from 'react-icons/fa';
 
 const DebouncedInput = ({ onChange, delay, ...rest }) => {
-  const searchBg = useColorModeValue('gray.100', 'gray.600');
+  const searchBg = useColorModeValue('gray.100', 'gray.700');
   const textColor = useColorModeValue('purple.900', 'white');
   const searchIcon = useColorModeValue('purple', 'lighgray');
 
@@ -40,7 +40,7 @@ const DebouncedInput = ({ onChange, delay, ...rest }) => {
       <InputRightElement
         pr={3}
         pointerEvents='none'
-        children={<FaSearchLocation color={searchIcon} size={20} />}
+        children={<FaSearchLocation color={'#9F7AEA'} size={20} />}
       />
       <Input
         {...rest}
@@ -56,10 +56,10 @@ const DebouncedInput = ({ onChange, delay, ...rest }) => {
         bgColor={searchBg}
         p={5}
         _focus={{
-          border: 'purple 2px solid',
+          border: '#9F7AEA 2px solid',
           boxShadow: 'xl',
         }}
-        placeholder='Search parking'
+        placeholder='Search Places... (eg. Dhanmondi)'
       />
     </InputGroup>
   );

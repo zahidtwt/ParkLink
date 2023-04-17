@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Button,
@@ -8,12 +8,11 @@ import {
   FormLabel,
   Heading,
   Stack,
-  Tag,
-  TagLabel,
-  TagLeftIcon,
   VStack,
   Progress,
   useToast,
+  Text,
+  Flex,
 } from '@chakra-ui/react';
 
 import { FaBiking, FaCar } from 'react-icons/fa';
@@ -22,10 +21,12 @@ import RulesSection from './RulesSection';
 import RateSection from './RateSection';
 import VehicleSection from './VehicleSection';
 import ImageUpload from './ImageUpload';
-import { useSelector } from 'react-redux';
-import { setLocationValue } from '../../../../features/LocationSlice';
+import ParkingInfo from './ParkingInfo';
 
 function ParkingForm() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   const [parkingInfo, setParkingInfo] = useState({
     location: {
       address: '',
@@ -90,7 +91,10 @@ function ParkingForm() {
     setParkingInfo({ ...parkingInfo, [name]: value });
   };
   const handleImageRemove = (imageUrl) => {
-    parkingInfo.images.filter((imgUrl) => imgUrl !== imageUrl);
+    setParkingInfo((prevParkingInfo) => ({
+      ...prevParkingInfo,
+      images: [prevParkingInfo.images.filter((img) => img !== imageUrl)],
+    }));
   };
   const handleImageUpload = (newImages) => {
     setParkingInfo((prevParkingInfo) => ({
@@ -106,7 +110,7 @@ function ParkingForm() {
   function handleNextClick() {
     const validationErrors = validateForm(step, parkingInfo);
     if (Object.keys(validationErrors).length === 0) {
-      if (step < 3) {
+      if (step < 4) {
         setStep(step + 1);
         if (step === 1) {
           setPercent(66);
@@ -165,9 +169,25 @@ function ParkingForm() {
 
   return (
     <Container maxWidth='container.md'>
-      <Box borderWidth={1} borderRadius='lg' p={6} mt={6} boxShadow='lg'>
+      <Box
+        mb={20}
+        borderWidth={1}
+        borderRadius='lg'
+        p={6}
+        mt={6}
+        boxShadow='lg'
+        border={'1px solid #CBC3E3'}>
         {' '}
+        <Heading
+          as='h2'
+          size='md'
+          mb={4}
+          textAlign={'center'}
+          textTransform={'uppercase'}>
+          Add Parking Information
+        </Heading>
         <Progress
+          borderRadius={10}
           value={percent}
           size='lg'
           mb={4}
@@ -176,11 +196,8 @@ function ParkingForm() {
           hasStripe
           transition='all 0.3s ease-in-out'
         />{' '}
-        <Heading as='h2' size='lg' mb={4}>
-          Add Parking Information
-        </Heading>
         <form onSubmit={handleSubmit}>
-          <VStack spacing={4} mb={'150px'}>
+          <VStack spacing={4}>
             {step === 1 && (
               <AddressSection
                 parkingInfo={parkingInfo}
@@ -225,13 +242,19 @@ function ParkingForm() {
                 </FormControl>
               </>
             )}
+            {step === 4 && (
+              <ParkingInfo
+                parkingInfo={parkingInfo}
+                handleEditClick={() => setStep(1)}
+              />
+            )}
 
-            <Box mt={8}>
+            <Box mt={10}>
               <Stack direction='row' spacing={4} align='center'>
                 {step > 1 && (
                   <Button
                     onClick={handleBackClick}
-                    colorScheme='purple'
+                    colorScheme='gray'
                     w={'100%'}>
                     Back
                   </Button>
@@ -239,7 +262,7 @@ function ParkingForm() {
                 <Button
                   w={'100%'}
                   colorScheme='purple'
-                  onClick={step === 3 ? handleSubmit : handleNextClick}
+                  onClick={step === 4 ? handleSubmit : handleNextClick}
                   disabled={
                     (step === 1 &&
                       (!parkingInfo.address || !parkingInfo.city)) ||
@@ -248,7 +271,7 @@ function ParkingForm() {
                         (parkingInfo.bike && !parkingInfo.bikeSlot) ||
                         (parkingInfo.car && !parkingInfo.carSlot)))
                   }>
-                  {step === 3 ? 'Submit' : 'Next'}
+                  {step === 4 ? 'Submit' : 'Next'}
                 </Button>
               </Stack>
             </Box>
@@ -260,17 +283,29 @@ function ParkingForm() {
 
   function renderTagCheckbox(name, label, icon) {
     return (
-      <Tag size='lg' variant='outline' borderRadius='full'>
+      <Flex
+        fontSize={'20px'}
+        width={'100%'}
+        alignItems='center'
+        p='2'
+        borderRadius='md'
+        transition='all 0.3s ease'
+        _hover={{
+          bg: 'gray.100',
+          cursor: 'pointer',
+        }}>
+        {icon}
         <Checkbox
+          fontSize={'40px'}
           name={name}
           isChecked={parkingInfo[name]}
           onChange={handleCheckboxChange}
-          iconColor='blue.500'
-          iconSize='18px'>
-          <TagLeftIcon boxSize='20px' as={icon} />
-          <TagLabel>{label}</TagLabel>
+          ml='2'
+          fontWeight='bold'
+          colorScheme='green'>
+          <Text fontSize={'lg'}>{label}</Text>
         </Checkbox>
-      </Tag>
+      </Flex>
     );
   }
 }
