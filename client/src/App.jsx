@@ -23,7 +23,7 @@ import PublicRoute from './components/PublicRoute';
 import MobileBottomNavbar from './components/common/mobileNav';
 import Dashboard from './components/dashboard/Dashboard';
 import BookParking from './components/parking/booking/BookParking';
-import ParkingForm from './components/parking/ParkingForm/ParkingForm';
+import ParkingForm from './components/parking/ParkingForm/ParkingForm/ParkingForm';
 function App() {
   const authChecked = useAuthCheck();
 
