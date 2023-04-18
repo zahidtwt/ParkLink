@@ -1,6 +1,7 @@
 const Parking = require('../model/Parking.model');
 const geolib = require('geolib'); // geolib library for distance calculation
-
+const Booking = require('../model/Booking.model');
+const User = require('../model/User.model');
 async function createParking(req, res) {
   try {
     const {
@@ -289,14 +290,18 @@ const getAllParking = async (req, res) => {
   }
 };
 
-const Booking = require('../model/Booking.model');
-
 // Create a new booking
 const createBooking = async (req, res) => {
   try {
-    const { parking_id, selectedDate, fromTime, toTime, endDate, vehicleType } =
-      req.body;
-
+    const {
+      parking_id,
+      selectedDate,
+      fromTime,
+      toTime,
+      endDate,
+      vehicleType,
+      cost,
+    } = req.body;
     const user = req.user._id;
 
     // Check if the parking spot exists
@@ -305,14 +310,18 @@ const createBooking = async (req, res) => {
       return res.status(404).json({ message: 'Parking spot not found' });
     }
     const parkingInfo = await Parking.findById(parking_id);
-    console.log(parkingInfo);
+    const parkingUser = await User.findById(parkingInfo.user);
+    const bookingUser = await User.findById(user);
     const availableSlots =
       vehicleType == 'bike' ? parkingInfo.bikeSlot : parkingInfo.carSlot;
 
     if (availableSlots === 0) {
       throw new Error('This parking spot is currently full');
     }
-
+    parkingUser.balance += cost;
+    bookingUser.due += cost;
+    await parkingUser.save();
+    await bookingUser.save();
     const booking = new Booking({
       parking_id,
       selectedDate,
@@ -320,6 +329,7 @@ const createBooking = async (req, res) => {
       toTime,
       endDate,
       user,
+      cost,
     });
     booking.bookingId = booking._id.toString().slice(-6);
 
@@ -330,6 +340,7 @@ const createBooking = async (req, res) => {
     } else {
       parkingInfo.carSlot--;
     }
+
     await parkingInfo.save();
 
     res.status(201).json({ message: 'Booking created', booking: savedBooking });

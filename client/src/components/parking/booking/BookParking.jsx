@@ -33,6 +33,7 @@ export default function BookParking() {
   const [toTime, setToTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [showEndDate, setShowEndDate] = useState(false);
+  const [cost, setCost] = useState(0);
 
   useEffect(() => {
     const fromHour = parseInt(fromTime.split(':')[0]);
@@ -49,6 +50,7 @@ export default function BookParking() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const bookingInfo = {
+      cost,
       vehicleType,
       parking_id: parkingInfo._id,
       selectedDate,
@@ -145,6 +147,40 @@ export default function BookParking() {
 
     return options;
   };
+
+  const calculateCost = () => {
+    if (!fromTime || !toTime) {
+      setCost(0);
+      return;
+    }
+
+    const fromHour = parseInt(fromTime.split(':')[0]);
+    const toHour = parseInt(toTime.split(':')[0]);
+    const totalHours = (toHour - fromHour) % 24;
+
+    let days = 1;
+    if (showEndDate && endDate) {
+      const startDateObj = new Date(selectedDate);
+      const endDateObj = new Date(endDate);
+      const diffInDays = Math.ceil(
+        (endDateObj - startDateObj) / (1000 * 60 * 60 * 24)
+      );
+      days = diffInDays;
+    }
+
+    const hourlyRate =
+      vehicleType === 'bike'
+        ? parkingInfo.bikeHourlyRate
+        : parkingInfo.carHourlyRate;
+    const calculatedCost = totalHours * hourlyRate * days;
+
+    setCost(calculatedCost);
+  };
+
+  useEffect(() => {
+    calculateCost();
+  }, [fromTime, toTime, selectedDate, endDate, vehicleType]);
+
   useEffect(() => {
     noAvailableTimeSlots.current = false;
     generateTimeOptions(parkingInfo.fromTime, parkingInfo.toTime, true);
@@ -224,6 +260,10 @@ export default function BookParking() {
               All time slots for today are unavailable.
             </Text>
           )}
+          <Text fontSize='xl' fontWeight='bold'>
+            Cost: ${cost}
+          </Text>
+
           <Button
             loadingText='Booking...'
             isLoading={isLoading}

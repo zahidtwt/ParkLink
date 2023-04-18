@@ -25,6 +25,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import BookParking from './components/parking/booking/BookParking';
 import ParkingForm from './components/parking/ParkingForm/ParkingForm/ParkingForm';
 import SuccessParkingSubmission from './components/parking/ParkingForm/ParkingForm/SuccessParkingSubmission';
+import BookingSuccess from './components/parking/booking/BookingSuccess';
 function App() {
   const authChecked = useAuthCheck();
 
@@ -93,7 +94,7 @@ function App() {
             path='/listparking/success'
             element={<SuccessParkingSubmission />}
           />
-
+          <Route path='/booking/success' element={<BookingSuccess />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
         <MobileBottomNavbar />

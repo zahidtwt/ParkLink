@@ -27,6 +27,9 @@ const bookingSchema = new Schema({
   endDate: {
     type: Date,
   },
+  cost: {
+    type: Number,
+  },
 });
 const Booking = mongoose.model('Booking', bookingSchema);
 module.exports = Booking;

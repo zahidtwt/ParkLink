@@ -57,6 +57,14 @@ const userSchema = new Schema(
       enum: ['male', 'female', 'other'],
       lowercase: true,
     },
+    balance: {
+      type: Number,
+      default: 0,
+    },
+    due: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
   // automatically adds two fields to the schema: createdAt and updatedAt. These fields
