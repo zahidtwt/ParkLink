@@ -9,7 +9,7 @@ module.exports = auth = async function (req, res, next) {
   const token = authHeader.split(' ')[1];
   try {
     const decodedToken = jwt.verify(token, ENV.JWT_SECRET);
-    const _id = decodedToken.userId;
+    const _id = decodedToken._id;
     const user = await UserModel.findById(_id);
     if (!user) {
       return res.status(401).send({ error: 'Invalid token: user not found' });

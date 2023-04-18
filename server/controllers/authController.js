@@ -103,7 +103,7 @@ module.exports = authController = {
 
       // Create JWT token with user ID and username as payload
       const token = jwt.sign(
-        { userId: user._id, username: user.username },
+        { _id: user._id, username: user.username },
         ENV.JWT_SECRET,
         {
           expiresIn: '24h',
@@ -160,9 +160,9 @@ module.exports = authController = {
   updateUser: async function (req, res) {
     try {
       // Get user ID from authentication middleware
-      const { userId } = req.user;
+      const { _id } = req.user;
 
-      if (userId) {
+      if (_id) {
         const body = req.body;
 
         // Check if there are any changes made to user data
@@ -172,7 +172,7 @@ module.exports = authController = {
             .send({ error: 'No changes made to User Data!' });
         }
 
-        const result = await UserModel.updateOne({ _id: userId }, body);
+        const result = await UserModel.updateOne({ _id }, body);
 
         return res.status(201).send({ msg: 'Record Updated...!' });
       } else {
