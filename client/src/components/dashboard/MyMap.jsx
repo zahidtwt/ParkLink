@@ -9,57 +9,7 @@ import CenterButton from './CenterButton';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
 
-const GeoJSON = {
-  type: 'FeatureCollection',
-  features: [
-    {
-      type: 'Parking List',
-      properties: {
-        address: 'Zahid er Basa, Gazipur, Dhaka',
-        hourly: true,
-        monthly: true,
-        time: '8am - 8pm',
-        rate: '20tk/hour',
-        vehicle: 'Bike/Car',
-        slot: '10',
-        cctv: true,
-        guard: true,
-        rules: [
-          'No Overnight Parking Allowed',
-          'Standard-Sized Vehicles Only',
-          'No Smoking or Littering Permitted',
-        ],
-      },
-      geometry: {
-        type: 'Parking Point',
-        coordinates: [90.317335, 24.004603],
-      },
-    },
-    {
-      type: 'Feature',
-      properties: {
-        message: 'Bar',
-        iconSize: [40, 40],
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [90.3167652, 24.0066416],
-      },
-    },
-    {
-      type: 'Feature',
-      properties: {
-        message: 'Baz',
-        iconSize: [40, 40],
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: [80.3111078, 24.0165401],
-      },
-    },
-  ],
-};
-function MyMap() {
+function MyMap({ parkings }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   // const colorMode = localStorage.getItem('chakra-ui-color-mode');
@@ -95,6 +45,8 @@ function MyMap() {
   /// user location
 
   useEffect(() => {
+    // console.log();
+
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
@@ -106,7 +58,8 @@ function MyMap() {
     const height = 40;
 
     // Add markers to the map.
-    GeoJSON.features.forEach((marker) => {
+    // if (!isLoading && !isError && parkings) {
+    parkings.forEach((marker) => {
       // Create a DOM element for each marker.
       const el = document.createElement('div');
       // const width = marker.properties.iconSize[0];
@@ -123,8 +76,9 @@ function MyMap() {
       });
 
       // Add markers to the map.
+
       new mapboxgl.Marker(el)
-        .setLngLat(marker.geometry.coordinates)
+        .setLngLat([marker?.location?.longitude, marker?.location?.latitude])
         .addTo(map.current);
     });
 
@@ -157,6 +111,7 @@ function MyMap() {
           ],
         },
       });
+
       map.current.addLayer({
         id: 'user-location-circle',
         type: 'circle',

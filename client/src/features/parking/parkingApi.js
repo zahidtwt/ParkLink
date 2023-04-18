@@ -2,6 +2,9 @@ import { apiSlice } from '../api/apiSlice';
 
 export const parkingApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
+    getAllParking: builder.query({
+      query: () => '/app/parkings/all',
+    }),
     // Get parking spot by ID
     getParkingById: builder.query({
       query: (id) => `/app/parkings/${id}`,
@@ -76,6 +79,7 @@ export const parkingApi = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetAllParkingQuery,
   useGetParkingByIdQuery,
   useGetParkingByLocationQuery,
   useGetParkingByDistanceQuery,

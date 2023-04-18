@@ -27,6 +27,7 @@ const ratingSchema = new Schema({
   },
 });
 const parkingSchema = new Schema({
+  parkingId: 'String',
   location: {
     type: locationSchema,
     required: true,

@@ -11,11 +11,13 @@ const {
   getParkingByVehicleType,
   deleteParkingById,
   updateParkingById,
+  getAllParking,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
 
 // Public endpoints
+appRouter.get('/parkings/all', getAllParking);
 appRouter.get('/parkings/:id', getParkingById);
 appRouter.get('/parkings', getParkingByLocation);
 appRouter.get('/parkings/distance', getParkingByDistance);

@@ -61,21 +61,41 @@ function ParkingForm() {
   });
   // console.log('parkinginfo', parkingInfo);
   // const dispatch = useDispatch();
-  const [createParking, { data, isLoading, isError, error }] =
-    useCreateParkingMutation();
+  const [
+    createParking,
+    { data, isLoading, isSuccess, isError, error: specialError },
+  ] = useCreateParkingMutation();
 
   const [step, setStep] = useState(1);
   const [percent, setPercent] = useState(33);
   const [errors] = useState({});
-
   const toast = useToast();
   const handleSubmit = (e) => {
     e.preventDefault();
-    createParking(parkingInfo);
-    if (!isError) {
-      navigate('success');
+    try {
+      createParking(parkingInfo);
+    } catch (error) {
+      console.log(error);
     }
   };
+  const toastError = specialError?.data?.message;
+  if (isError) {
+    toast({
+      title: 'Something went wrong',
+      description: toastError,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+      variant: 'left-accent',
+      position: 'top',
+    });
+  }
+  if (isSuccess) {
+    setTimeout(() => {
+      navigate('success?parkingId=' + data?.parkingId);
+    }, 0);
+  }
+
   const handleCheckboxChange = (e, rule) => {
     if (rule) {
       if (e.target.checked) {

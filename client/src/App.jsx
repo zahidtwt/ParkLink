@@ -90,7 +90,7 @@ function App() {
             }
           />
           <Route
-            path='/parking/success'
+            path='/listparking/success'
             element={<SuccessParkingSubmission />}
           />
 

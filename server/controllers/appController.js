@@ -49,6 +49,9 @@ async function createParking(req, res) {
       user: req.user._id, // Set the user ID to the current user's ID
     });
 
+    // Create a new attribute called parkingId from the last 6 digits of the _id field
+    parking.parkingId = parking._id.toString().slice(-6);
+
     // Save the parking object to the database
     const savedParking = await parking.save();
 
@@ -277,8 +280,18 @@ async function createParkingRating(req, res) {
   }
 }
 
+const getAllParking = async (req, res) => {
+  try {
+    const parkingList = await Parking.find({});
+    res.status(200).json(parkingList);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 module.exports = {
   createParking,
+  getAllParking,
   getParkingById,
   getParkingByLocation,
   getParkingByUserId,
