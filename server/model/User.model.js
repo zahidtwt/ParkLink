@@ -37,7 +37,7 @@ const userSchema = new Schema(
     lastName: {
       type: String,
       trim: true,
-      maxlength: [20, 'Last name cannot exceed 20 characters.'],
+      maxlength: [20, 'Last name can not exceed 20 characters.'],
     },
     mobile: {
       type: String,

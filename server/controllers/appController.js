@@ -1,268 +1,291 @@
-const UserModel = require('../model/User.model');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const ENV = require('../config');
-module.exports = controller = {
-  /*** Middleware for verify user */
+const Parking = require('../model/Parking.model');
+const geolib = require('geolib'); // geolib library for distance calculation
 
-  verifyMobile: async function (req, res) {
-    try {
-      const { mobile } = req.method === 'GET' ? req.query : req.body;
+async function createParking(req, res) {
+  try {
+    const {
+      location,
+      bikeHourly,
+      bikeMonthly,
+      carHourly,
+      carMonthly,
+      bikeHourlyRate,
+      bikeMonthlyRate,
+      carHourlyRate,
+      carMonthlyRate,
+      bike,
+      car,
+      bikeSlot,
+      carSlot,
+      cctv,
+      guard,
+      rules,
+      images,
+      fromTime,
+      toTime,
+    } = req.body;
 
-      // Check if the user exists
-      const user = await UserModel.findOne({ mobile });
-      if (!user) return res.status(404).send({ error: "Can't find user 😒" });
-      return res
-        .status(200)
-        .send({ mobile: user.mobile, username: user.username });
-    } catch (error) {
-      // Authentication error occurred
-      return res.status(401).send({ error: 'Authentication error' });
-    }
-  },
+    // Create a new parking object
+    const parking = new Parking({
+      location,
+      bikeHourly,
+      bikeMonthly,
+      carHourly,
+      carMonthly,
+      bikeHourlyRate,
+      bikeMonthlyRate,
+      carHourlyRate,
+      carMonthlyRate,
+      bike,
+      car,
+      bikeSlot,
+      carSlot,
+      cctv,
+      guard,
+      rules,
+      images,
+      fromTime,
+      toTime,
+      user: req.user._id, // Set the user ID to the current user's ID
+    });
 
-  verifyUser: async function (req, res, next) {
-    try {
-      const { username } = req.method === 'GET' ? req.query : req.body;
+    // Save the parking object to the database
+    const savedParking = await parking.save();
 
-      // Check if the user exists
-      const user = await UserModel.findOne({ username });
-      if (!user) return res.status(404).send({ error: "Can't find user 😒" });
-
-      // User exists, proceed to the next middleware/controller
-      next();
-    } catch (error) {
-      // Authentication error occurred
-      return res.status(401).send({ error: 'Authentication error' });
-    }
-  },
-
-  /** POST: http://localhost:8080/api/register 
- * @param : {
-  "username" : "example123",
-  "password" : "admin123",
-  "email": "example@gmail.com",
-  "firstName" : "bill",
-  "lastName": "william",
-  "mobile": 1953534243,
-
+    // Return the saved parking object as the response
+    res.status(201).json(savedParking);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 }
-*/
-  register: async function (req, res) {
-    try {
-      const { username, password, email, mobile, firstName, lastName } =
-        req.body;
 
-      // Check for existing user and email
-      const existingUser = await UserModel.findOne({ username });
-      const existingEmail = await UserModel.findOne({ email });
-      const existingMobile = await UserModel.findOne({ mobile });
+async function getParkingById(req, res) {
+  try {
+    const parkingId = req.params.id; // Get the ID of the parking spot from the request parameters
 
-      if (existingUser) {
-        return res.status(400).send({ error: 'Please use unique username' });
-      }
-      if (existingEmail) {
-        return res.status(400).send({ error: 'Email already registered' });
-      }
-      if (existingMobile) {
-        return res.status(400).send({ error: 'Mobile No already registered' });
-      }
+    // Find the parking spot by ID and populate the user field
+    const parking = await Parking.findById(parkingId).populate('user');
 
-      // Hash the password
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // Create a new user
-      const user = new UserModel({
-        username,
-        password: hashedPassword,
-        email,
-        mobile,
-        firstName,
-        lastName,
-      });
-
-      // Save the user to the database
-      await user.save();
-
-      // Send a success response
-      res.status(201).send(user);
-    } catch (error) {
-      // Handle any errors
-      res.status(500).send({ error: error.message });
+    if (!parking) {
+      // Return a 404 Not Found error if the parking spot doesn't exist
+      return res.status(404).json({ message: 'Parking spot not found' });
     }
-  },
-  /** POST: http://localhost:8080/api/login 
- * @param: {
-  "username" : "example123",
-  "password" : "admin123"
+
+    // Return the parking spot object as the response
+    res.json(parking);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 }
-*/
-  login: async function (req, res) {
-    const { username, password } = req.body;
 
-    try {
-      // Find user with matching username
-      const user = await UserModel.findOne({ username });
+async function getParkingByLocation(req, res) {
+  try {
+    const { city, area, postCode } = req.query;
 
-      // If user not found, return error response
-      if (!user) {
-        return res.status(404).send({ error: 'Username not found' });
-      }
+    const filter = {};
+    if (city) {
+      filter['location.city'] = city;
+    }
+    if (area) {
+      filter['location.area'] = area;
+    }
+    if (postCode) {
+      filter['location.postCode'] = postCode;
+    }
 
-      // Compare input password with hashed password in the database
-      const passwordCheck = await bcrypt.compare(password, user.password);
+    const parkings = await Parking.find(filter).populate('user');
 
-      // If password doesn't match, return error response
-      if (!passwordCheck) {
-        return res.status(400).send({ error: "Password doesn't match" });
-      }
+    res.json(parkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
-      // Create JWT token with user ID and username as payload
-      const token = jwt.sign(
-        { userId: user._id, username: user.username },
-        ENV.JWT_SECRET,
+async function getParkingByUserId(req, res) {
+  try {
+    const userId = req.params.id; // Get the user ID from the request parameters
+
+    // Find the parking spots that belong to the user and populate the user field
+    const parkings = await Parking.find({ user: userId }).populate('user');
+
+    // Return the parking spots as the response
+    res.json(parkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+async function getParkingByDistance(req, res) {
+  try {
+    const { latitude, longitude } = req.query; // Get the latitude and longitude of the user's location from the query parameters
+
+    // Find all the parking spots and populate the user field
+    const parkings = await Parking.find().populate('user');
+
+    // Calculate the distance between the user's location and each parking spot's location
+    const parkingDistances = parkings.map((parking) => {
+      const distance = geolib.getDistance(
+        { latitude, longitude },
         {
-          expiresIn: '24h',
+          latitude: parking.location.latitude,
+          longitude: parking.location.longitude,
         }
       );
+      return { ...parking.toObject(), distance };
+    });
 
-      // Return success response with user data and token
-      return res.status(200).send({
-        token,
-        msg: 'Successfully logged in',
-        username: user.username,
-        firstname: user.firstName,
-        lastname: user.lastName,
-        email: user.email,
-        mobile: user.mobile,
-        dob: user.dob,
-        gender: user.gender,
-      });
-    } catch (error) {
-      // Return error response for any unhandled error
-      return res.status(500).send({ error });
+    // Sort the list of parking spots by distance
+    const sortedParkings = parkingDistances.sort(
+      (a, b) => a.distance - b.distance
+    );
+
+    // Return the sorted list of parking spots as the response
+    res.json(sortedParkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+async function getParkingByRating(req, res) {
+  try {
+    // Find all the parking spots and populate the user field and ratings subdocument
+    const parkings = await Parking.find()
+      .populate('user')
+      .populate('ratings.user');
+
+    // Calculate the average rating for each parking spot
+    const parkingRatings = parkings.map((parking) => {
+      const ratingCount = parking.ratings.length;
+      const ratingTotal = parking.ratings.reduce(
+        (total, rating) => total + rating.rating,
+        0
+      );
+      const ratingAvg = ratingCount > 0 ? ratingTotal / ratingCount : 0;
+      return { ...parking.toObject(), ratingAvg };
+    });
+
+    // Sort the list of parking spots by average rating
+    const sortedParkings = parkingRatings.sort(
+      (a, b) => b.ratingAvg - a.ratingAvg
+    );
+
+    // Return the sorted list of parking spots as the response
+    res.json(sortedParkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+async function getParkingByVehicleType(req, res) {
+  try {
+    const { vehicleType } = req.query; // Get the vehicle type from the query parameters
+
+    // Find the parking spots that match the vehicle type and populate the user field
+    const parkings = await Parking.find({ [`${vehicleType}`]: true }).populate(
+      'user'
+    );
+
+    // Return the parking spots as the response
+    res.json(parkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+async function updateParkingById(req, res) {
+  try {
+    const parkingId = req.params.id;
+    const updates = req.body;
+
+    // Update the parking spot and return the updated object
+    const updatedParking = await Parking.findByIdAndUpdate(parkingId, updates, {
+      new: true,
+    }).populate('user');
+
+    if (!updatedParking) {
+      return res.status(404).json({ message: 'Parking spot not found' });
     }
-  },
 
-  /** GET: http://localhost:8080/api/user/example123
-   * Get user by username
-   */
-  getUser: async function (req, res) {
-    try {
-      const { username } = req.params;
+    res.json(updatedParking);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
-      // Check for valid username
-      if (!username) {
-        return res.status(400).send({ error: 'Invalid username' });
-      }
+async function deleteParkingById(req, res) {
+  try {
+    const parkingId = req.params.id;
 
-      // Find user by username
-      const user = await UserModel.findOne({ username });
-      if (!user) {
-        return res.status(404).send({ error: "Couldn't find the user" });
-      }
+    // Delete the parking spot
+    const deletedParking = await Parking.findByIdAndDelete(parkingId);
 
-      // Remove password from user object
-      const { password, ...userData } = user.toJSON();
-
-      return res.status(200).send(userData);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).send({ error: 'Internal server error' });
+    if (!deletedParking) {
+      return res.status(404).json({ message: 'Parking spot not found' });
     }
-  },
 
-  /** PUT: http://localhost:8080/api/updateuser */
-  updateUser: async function (req, res) {
-    try {
-      // Get user ID from authentication middleware
-      const { userId } = req.user;
+    res.json(deletedParking);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
-      if (userId) {
-        const body = req.body;
+async function createParkingRating(req, res) {
+  try {
+    const { parkingId, rating, comment } = req.body;
+    const userId = req.user.id; // Assuming you have middleware that sets the user ID in the request object
 
-        // Check if there are any changes made to user data
-        if (Object.keys(body).length === 0) {
-          return res
-            .status(400)
-            .send({ error: 'No changes made to User Data!' });
-        }
+    // Find the parking spot by ID and add the new rating
+    const parking = await Parking.findByIdAndUpdate(
+      parkingId,
+      {
+        $push: { ratings: { user: userId, rating, comment } },
+      },
+      { new: true }
+    ).populate('user');
 
-        // Update the user data
-        const result = await UserModel.updateOne({ _id: userId }, body);
-
-        return res.status(201).send({ msg: 'Record Updated...!' });
-      } else {
-        // User not found
-        return res.status(401).send({ error: 'User Not Found...!' });
-      }
-    } catch (error) {
-      // Error occurred while updating user data
-      return res.status(400).send(error.toJSON());
+    if (!parking) {
+      return res.status(404).json({ message: 'Parking spot not found' });
     }
-    return res.status(200).send({ msg: 'User Updated' });
-  },
 
-  /** GET: http://localhost:8080/api/generateOTP */
-  generateOTP: function (req, res) {
-    // npm i otp-generator
-    req.app.locals.OTP = Math.floor(1000 + Math.random() * 9000);
-    res.status(201).send({ code: req.app.locals.OTP });
-  },
+    // Calculate the new rating aggregate and update the parking spot
+    const ratingCount = parking.ratings.length;
+    const ratingTotal = parking.ratings.reduce(
+      (total, rating) => total + rating.rating,
+      0
+    );
+    const ratingAvg = ratingCount > 0 ? ratingTotal / ratingCount : 0;
 
-  /** GET: http://localhost:8080/api/verifyOTP */
-  verifyOTP: async function (req, res) {
-    const { code } = req.query;
-    if (parseInt(req.app.locals.OTP) === Number(code)) {
-      req.app.locals.OTP = null; // reset otp value
-      req.app.locals.resetSession = true; // start session for reset password
-      return res.status(201).send({ msg: 'Verify successfully' });
-    }
-    return res.status(400).send({ error: 'Invalid OTP' });
-  },
+    await Parking.findByIdAndUpdate(parkingId, {
+      ratingCount,
+      ratingTotal,
+      ratingAvg,
+    });
 
-  // successfully redirect user when OTP is valid
-  /** GET: http://localhost:8080/api/createResetSession */
-  createResetSession: async function (req, res) {
-    if (req.app.locals.resetSession) {
-      req.app.locals.resetSession = false; // allow access to this route only
-      return res.status(201).send({ msg: 'access granted!' });
-    }
-    return res.status(440).send({ error: 'Session Expired!' });
-  },
+    res.json(parking);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
-  // update the password when we have valid session
-  /** PUT: http://localhost:8080/api/resetPassword */
-  resetPassword: async function (req, res) {
-    try {
-      if (!req.app.locals.resetSession) {
-        return res.status(440).send({ error: 'Session expired!' });
-      }
-
-      const { username, password } = req.body;
-
-      try {
-        const user = await UserModel.findOne({ username });
-
-        if (!user) {
-          return res.status(404).send({ error: 'Username not found' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        await UserModel.updateOne(
-          { username: user.username },
-          { password: hashedPassword }
-        );
-
-        req.app.locals.resetSession = false;
-
-        return res.status(201).send({ msg: 'Updated...' });
-      } catch (error) {
-        return res.status(500).send({ error: 'Failed to update password' });
-      }
-    } catch (error) {
-      return res.status(401).send({ error });
-    }
-  },
+module.exports = {
+  createParking,
+  getParkingById,
+  getParkingByLocation,
+  getParkingByUserId,
+  getParkingByDistance,
+  getParkingByRating,
+  getParkingByVehicleType,
+  deleteParkingById,
+  updateParkingById,
+  createParkingRating,
 };
