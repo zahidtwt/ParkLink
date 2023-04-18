@@ -18,7 +18,6 @@ import {
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -44,7 +43,7 @@ const settings = {
 };
 
 function ParkingInfo({ msg, onClose, isOpen }) {
-  const { data: parkingInfo } = useGetParkingByIdQuery(msg?._id);
+  const { data: parkingInfo } = useGetParkingByIdQuery(msg._id);
   const navigate = useNavigate();
 
   const selectedLon = parkingInfo?.location?.longitude;

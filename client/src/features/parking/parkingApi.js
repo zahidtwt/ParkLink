@@ -7,7 +7,10 @@ export const parkingApi = apiSlice.injectEndpoints({
     }),
     // Get parking spot by ID
     getParkingById: builder.query({
-      query: (id) => `/app/parkings/${id}`,
+      query: (id) => {
+        if (!id) return { data: [] };
+        return `/app/parkings/${id}`;
+      },
     }),
 
     // Get parking spots by location

@@ -9,9 +9,8 @@ import {
   Thead,
   Tr,
   VStack,
-  useColorModeValue,
 } from '@chakra-ui/react';
-import { FaMotorcycle, FaCar } from 'react-icons/fa';
+// import { FaMotorcycle, FaCar } from 'react-icons/fa';
 
 function PriceBox({ parkingInfo }) {
   const {
@@ -42,14 +41,16 @@ function PriceBox({ parkingInfo }) {
             </Tr>
           </Thead>
           <Tbody>
-            {bikeSlot && (
+            {bikeSlot > 0 && (
               <Tr>
                 <Td
                   textAlign='center'
                   width='20%'
                   bg={'#c1e0ff57'}
                   fontWeight={'bold'}>
-                  Bike
+                  <HStack justifyContent={'center'}>
+                    <Text>Bike</Text>
+                  </HStack>
                 </Td>
                 <Td textAlign='center' width='20%' bg={'#c1e0ff57'}>
                   {bikeSlot}
@@ -65,14 +66,16 @@ function PriceBox({ parkingInfo }) {
                 )}
               </Tr>
             )}
-            {carSlot && (
+            {carSlot > 0 && (
               <Tr>
                 <Td
                   textAlign='center'
                   width='20%'
                   bg={'#f76ba21f'}
                   fontWeight={'bold'}>
-                  Car
+                  <HStack justifyContent={'center'}>
+                    <Text>Car</Text>
+                  </HStack>
                 </Td>
                 <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
                   20

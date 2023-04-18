@@ -11,20 +11,29 @@ import {
   Button,
   Select,
   Checkbox,
+  useToast,
 } from '@chakra-ui/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
 
 export default function BookParking() {
+  const [createBooking, { data, isLoading, error, isSuccess, isError }] =
+    useCreateBookingMutation();
+  const toast = useToast();
+  const navigate = useNavigate();
   const location = useLocation();
+
   const parkingInfo = location.state?.parkingInfo;
   const minDate = new Date().toISOString().split('T')[0];
 
+  const [vehicleType, setVehicleType] = useState('bike');
   const [selectedDate, setSelectedDate] = useState(minDate);
   const [fromTime, setFromTime] = useState('');
   const noAvailableTimeSlots = useRef(false);
   const [toTime, setToTime] = useState('');
   const [endDate, setEndDate] = useState('');
   const [showEndDate, setShowEndDate] = useState(false);
+
   useEffect(() => {
     const fromHour = parseInt(fromTime.split(':')[0]);
     const nextHour = (fromHour + 1) % 24;
@@ -36,16 +45,44 @@ export default function BookParking() {
       setToTime('');
     }
   }, [fromTime, parkingInfo.toTime]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const bookingInfo = {
+      vehicleType,
+      parking_id: parkingInfo._id,
       selectedDate,
       fromTime,
       toTime,
       ...(showEndDate && { endDate }),
     };
-    console.log(bookingInfo);
+    try {
+      createBooking(bookingInfo);
+    } catch (error) {
+      console.log(error);
+    }
   };
+  const handleVehicleTypeChange = (e) => {
+    setVehicleType(e.target.value);
+  };
+  const toastError = error?.data?.message;
+  if (isError) {
+    toast({
+      title: 'Something went wrong',
+      description: toastError,
+      status: 'error',
+      duration: 3000,
+      isClosable: true,
+      variant: 'left-accent',
+      position: 'top',
+    });
+  }
+  if (isSuccess) {
+    setTimeout(() => {
+      navigate('success?bookingId=' + data?.bookingId);
+    }, 0);
+  }
+
   const toggleShowEndDate = () => {
     setShowEndDate(!showEndDate);
   };
@@ -119,6 +156,15 @@ export default function BookParking() {
       <Text>{parkingInfo.location.area}</Text>
       <form onSubmit={handleSubmit}>
         <VStack spacing={4}>
+          {(parkingInfo.bikeSlot > 0 || parkingInfo.carSlot > 0) && (
+            <FormControl isRequired>
+              <FormLabel>Vehicle Type</FormLabel>
+              <Select value={vehicleType} onChange={handleVehicleTypeChange}>
+                {parkingInfo.bikeSlot > 0 && <option value='bike'>Bike</option>}
+                {parkingInfo.carSlot > 0 && <option value='car'>Car</option>}
+              </Select>
+            </FormControl>
+          )}
           <FormControl isRequired>
             <FormLabel>Date</FormLabel>
             <Input
@@ -179,6 +225,8 @@ export default function BookParking() {
             </Text>
           )}
           <Button
+            loadingText='Booking...'
+            isLoading={isLoading}
             type='submit'
             colorScheme='purple'
             isDisabled={noAvailableTimeSlots.current}>

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bookingSchema = new Schema({
-  parking: {
+  bookingId: 'String',
+  parking_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Parking',
     required: true,

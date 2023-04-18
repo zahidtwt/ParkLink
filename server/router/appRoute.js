@@ -14,6 +14,7 @@ const {
   getAllParking,
   createBooking,
   getUserBookings,
+  deleteBookingById,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
@@ -29,13 +30,14 @@ appRouter.get('/parkings/rating', getParkingByRating);
 // Private endpoints
 appRouter.use(authMiddleware); // Requires authentication for all routes below this line
 appRouter.post('/parkings', createParking);
-appRouter.get('/users/:userId/parkings', getParkingByUserId);
+appRouter.get('/parkings/:userId', getParkingByUserId);
 appRouter.put('/parkings/:id', updateParkingById);
 appRouter.delete('/parkings/:id', deleteParkingById);
 appRouter.post('/parkings/ratings', createParkingRating);
 
 // Booking endpoints
 appRouter.post('/bookings', createBooking);
-appRouter.get('/users/bookings', getUserBookings);
+appRouter.get('/bookings/:userId', getUserBookings);
+appRouter.delete('/bookings/:id', deleteBookingById);
 
 module.exports = appRouter;

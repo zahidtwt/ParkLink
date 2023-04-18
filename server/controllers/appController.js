@@ -294,79 +294,43 @@ const Booking = require('../model/Booking.model');
 // Create a new booking
 const createBooking = async (req, res) => {
   try {
-    const { parking, selectedDate, fromTime, toTime, endDate } = req.body;
+    const { parking_id, selectedDate, fromTime, toTime, endDate, vehicleType } =
+      req.body;
+
     const user = req.user._id;
 
     // Check if the parking spot exists
-    const parkingSpot = await Parking.findById(parking);
+    const parkingSpot = await Parking.findById(parking_id);
     if (!parkingSpot) {
       return res.status(404).json({ message: 'Parking spot not found' });
     }
+    const parkingInfo = await Parking.findById(parking_id);
+    console.log(parkingInfo);
+    const availableSlots =
+      vehicleType == 'bike' ? parkingInfo.bikeSlot : parkingInfo.carSlot;
 
-    // Check if the parking spot is available for the selected time period
-    const existingBooking = await Booking.findOne({
-      parking,
-      $or: [
-        {
-          $and: [
-            { selectedDate },
-            {
-              $or: [
-                {
-                  $and: [
-                    { fromTime: { $lte: fromTime } },
-                    { toTime: { $gt: fromTime } },
-                  ],
-                },
-                {
-                  $and: [
-                    { fromTime: { $lt: toTime } },
-                    { toTime: { $gte: toTime } },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          $and: [
-            { endDate: { $gte: selectedDate } },
-            {
-              $or: [
-                {
-                  $and: [
-                    { fromTime: { $lte: fromTime } },
-                    { toTime: { $gt: fromTime } },
-                  ],
-                },
-                {
-                  $and: [
-                    { fromTime: { $lt: toTime } },
-                    { toTime: { $gte: toTime } },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    });
-    if (existingBooking) {
-      return res.status(400).json({
-        message: 'Parking spot is not available for this time period',
-      });
+    if (availableSlots === 0) {
+      throw new Error('This parking spot is currently full');
     }
 
-    // Create a new booking
     const booking = new Booking({
-      parking,
+      parking_id,
       selectedDate,
       fromTime,
       toTime,
       endDate,
       user,
     });
+    booking.bookingId = booking._id.toString().slice(-6);
+
     const savedBooking = await booking.save();
+    // Decrement the number of available slots for the selected vehicle type
+    if (vehicleType === 'bike') {
+      parkingInfo.bikeSlot--;
+    } else {
+      parkingInfo.carSlot--;
+    }
+    await parkingInfo.save();
 
     res.status(201).json({ message: 'Booking created', booking: savedBooking });
   } catch (err) {
@@ -388,6 +352,30 @@ const getUserBookings = async (req, res) => {
   }
 };
 
+const deleteBookingById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if booking exists
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    // Check if user is authorized to delete booking
+    if (booking.user.toString() !== req.user._id) {
+      return res.status(401).json({ error: 'Not authorized' });
+    }
+
+    // Delete booking
+    await booking.deleteOne();
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Server error' });
+  }
+};
+
 module.exports = {
   createBooking,
   getUserBookings,
@@ -402,4 +390,5 @@ module.exports = {
   deleteParkingById,
   updateParkingById,
   createParkingRating,
+  deleteBookingById,
 };
