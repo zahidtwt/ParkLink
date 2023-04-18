@@ -16,6 +16,8 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
+import { useNavigate } from 'react-router-dom';
+
 import { useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
@@ -31,6 +33,7 @@ import { MdBookmarkAdd } from 'react-icons/md';
 import { GiPoliceOfficerHead } from 'react-icons/gi';
 
 import PriceBox from './PricerBox';
+import { useGetParkingByIdQuery } from '../../features/parking/parkingApi';
 
 const settings = {
   dots: true,
@@ -41,20 +44,22 @@ const settings = {
 };
 
 function ParkingInfo({ msg, onClose, isOpen }) {
-  const [images] = useState([
-    'https://st.depositphotos.com/1008438/3923/i/600/depositphotos_39236807-stock-photo-underground-parking-aisle.jpg',
-    'https://via.placeholder.com/290x150?text=Image+2',
-    'https://via.placeholder.com/290x150?text=Image+3',
-    'https://via.placeholder.com/320x150?text=Image+4',
-    'https://via.placeholder.com/320x150?text=Image+5',
-  ]);
-  const selectedLon = msg?.geometry?.coordinates[0];
-  const selectedLat = msg?.geometry?.coordinates[1];
-  const properties = msg?.properties;
-  const time = properties?.time ? properties?.time.toUpperCase() : '24H';
+  const { data: parkingInfo } = useGetParkingByIdQuery(msg?._id);
+  const navigate = useNavigate();
+
+  const selectedLon = parkingInfo?.location?.longitude;
+  const selectedLat = parkingInfo?.location?.latitude;
+  const time =
+    parkingInfo?.fromTime && parkingInfo.toTime
+      ? `${formatTime(parkingInfo?.fromTime)} - ${formatTime(
+          parkingInfo.toTime
+        )}`
+      : '24H';
   const selectedBgColor = useColorModeValue('purple.100', 'gray.700');
   // const selectedColor = useColorModeValue('purple.600', 'purple.200');
-
+  const handleBooking = () => {
+    navigate('/booking', { state: { parkingInfo } });
+  };
   return (
     <>
       <Drawer placement='bottom' onClose={onClose} isOpen={isOpen}>
@@ -72,7 +77,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
 
             <Box maxW='500px' mx='1' mt={8}>
               <Slider {...settings}>
-                {images.map((image, index) => (
+                {parkingInfo?.images?.map((image, index) => (
                   <Box key={index} mb={4}>
                     <Image src={image} borderRadius={10} />
                   </Box>
@@ -82,7 +87,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
             <HStack justifyContent={'space-between'}>
               <VStack align={'left'} mb={3}>
                 <Heading size={'md'}>Parking Space at Konabari</Heading>
-                <Text>{properties?.address}</Text>
+                <Text>{parkingInfo?.location?.address}</Text>
               </VStack>
 
               <Text pr={2} pb={5}>
@@ -108,7 +113,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                 icon={GrAlarm}
                 size={'md'}
               />
-              {properties?.hourly ? (
+              {parkingInfo?.hourly ? (
                 <InfoCheap
                   text={'Hourly'}
                   color={'purple'}
@@ -130,7 +135,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                 icon={FaCar}
                 size={'md'}
               />
-              {properties?.cctv ? (
+              {parkingInfo?.cctv ? (
                 <InfoCheap
                   text='CCTV'
                   color={'blue'}
@@ -138,7 +143,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                   size={'md'}
                 />
               ) : null}
-              {properties?.guard ? (
+              {parkingInfo?.guard ? (
                 <InfoCheap
                   text='Guard'
                   color={'blue'}
@@ -151,8 +156,8 @@ function ParkingInfo({ msg, onClose, isOpen }) {
             <VStack align={'left'} mb={3} mt={5}>
               <Heading size={'md'}>Parking Rules</Heading>
               <UnorderedList listStyleType='none'>
-                {properties?.rules
-                  ? properties.rules.map((rule) => (
+                {parkingInfo?.rules
+                  ? parkingInfo.rules.map((rule) => (
                       <HStack key={rule}>
                         <Text display={'inline'}>
                           {<CiWarning color='red' />}
@@ -163,9 +168,10 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                   : null}
               </UnorderedList>
             </VStack>
-            <PriceBox price='20 TK' type='hour' slot='20' />
+            <PriceBox parkingInfo={parkingInfo} />
 
             <Button
+              onClick={handleBooking}
               colorScheme='purple'
               w={'100%'}
               borderRadius={20}
@@ -180,4 +186,10 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   );
 }
 
+function formatTime(time) {
+  const [hour, minute] = time.split(':');
+  const date = new Date(0, 0, 0, hour, minute);
+  const options = { hour: 'numeric', minute: 'numeric', hour12: true };
+  return date.toLocaleTimeString([], options);
+}
 export default ParkingInfo;

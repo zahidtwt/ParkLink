@@ -1,10 +1,8 @@
 import MapPage from './MapPage';
-import SearchLocation from './searchLocation';
 
 function Dashboard() {
   return (
     <>
-      <SearchLocation />
       <MapPage />
     </>
   );

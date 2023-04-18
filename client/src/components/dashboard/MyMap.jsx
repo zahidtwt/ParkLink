@@ -1,17 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
-import Cookies from 'js-cookie';
 import mapboxgl from 'mapbox-gl';
 import parking from './parking.svg';
-import ParkingInfo from '../parking/ParkingInfo';
+import ParkingInfo from '../parking/ParkingInfoDisplay';
 import { useDisclosure } from '@chakra-ui/react';
 import CenterButton from './CenterButton';
+import SearchLocation from './searchLocation';
 
 mapboxgl.accessToken =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
-
-function MyMap({ parkings }) {
+// coordinates: { latitude, longitude } }
+function MyMap({ parkings, coordinates: { latitude, longitude } }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-
   // const colorMode = localStorage.getItem('chakra-ui-color-mode');
   // const darkMap = 'mapbox://styles/zahidtwt/clgik0tz3006101qyeidl72vg';
   const lightMap = 'mapbox://styles/zahidtwt/clgienaqi005u01o1d5rzcmgi';
@@ -21,26 +20,6 @@ function MyMap({ parkings }) {
   const [msg, setMsg] = useState(''); // <- add this line to store the message
   // const [currentLocation, setCurrentLocation] = useState(null);
   // const [error, setError] = useState(null);
-  const cookieLocation = Cookies.get('location');
-  if (!cookieLocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        Cookies.set(
-          'location',
-          JSON.stringify({
-            location: { latitude, longitude },
-          }),
-          { expires: 1 } // 1 day
-        );
-      },
-      (error) => {
-        console.error(error);
-      },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
-    );
-  }
-  const { latitude, longitude } = JSON.parse(cookieLocation).location;
 
   /// user location
 
@@ -134,6 +113,7 @@ function MyMap({ parkings }) {
   return (
     <>
       <div ref={mapContainer} style={{ height: '100vh' }} />;
+      <SearchLocation map={map} />
       <CenterButton map={map} latitude={latitude} longitude={longitude} />
       <ParkingInfo msg={msg} isOpen={isOpen} onClose={onClose} />
     </>

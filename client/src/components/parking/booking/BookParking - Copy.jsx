@@ -1,6 +1,6 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  Box,
   Text,
   Image,
   VStack,
@@ -10,9 +10,15 @@ import {
   Input,
   Button,
   Select,
-  Checkbox,
 } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
+const settings = {
+  dots: true,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1,
+};
 
 export default function BookParking() {
   const location = useLocation();
@@ -23,8 +29,7 @@ export default function BookParking() {
   const [fromTime, setFromTime] = useState('');
   const noAvailableTimeSlots = useRef(false);
   const [toTime, setToTime] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [showEndDate, setShowEndDate] = useState(false);
+
   useEffect(() => {
     const fromHour = parseInt(fromTime.split(':')[0]);
     const nextHour = (fromHour + 1) % 24;
@@ -42,23 +47,10 @@ export default function BookParking() {
       selectedDate,
       fromTime,
       toTime,
-      ...(showEndDate && { endDate }),
     };
     console.log(bookingInfo);
   };
-  const toggleShowEndDate = () => {
-    setShowEndDate(!showEndDate);
-  };
 
-  const handleEndDateChange = (e) => {
-    const newEndDate = e.target.value;
-
-    if (new Date(newEndDate) > new Date(selectedDate)) {
-      setEndDate(newEndDate);
-    } else {
-      alert('End date must be greater than the start date');
-    }
-  };
   const convertTo12Hour = (time) => {
     let hour = parseInt(time.split(':')[0]);
     const suffix = hour >= 12 ? 'PM' : 'AM';
@@ -128,22 +120,6 @@ export default function BookParking() {
               onChange={(e) => setSelectedDate(e.target.value)}
             />
           </FormControl>
-          <FormControl>
-            <Checkbox isChecked={showEndDate} onChange={toggleShowEndDate}>
-              More than 1 day
-            </Checkbox>
-          </FormControl>
-          {showEndDate && (
-            <FormControl isRequired>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type='date'
-                value={endDate}
-                min={selectedDate}
-                onChange={handleEndDateChange}
-              />
-            </FormControl>
-          )}
           <HStack spacing={4}>
             <FormControl isRequired>
               <FormLabel>From</FormLabel>
@@ -189,3 +165,45 @@ export default function BookParking() {
     </VStack>
   );
 }
+
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  Box,
+  FormControl,
+  FormLabel,
+  VStack,
+  Button,
+  Select,
+} from '@chakra-ui/react';
+import DatePicker from 'react-multi-date-picker';
+import 'react-multi-date-picker/styles/colors/red.css';
+
+// ... (other imports and code)
+
+const BookingPage = ({ parkingInfo }) => {
+  // ... (states, variables, and functions)
+
+  const [selectedDates, setSelectedDates] = useState([]);
+
+  // ... (other states, variables, and functions)
+
+  return (
+    <Box>
+      {/* ... (rest of the component) */}
+      <FormControl isRequired>
+        <FormLabel>Select Dates</FormLabel>
+        <DatePicker
+          value={selectedDates}
+          onChange={setSelectedDates}
+          multiple
+          format='YYYY-MM-DD'
+          calendarPosition='bottom-left'
+          disableDay={(date) => date < new Date()}
+          hideFooter
+          className='rmdp-red'
+        />
+      </FormControl>
+      {/* ... (rest of the component) */}
+    </Box>
+  );
+};

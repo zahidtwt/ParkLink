@@ -1,38 +1,94 @@
-import { HStack, Text, VStack, useColorModeValue } from '@chakra-ui/react';
+import {
+  HStack,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Text,
+  Th,
+  Thead,
+  Tr,
+  VStack,
+  useColorModeValue,
+} from '@chakra-ui/react';
+import { FaMotorcycle, FaCar } from 'react-icons/fa';
 
-function PriceBox({ price, type }) {
-  const selectedBgColor = useColorModeValue('gray.100', 'gray.700');
-  const selectedColor = useColorModeValue('purple.600', 'purple.200');
+function PriceBox({ parkingInfo }) {
+  const {
+    bikeSlot,
+    carSlot,
+    bikeHourlyRate,
+    carHourlyRate,
+    bikeMonthlyRate,
+    carMonthlyRate,
+  } = parkingInfo ? parkingInfo : {};
   return (
-    <VStack>
-      <HStack mb={3} spacing={5}>
-        <HStack
-          justifyContent={'center'}
-          textAlign={'center'}
-          bg={selectedBgColor}
-          color={selectedColor}
-          borderRadius='0'
-          py={1}
-          px={2}
-          borderLeft={'4px solid '}>
-          <Text fontSize='lg' fontWeight={600}>
-            20 slots avaialable
-          </Text>
-        </HStack>
-        <HStack
-          justifyContent={'center'}
-          textAlign={'center'}
-          bg={selectedBgColor}
-          color={selectedColor}
-          borderRadius='0'
-          py={1}
-          px={2}
-          borderLeft={'4px solid '}>
-          <Text fontSize='lg' fontWeight={600}>
-            $ 1.00 per hour
-          </Text>
-        </HStack>
-      </HStack>
+    <VStack mb={2}>
+      <TableContainer w={'100%'} borderRadius={'xl'}>
+        <Table typeof='purple' size={''} fontWeight={400}>
+          <Thead bg={'#805ad52b'}>
+            <Tr>
+              <Th
+                textAlign='center'
+                padding={'4px'}
+                width='25%'
+                colSpan={1}></Th>
+              <Th textAlign='center' padding={'4px'} width='15%'>
+                Slots
+              </Th>
+              <Th textAlign='center' width='60%' colSpan={2}>
+                Rate <sub>(BDT)</sub>
+              </Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {bikeSlot && (
+              <Tr>
+                <Td
+                  textAlign='center'
+                  width='20%'
+                  bg={'#c1e0ff57'}
+                  fontWeight={'bold'}>
+                  Bike
+                </Td>
+                <Td textAlign='center' width='20%' bg={'#c1e0ff57'}>
+                  {bikeSlot}
+                </Td>
+
+                <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
+                  {bikeHourlyRate} <sub>/H</sub>
+                </Td>
+                {bikeMonthlyRate && (
+                  <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
+                    {bikeMonthlyRate} <sub>/M</sub>
+                  </Td>
+                )}
+              </Tr>
+            )}
+            {carSlot && (
+              <Tr>
+                <Td
+                  textAlign='center'
+                  width='20%'
+                  bg={'#f76ba21f'}
+                  fontWeight={'bold'}>
+                  Car
+                </Td>
+                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
+                  20
+                </Td>
+
+                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
+                  {carHourlyRate} <sub>/H</sub>
+                </Td>
+                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
+                  {carMonthlyRate} <sub>/M</sub>
+                </Td>
+              </Tr>
+            )}
+          </Tbody>
+        </Table>
+      </TableContainer>
     </VStack>
   );
 }

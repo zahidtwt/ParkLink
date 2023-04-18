@@ -289,7 +289,108 @@ const getAllParking = async (req, res) => {
   }
 };
 
+const Booking = require('../model/Booking.model');
+
+// Create a new booking
+const createBooking = async (req, res) => {
+  try {
+    const { parking, selectedDate, fromTime, toTime, endDate } = req.body;
+    const user = req.user._id;
+
+    // Check if the parking spot exists
+    const parkingSpot = await Parking.findById(parking);
+    if (!parkingSpot) {
+      return res.status(404).json({ message: 'Parking spot not found' });
+    }
+
+    // Check if the parking spot is available for the selected time period
+    const existingBooking = await Booking.findOne({
+      parking,
+      $or: [
+        {
+          $and: [
+            { selectedDate },
+            {
+              $or: [
+                {
+                  $and: [
+                    { fromTime: { $lte: fromTime } },
+                    { toTime: { $gt: fromTime } },
+                  ],
+                },
+                {
+                  $and: [
+                    { fromTime: { $lt: toTime } },
+                    { toTime: { $gte: toTime } },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          $and: [
+            { endDate: { $gte: selectedDate } },
+            {
+              $or: [
+                {
+                  $and: [
+                    { fromTime: { $lte: fromTime } },
+                    { toTime: { $gt: fromTime } },
+                  ],
+                },
+                {
+                  $and: [
+                    { fromTime: { $lt: toTime } },
+                    { toTime: { $gte: toTime } },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    if (existingBooking) {
+      return res.status(400).json({
+        message: 'Parking spot is not available for this time period',
+      });
+    }
+
+    // Create a new booking
+    const booking = new Booking({
+      parking,
+      selectedDate,
+      fromTime,
+      toTime,
+      endDate,
+      user,
+    });
+    const savedBooking = await booking.save();
+
+    res.status(201).json({ message: 'Booking created', booking: savedBooking });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+// Get all bookings for a user
+const getUserBookings = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const bookings = await Booking.find({ userId });
+
+    res.json(bookings);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 module.exports = {
+  createBooking,
+  getUserBookings,
   createParking,
   getAllParking,
   getParkingById,

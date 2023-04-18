@@ -12,6 +12,8 @@ const {
   deleteParkingById,
   updateParkingById,
   getAllParking,
+  createBooking,
+  getUserBookings,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
@@ -31,5 +33,9 @@ appRouter.get('/users/:userId/parkings', getParkingByUserId);
 appRouter.put('/parkings/:id', updateParkingById);
 appRouter.delete('/parkings/:id', deleteParkingById);
 appRouter.post('/parkings/ratings', createParkingRating);
+
+// Booking endpoints
+appRouter.post('/bookings', createBooking);
+appRouter.get('/users/bookings', getUserBookings);
 
 module.exports = appRouter;

@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 import DebouncedInput from './DebouncedInput';
 import axios from 'axios';
+import MyMap from './MyMap';
 
-function SearchLocation() {
+function SearchLocation({ map }) {
   const [searchValue, setSearchValue] = useState('');
   const [locations, setLocations] = useState([]);
   const searchBg = useColorModeValue('gray.100', 'gray.600');
@@ -12,9 +13,11 @@ function SearchLocation() {
   const searchIcon = useColorModeValue('purple', 'lighgray');
 
   const handleSelect = (selectedItem) => {
-    console.log(selectedItem);
+    const { longitude, latitude } = selectedItem;
+    setBoxOpen(false);
+    map.current.flyTo({ center: [longitude, latitude], zoom: 14 });
   };
-
+  const [boxOpen, setBoxOpen] = useState(false);
   useEffect(() => {
     if (searchValue === '') {
       setLocations([]);
@@ -31,11 +34,12 @@ function SearchLocation() {
   return (
     <>
       <DebouncedInput
+        onFocus={() => setBoxOpen(true)}
         delay={1000}
         placeholder='Search'
         onChange={(value) => setSearchValue(value)}
       />
-      {locations?.places ? (
+      {locations?.places && boxOpen ? (
         <Box
           shadow={'xl'}
           border={'2px solid lightgray'}
