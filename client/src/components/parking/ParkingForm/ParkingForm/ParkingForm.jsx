@@ -22,11 +22,14 @@ import RateSection from './RateSection';
 import VehicleSection from './VehicleSection';
 import ImageUpload from './ImageUpload';
 import ParkingInfo from './ParkingInfo';
+import { useCreateParkingMutation } from '../../../../features/parking/parkingApi';
+import { useNavigate } from 'react-router-dom';
 
 function ParkingForm() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+  const navigate = useNavigate();
   const [parkingInfo, setParkingInfo] = useState({
     location: {
       address: '',
@@ -57,11 +60,22 @@ function ParkingForm() {
     toTime: '',
   });
   // console.log('parkinginfo', parkingInfo);
+  // const dispatch = useDispatch();
+  const [createParking, { data, isLoading, isError, error }] =
+    useCreateParkingMutation();
+
   const [step, setStep] = useState(1);
   const [percent, setPercent] = useState(33);
   const [errors] = useState({});
 
   const toast = useToast();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    createParking(parkingInfo);
+    if (!isError) {
+      navigate('success');
+    }
+  };
   const handleCheckboxChange = (e, rule) => {
     if (rule) {
       if (e.target.checked) {
@@ -103,10 +117,6 @@ function ParkingForm() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(parkingInfo);
-  };
   function handleNextClick() {
     const validationErrors = validateForm(step, parkingInfo);
     if (Object.keys(validationErrors).length === 0) {
@@ -260,6 +270,8 @@ function ParkingForm() {
                   </Button>
                 )}
                 <Button
+                  loadingText='Submitting'
+                  isLoading={isLoading}
                   w={'100%'}
                   colorScheme='purple'
                   onClick={step === 4 ? handleSubmit : handleNextClick}

@@ -11,7 +11,7 @@ import {
 } from '@chakra-ui/react';
 
 function RateSection({ parkingInfo, handleNumberInputChange }) {
-  const [fromTime, setFromTime] = useState('08:00');
+  const [fromTime, setFromTime] = useState('');
 
   const handleFromTimeChange = (value) => {
     setFromTime(value);

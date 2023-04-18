@@ -10,12 +10,21 @@ import {
   FormLabel,
   Select,
 } from '@chakra-ui/react';
+import uploadMapboxImageToCloudinary from './mapimgtocloudinary';
 
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useUpdateUserInfoMutation } from '../../../features/auth/authApi';
 
 export default function Profile() {
+  const longitude = 90.331753;
+  const latitude = 24.004864;
+  const yourAsyncFunction = async () => {
+    // do something asynchronously and return a promise
+    const imageUrl = await uploadMapboxImageToCloudinary(longitude, latitude);
+    console.log(imageUrl);
+  };
+
   const { user } = useSelector((state) => state.auth);
   const [updateUser, { isLoading, error }] = useUpdateUserInfoMutation();
   const { register, handleSubmit } = useForm({
@@ -30,6 +39,7 @@ export default function Profile() {
   });
 
   const onSubmit = async (data) => {
+    yourAsyncFunction();
     try {
       await updateUser({
         mobile: data.number,

@@ -11,7 +11,7 @@ import { FaSearchLocation } from 'react-icons/fa';
 const DebouncedInput = ({ onChange, delay, ...rest }) => {
   const searchBg = useColorModeValue('gray.100', 'gray.700');
   const textColor = useColorModeValue('purple.900', 'white');
-  const searchIcon = useColorModeValue('purple', 'lighgray');
+  // const searchIcon = useColorModeValue('purple', 'lighgray');
 
   const [value, setValue] = useState(rest.defaultValue || '');
 
