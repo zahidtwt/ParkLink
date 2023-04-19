@@ -24,7 +24,8 @@ import ImageUpload from './ImageUpload';
 import ParkingInfo from './ParkingInfo';
 import { useCreateParkingMutation } from '../../../../features/parking/parkingApi';
 import { useNavigate } from 'react-router-dom';
-
+import uploadMapboxImageToCloudinary from './mapimgtocloudinary';
+import LoadingOverlay from '../../../common/LoadingOverlay';
 function ParkingForm() {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -59,8 +60,7 @@ function ParkingForm() {
     fromTime: '',
     toTime: '',
   });
-  // console.log('parkinginfo', parkingInfo);
-  // const dispatch = useDispatch();
+
   const [
     createParking,
     { data, isLoading, isSuccess, isError, error: specialError },
@@ -70,14 +70,30 @@ function ParkingForm() {
   const [percent, setPercent] = useState(33);
   const [errors] = useState({});
   const toast = useToast();
-  const handleSubmit = (e) => {
+
+  const uploadMapImage = async (lng, lat) => {
+    try {
+      const imageUrl = await uploadMapboxImageToCloudinary(lng, lat);
+      return imageUrl;
+    } catch (error) {
+      throw new Error(`Failed to upload map image: ${error}`);
+    }
+  };
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      createParking(parkingInfo);
+      const imageUrl = await uploadMapImage(
+        parkingInfo?.location?.longitude,
+        parkingInfo?.location?.latitude
+      );
+      handleImageUpload(imageUrl, async (updatedParkingInfo) => {
+        await createParking(updatedParkingInfo);
+      });
     } catch (error) {
       console.log(error);
     }
   };
+
   const toastError = specialError?.data?.message;
   if (isError) {
     toast({
@@ -130,13 +146,18 @@ function ParkingForm() {
       images: [prevParkingInfo.images.filter((img) => img !== imageUrl)],
     }));
   };
-  const handleImageUpload = (newImages) => {
-    setParkingInfo((prevParkingInfo) => ({
-      ...prevParkingInfo,
-      images: [...prevParkingInfo.images, newImages],
-    }));
+  const handleImageUpload = (newImages, callback) => {
+    setParkingInfo((prevParkingInfo) => {
+      const updatedParkingInfo = {
+        ...prevParkingInfo,
+        images: [...prevParkingInfo.images, newImages],
+      };
+      if (callback) {
+        callback(updatedParkingInfo);
+      }
+      return updatedParkingInfo;
+    });
   };
-
   function handleNextClick() {
     const validationErrors = validateForm(step, parkingInfo);
     if (Object.keys(validationErrors).length === 0) {
@@ -199,6 +220,7 @@ function ParkingForm() {
 
   return (
     <Container maxWidth='container.md'>
+      <LoadingOverlay isLoading={isLoading} />
       <Box
         mb={20}
         borderWidth={1}

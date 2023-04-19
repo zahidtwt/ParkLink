@@ -26,7 +26,7 @@ const settings = {
   slidesToShow: 1,
   slidesToScroll: 1,
 };
-function ParkingInfo({ parkingInfo, handleEditClick, handleConfirmClick }) {
+function ParkingInfo({ parkingInfo }) {
   return (
     <>
       <Box borderRadius='lg' w={'100%'} justifyContent={'left'}>

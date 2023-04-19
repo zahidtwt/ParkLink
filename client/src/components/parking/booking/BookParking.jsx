@@ -212,7 +212,7 @@ export default function BookParking() {
   }, [selectedDate]);
 
   return (
-    <VStack spacing={4} p={0}>
+    <VStack spacing={4} p={0} mb={'40px'}>
       {isParkingInfoLoading ? (
         <BookParkingSkeletor />
       ) : !showSummary ? (
@@ -306,6 +306,7 @@ export default function BookParking() {
               </Text>
 
               <Button
+                mb={'20!important'}
                 w='100%'
                 loadingText='Booking...'
                 isLoading={isLoading}
