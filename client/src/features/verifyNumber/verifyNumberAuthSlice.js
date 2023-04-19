@@ -29,7 +29,12 @@ const verifyMobileSlice = createSlice({
       .addCase(verifyMobile.fulfilled, (state, action) => {
         state.status = 'succeeded';
         state.username = action.payload.username;
+        state.firstName = action.payload.firstName;
+        state.lastName = action.payload.lastName;
         state.mobile = action.payload.mobile;
+        state.profileImage = action.payload.profileImage;
+        state.balance = action.payload.balance;
+        state.due = action.payload.due;
       })
       .addCase(verifyMobile.rejected, (state, action) => {
         state.status = 'failed';

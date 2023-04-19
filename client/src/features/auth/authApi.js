@@ -26,24 +26,17 @@ export const authApi = apiSlice.injectEndpoints({
           Cookies.set(
             'auth',
             JSON.stringify({
-              accessToken: result.data.token,
-              user: result.data.username,
+              accessToken: result.data.accessToken,
+
+              user: result.data.user,
             }),
             { expires: 1 } // 1 day
           );
 
-          localStorage.setItem(
-            'auth',
-            JSON.stringify({
-              accessToken: result.data.token,
-              user: result.data.username,
-            })
-          );
-
           dispatch(
             userLoggedIn({
-              accessToken: result.data.token,
-              user: result.data.username,
+              accessToken: result.data.accessToken,
+              user: result.data.user,
             })
           );
         } catch (err) {

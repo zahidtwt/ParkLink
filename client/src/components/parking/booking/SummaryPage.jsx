@@ -12,6 +12,7 @@ import {
   Th,
   Td,
   Tfoot,
+  HStack,
 } from '@chakra-ui/react';
 
 export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
@@ -80,7 +81,7 @@ export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
                 </Tr>
                 <Tr>
                   <Th>To</Th>
-                  <Td>To: {convertTo12Hour(formData.toTime)}</Td>
+                  <Td>{convertTo12Hour(formData.toTime)}</Td>
                 </Tr>
               </Tbody>
             </Table>
@@ -89,7 +90,7 @@ export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
             mb={4}
             shadow={'lg'}
             borderRadius={'lg'}
-            border={'1px solid #CBC3E3'}>
+            border={'1px solid #38a1694a'}>
             <Text
               borderRadius={'lg'}
               borderBottomLeftRadius={0}
@@ -97,7 +98,7 @@ export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
               fontSize='md'
               fontWeight='bold'
               textAlign={'center'}
-              bg={'#CBC3E3'}
+              bg={'#38a1694a'}
               p={2}
               color={'#3D405B'}>
               Payment Details
@@ -108,7 +109,7 @@ export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
                   <Th>Amount</Th>
                   <Td> ${formData.cost} </Td>
                 </Tr>
-                <Tr borderBottom={'2px solid #8865f25e'}>
+                <Tr borderBottom={'2px solid #38a1694a'}>
                   <Th>Taxes & Fees (10%)</Th>
                   <Td> ${formData.cost * 0.1}</Td>
                 </Tr>
@@ -123,16 +124,26 @@ export const SummaryPage = ({ formData, onSubmit, onEdit, isLoading }) => {
               </Tfoot>
             </Table>
           </Box>
-          <VStack spacing={4}>
+          <VStack spacing={4} mt={5}>
+            <HStack>
+              <Button colorScheme='gray' onClick={onEdit}>
+                Edit Booking Info
+              </Button>
+              <Button
+                loadingText='Booking...'
+                isLoading={isLoading}
+                onClick={onSubmit}
+                colorScheme='purple'>
+                Pay Later & Book
+              </Button>
+            </HStack>
             <Button
+              w={'90%'}
               loadingText='Booking...'
               isLoading={isLoading}
               onClick={onSubmit}
-              colorScheme='purple'>
-              Submit Booking
-            </Button>
-            <Button colorScheme='gray' onClick={onEdit}>
-              Edit Booking
+              colorScheme='green'>
+              Make Payment
             </Button>
           </VStack>
         </Box>

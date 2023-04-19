@@ -82,9 +82,11 @@ function BookingSuccess() {
           <Image src={parkingDone} borderRadius={'20px'}></Image>
         </Box>
         <VStack>
-          <Button w={'100%'} colorScheme='green' onClick={handleClick}>
-            Go to Dashboard
-          </Button>
+          <a href='/'>
+            <Button w={'100%'} colorScheme='green'>
+              Go to Dashboard
+            </Button>
+          </a>
           <a href={navLink}>
             <Button w={'100%'} colorScheme='purple'>
               Navigate to Parking

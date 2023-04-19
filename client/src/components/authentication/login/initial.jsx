@@ -20,7 +20,6 @@ import {
   AlertTitle,
   Alert,
 } from '@chakra-ui/react';
-import avatar from './avatar.svg';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyMobile } from '../../../features/verifyNumber/verifyNumberAuthSlice';
@@ -80,7 +79,7 @@ export default function InitialCheck() {
         alignItems={'center'}>
         <VStack shadow={'md'} w='350px' p='10px' spacing={10} borderRadius={10}>
           <WrapItem>
-            <Avatar size='2xl' name='?' src={avatar} />
+            <Avatar size='2xl' />
           </WrapItem>
           {isSignupSuccess && (
             <Alert status='success'>

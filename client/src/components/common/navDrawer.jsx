@@ -16,11 +16,15 @@ import {
 import SwitchDarkMode from './switchDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { userLoggedOut } from '../../features/auth/authSlice';
-import avatar from '../../assets/avatar.svg';
 import { Link } from 'react-router-dom';
 function NavDrawer({ isOpen, onClose }) {
-  const { firstname, lastname } = useSelector((state) => state.auth.user) || {};
+  const { profileImage, firstName, lastName, due, balance } =
+    useSelector((state) => state.auth.user) || {};
   const dispatch = useDispatch();
+
+  const handleLinkClick = () => {
+    onClose();
+  };
 
   return (
     <Drawer isOpen={isOpen} onClose={onClose}>
@@ -31,15 +35,13 @@ function NavDrawer({ isOpen, onClose }) {
 
         <DrawerBody>
           <VStack alignItems={'center'} mb={5} justifyContent={'space-between'}>
-            {' '}
-            j
             <HStack spacing={2} mb={5}>
-              <Avatar size='md' name='?' src={avatar} />
+              <Avatar size='md' name={firstName} src={profileImage} />
               <VStack alignItems={'left'}>
                 <Text fontSize={'lg'} mr={10}>
-                  {firstname} {lastname}
+                  {firstName} {lastName}
                 </Text>{' '}
-                <Link to='/profile'>
+                <Link to='/profile' onClick={handleLinkClick}>
                   <Text fontSize={'sm'} fontWeight={400}>
                     Edit Profile
                   </Text>
@@ -55,7 +57,7 @@ function NavDrawer({ isOpen, onClose }) {
                 borderRadius='md'
                 textAlign='center'
                 py={2}>
-                Balance: 10 ৳
+                Balance: {balance}
               </Box>
               <Box
                 px={5}
@@ -64,7 +66,7 @@ function NavDrawer({ isOpen, onClose }) {
                 borderRadius='md'
                 textAlign='center'
                 py={2}>
-                Due: 10 ৳
+                Due: {due}
               </Box>
             </HStack>
           </VStack>
@@ -87,12 +89,27 @@ function NavDrawer({ isOpen, onClose }) {
               fontSize={'md'}
               fontWeight={400}
               pl={5}>
-              <Link to={'/'}>Manage Listing</Link>
-              <Link to={'/'}>Bookmarks</Link>
-              <Link to={'/'}>History</Link>
-              <Link to={'/'}>Payment</Link>
-              <Link to={'/'}>Withdraw</Link>
-              <Link to={'/'}>Support</Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Bookings
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Manage Listing
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Bookmarks
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                History
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Payment
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Withdraw
+              </Link>
+              <Link to={'/'} onClick={handleLinkClick}>
+                Support
+              </Link>
             </VStack>{' '}
           </VStack>
         </DrawerBody>

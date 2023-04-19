@@ -6,11 +6,6 @@ function SuccessParkingSubmission() {
   const searchParams = new URLSearchParams(window.location.search);
   const parkingId = searchParams.get('parkingId');
 
-  const handleClick = () => {
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 0);
-  };
   return (
     <Flex
       direction='column'
@@ -76,9 +71,11 @@ function SuccessParkingSubmission() {
           />
         </Box>
 
-        <Button colorScheme='purple' onClick={handleClick}>
-          Go to Dashboard
-        </Button>
+        <a href='/'>
+          <Button w={'100%'} colorScheme='purple'>
+            Go to Dashboard
+          </Button>
+        </a>
       </VStack>
     </Flex>
   );

@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 
 import PullToRefresh from 'react-simple-pull-to-refresh';
-import { Spinner } from '@chakra-ui/react';
 import SplashScreenOne from './components/splash/splashScreenOne';
 import SplashScreenTwo from './components/splash/splashScreenTwo';
 import SplashScreenThree from './components/splash/splashScreenThree';

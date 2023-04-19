@@ -26,12 +26,13 @@ export default function Profile() {
   };
 
   const { user } = useSelector((state) => state.auth);
+  console.log(user);
   const [updateUser, { isLoading, error }] = useUpdateUserInfoMutation();
   const { register, handleSubmit } = useForm({
     defaultValues: {
-      number: user.mobile,
-      firstName: user.firstname,
-      lastName: user.lastname,
+      mobile: user.mobile,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       dob: user.dob ? new Date(user.dob).toISOString().slice(0, 10) : '',
       gender: user.gender,
@@ -42,7 +43,7 @@ export default function Profile() {
     yourAsyncFunction();
     try {
       await updateUser({
-        mobile: data.number,
+        mobile: data.mobile,
         firstname: data.firstName,
         lastname: data.lastName,
         email: data.email,
@@ -72,10 +73,10 @@ export default function Profile() {
               <InputGroup>
                 <InputLeftAddon children='+880' />
                 <Input
-                  {...register('number')}
+                  {...register('mobile')}
                   type='tel'
                   placeholder='Phone number'
-                  name='number'
+                  name='mobile'
                   // disabled
                 />
               </InputGroup>

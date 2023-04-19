@@ -18,7 +18,6 @@ import {
   Heading,
   InputLeftAddon,
 } from '@chakra-ui/react';
-import avatar from './avatar.svg';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -26,7 +25,9 @@ import { useLoginMutation } from '../../../features/auth/authApi';
 import Cookies from 'js-cookie';
 export default function Login() {
   const Navigate = useNavigate();
-  const { username, mobile } = useSelector((state) => state.verifyMobile);
+  const { username, mobile, profileImage, firstName } = useSelector(
+    (state) => state.verifyMobile
+  );
   const [login, { data, isLoading, error }] = useLoginMutation();
   const [showPassword, setShowPassword] = useState(false);
   const {
@@ -79,9 +80,9 @@ export default function Login() {
         alignItems={'center'}>
         <VStack shadow={'md'} w='350px' p='10px' spacing={10} borderRadius={10}>
           <WrapItem>
-            <Avatar size='2xl' name='Segun Adebayo' src={avatar} />{' '}
+            <Avatar size='2xl' name={firstName} src={profileImage} />{' '}
           </WrapItem>
-          <Heading>Welcome {username}!</Heading>
+          <Heading>Welcome {firstName}!</Heading>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             <Box h={'20px'} mb={10}>

@@ -5,7 +5,6 @@ import ParkingInfo from '../parking/ParkingInfoDisplay';
 import { useDisclosure } from '@chakra-ui/react';
 import CenterButton from './CenterButton';
 import SearchLocation from './searchLocation';
-
 mapboxgl.accessToken =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
 // coordinates: { latitude, longitude } }
@@ -35,7 +34,6 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
     });
     const width = 40;
     const height = 40;
-
     // Add markers to the map.
     // if (!isLoading && !isError && parkings) {
     parkings.forEach((marker) => {
