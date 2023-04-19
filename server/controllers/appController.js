@@ -245,7 +245,7 @@ async function deleteParkingById(req, res) {
 async function createParkingRating(req, res) {
   try {
     const { parkingId, rating, comment } = req.body;
-    const userId = req.user.id; // Assuming you have middleware that sets the user ID in the request object
+    const userId = req.user.id;
 
     // Find the parking spot by ID and add the new rating
     const parking = await Parking.findByIdAndUpdate(
@@ -387,7 +387,62 @@ const deleteBookingById = async (req, res) => {
   }
 };
 
+const addBookmarks = async (req, res) => {
+  const parking_id = req.params.parkingId;
+  const userId = req.user._id;
+  await User.findByIdAndUpdate(userId, {
+    $addToSet: { bookmarkedParkings: parking_id },
+  });
+  res.status(200).json({ message: 'Bookmark added' });
+};
+
+const removeBookmarks = async (req, res) => {
+  const parking_id = req.params.parkingId;
+  const userId = req.user._id;
+
+  await User.findByIdAndUpdate(userId, {
+    $addToSet: { bookmarkedParkings: parking_id },
+  });
+  res.status(200).json({ message: 'Bookmark added' });
+};
+
+const getAllBookMarkedParkings = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    // Fetch the user with the list of bookmarked parking IDs
+    const user = await User.findById(userId).select('bookmarkedParkings');
+
+    // Fetch the bookmarked parkings using the IDs
+    const bookmarkedParkings = await Parking.find({
+      _id: { $in: user.bookmarkedParkings },
+    });
+
+    res.status(200).json({ bookmarkedParkings });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
+const getAllBookingHistory = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const bookings = await Booking.find({ user: userId }).populate(
+      'parking_id'
+    );
+
+    res.status(200).json({ bookings });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server Error' });
+  }
+};
 module.exports = {
+  getAllBookingHistory,
+  getAllBookMarkedParkings,
+  addBookmarks,
+  removeBookmarks,
   createBooking,
   getUserBookings,
   createParking,

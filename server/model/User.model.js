@@ -65,8 +65,20 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
+    profileImage: {
+      type: String,
+      default:
+        'https://res.cloudinary.com/di31yslny/image/upload/c_scale,q_61,w_237/v1681855844/3d-illustration-person-with-sunglasses_23-2149436188_vtqr1a.avif',
+    },
+    bookmarkedParkings: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Parking',
+      },
+    ],
   },
   { timestamps: true }
+
   // automatically adds two fields to the schema: createdAt and updatedAt. These fields
   // track when a document was created and when it was last updated.
 );

@@ -15,6 +15,10 @@ const {
   createBooking,
   getUserBookings,
   deleteBookingById,
+  getAllBookMarkedParkings,
+  addBookmarks,
+  removeBookmarks,
+  getAllBookingHistory,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
@@ -39,5 +43,11 @@ appRouter.post('/parkings/ratings', createParkingRating);
 appRouter.post('/bookings', createBooking);
 appRouter.get('/bookings/:userId', getUserBookings);
 appRouter.delete('/bookings/:id', deleteBookingById);
+appRouter.get('/bookings/history/', getAllBookingHistory);
+
+// Bookmark endpoints
+appRouter.post('/bookmarks', addBookmarks);
+appRouter.get('/bookmarks/:userId', getAllBookMarkedParkings);
+appRouter.delete('/bookmarks/:id', removeBookmarks);
 
 module.exports = appRouter;
