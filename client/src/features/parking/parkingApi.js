@@ -28,6 +28,12 @@ export const parkingApi = apiSlice.injectEndpoints({
         params,
       }),
     }),
+    getNearbyParkings: builder.query({
+      query: (lng, latitude) => ({
+        url: `app/parkings/nearby/${lng}/${latitude}`,
+        method: 'GET',
+      }),
+    }),
 
     // Get parking spots by vehicle type
     getParkingByVehicleType: builder.query({
@@ -82,6 +88,7 @@ export const parkingApi = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetNearbyParkingsQuery,
   useGetAllParkingQuery,
   useGetParkingByIdQuery,
   useGetParkingByLocationQuery,

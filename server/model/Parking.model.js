@@ -57,6 +57,16 @@ const parkingSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  onHold: {
+    type: Boolean,
+    default: false,
+  },
+  bookings: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Booking',
+    },
+  ],
 });
 
 const Parking = mongoose.model('Parking', parkingSchema);

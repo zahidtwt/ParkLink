@@ -7,6 +7,7 @@ const {
   getParkingByLocation,
   getParkingByUserId,
   getParkingByDistance,
+  getNearbyParking,
   getParkingByRating,
   getParkingByVehicleType,
   deleteParkingById,
@@ -16,9 +17,8 @@ const {
   getUserBookings,
   deleteBookingById,
   getAllBookMarkedParkings,
-  addBookmarks,
-  removeBookmarks,
-  getAllBookingHistory,
+  addBookmark,
+  removeBookmark,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
@@ -28,6 +28,7 @@ appRouter.get('/parkings/all', getAllParking);
 appRouter.get('/parkings/:id', getParkingById);
 appRouter.get('/parkings', getParkingByLocation);
 appRouter.get('/parkings/distance', getParkingByDistance);
+appRouter.get('/parkings/nearby/:longitude/:latitude', getNearbyParking);
 appRouter.get('/parkings/vehicle-type', getParkingByVehicleType);
 appRouter.get('/parkings/rating', getParkingByRating);
 
@@ -41,13 +42,12 @@ appRouter.post('/parkings/ratings', createParkingRating);
 
 // Booking endpoints
 appRouter.post('/bookings', createBooking);
-appRouter.get('/bookings/:userId', getUserBookings);
+appRouter.get('/bookings/', getUserBookings);
 appRouter.delete('/bookings/:id', deleteBookingById);
-appRouter.get('/bookings/history/', getAllBookingHistory);
 
 // Bookmark endpoints
-appRouter.post('/bookmarks', addBookmarks);
-appRouter.get('/bookmarks/:userId', getAllBookMarkedParkings);
-appRouter.delete('/bookmarks/:id', removeBookmarks);
+appRouter.post('/bookmarks/:parkingId', addBookmark);
+appRouter.delete('/bookmarks/:parkingId', removeBookmark);
+appRouter.get('/bookmarks/', getAllBookMarkedParkings);
 
 module.exports = appRouter;

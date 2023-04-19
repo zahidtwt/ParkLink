@@ -14,7 +14,7 @@ authRouter.post('/authenticate', (req, res) => {
 authRouter.post('/login', authController.verifyUser, authController.login);
 
 authRouter.get('/verifymobile', authController.verifyMobile);
-authRouter.get('/user/:username', authController.getUser);
+authRouter.get('/user/', authMiddleware, authController.getUser);
 authRouter.get('/verifyOTP', authController.verifyOTP);
 authRouter.get('/createResetSession', authController.createResetSession);
 

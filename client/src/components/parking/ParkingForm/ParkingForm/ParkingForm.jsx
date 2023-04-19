@@ -245,7 +245,6 @@ function ParkingForm() {
           mb={4}
           isAnimated
           colorScheme='purple'
-          hasStripe
           transition='all 0.3s ease-in-out'
         />{' '}
         <form onSubmit={handleSubmit}>

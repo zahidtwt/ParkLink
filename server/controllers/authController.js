@@ -12,9 +12,12 @@ module.exports = authController = {
       // Check if the user exists
       const user = await UserModel.findOne({ mobile });
       if (!user) return res.status(404).send({ error: "Can't find user 😒" });
-      return res
-        .status(200)
-        .send({ mobile: user.mobile, username: user.username });
+      return res.status(200).send({
+        mobile: user.mobile,
+        username: user.username,
+        firstName: user.firstName,
+        profileImage: user.profileImage,
+      });
     } catch (error) {
       // Authentication error occurred
       return res.status(401).send({ error: 'Authentication error' });
@@ -112,15 +115,22 @@ module.exports = authController = {
 
       // Return success response with user data and token
       return res.status(200).send({
-        token,
+        accessToken: token,
         msg: 'Successfully logged in',
-        username: user.username,
-        firstname: user.firstName,
-        lastname: user.lastName,
-        email: user.email,
-        mobile: user.mobile,
-        dob: user.dob,
-        gender: user.gender,
+
+        user: {
+          username: user.username,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          mobile: user.mobile,
+          dob: user.dob,
+          gender: user.gender,
+          due: user.due,
+          profileImage: user.profileImage,
+          balance: user.balance,
+          bookmarkedParkings: user.bookmarkedParkings,
+        },
       });
     } catch (error) {
       // Return error response for any unhandled error
@@ -133,15 +143,10 @@ module.exports = authController = {
    */
   getUser: async function (req, res) {
     try {
-      const { username } = req.params;
-
-      // Check for valid username
-      if (!username) {
-        return res.status(400).send({ error: 'Invalid username' });
-      }
-
-      // Find user by username
-      const user = await UserModel.findOne({ username });
+      const userId = req.user._id;
+      console.log('userId', userId);
+      // Find user by userId
+      const user = await UserModel.findById(userId);
       if (!user) {
         return res.status(404).send({ error: "Couldn't find the user" });
       }
@@ -155,7 +160,6 @@ module.exports = authController = {
       return res.status(500).send({ error: 'Internal server error' });
     }
   },
-
   /** PUT: http://localhost:8080/api/updateuser */
   updateUser: async function (req, res) {
     try {

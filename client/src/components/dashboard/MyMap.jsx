@@ -49,8 +49,8 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
       el.style.backgroundSize = '100%';
 
       el.addEventListener('click', () => {
-        onOpen(); // <- add this line to open the drawer
-        setMsg(marker); // <- add this line to store the message
+        onOpen();
+        setMsg(marker);
       });
 
       // Add markers to the map.

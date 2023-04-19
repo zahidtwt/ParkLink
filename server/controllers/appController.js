@@ -155,6 +155,35 @@ async function getParkingByDistance(req, res) {
   }
 }
 
+async function getNearbyParking(req, res) {
+  try {
+    const latitude = req.params.latitude;
+    const longitude = req.params.longitude;
+
+    const parkings = await Parking.find().populate('user');
+
+    const parkingDistances = parkings.map((parking) => {
+      const distance = geolib.getDistance(
+        { latitude, longitude },
+        {
+          latitude: parking.location.latitude,
+          longitude: parking.location.longitude,
+        }
+      );
+      return { ...parking.toObject(), distance };
+    });
+
+    const sortedParkings = parkingDistances
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 5); // Add a slice method to get the first 5 parking spots only
+
+    res.json(sortedParkings);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
 async function getParkingByRating(req, res) {
   try {
     // Find all the parking spots and populate the user field and ratings subdocument
@@ -387,7 +416,7 @@ const deleteBookingById = async (req, res) => {
   }
 };
 
-const addBookmarks = async (req, res) => {
+const addBookmark = async (req, res) => {
   const parking_id = req.params.parkingId;
   const userId = req.user._id;
   await User.findByIdAndUpdate(userId, {
@@ -396,14 +425,14 @@ const addBookmarks = async (req, res) => {
   res.status(200).json({ message: 'Bookmark added' });
 };
 
-const removeBookmarks = async (req, res) => {
+const removeBookmark = async (req, res) => {
   const parking_id = req.params.parkingId;
   const userId = req.user._id;
 
   await User.findByIdAndUpdate(userId, {
-    $addToSet: { bookmarkedParkings: parking_id },
+    $pull: { bookmarkedParkings: parking_id },
   });
-  res.status(200).json({ message: 'Bookmark added' });
+  res.status(200).json({ message: 'Bookmark removed' });
 };
 
 const getAllBookMarkedParkings = async (req, res) => {
@@ -424,25 +453,12 @@ const getAllBookMarkedParkings = async (req, res) => {
     res.status(500).json({ message: 'Server Error' });
   }
 };
-const getAllBookingHistory = async (req, res) => {
-  try {
-    const userId = req.user._id;
 
-    const bookings = await Booking.find({ user: userId }).populate(
-      'parking_id'
-    );
-
-    res.status(200).json({ bookings });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
-  }
-};
 module.exports = {
-  getAllBookingHistory,
+  getNearbyParking,
   getAllBookMarkedParkings,
-  addBookmarks,
-  removeBookmarks,
+  addBookmark,
+  removeBookmark,
   createBooking,
   getUserBookings,
   createParking,

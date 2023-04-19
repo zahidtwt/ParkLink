@@ -30,6 +30,7 @@ import BookingSuccess from './components/parking/booking/BookingSuccess';
 import AllBookings from './components/bookings/AllBookings';
 import { Spinner } from '@chakra-ui/react';
 import ParkListing from './components/ParkListing/ParkListing';
+import MainPage from './components/homepage/MainPage';
 function App() {
   const authChecked = useAuthCheck();
   const refresh = () => {
@@ -117,6 +118,14 @@ function App() {
             element={
               <PrivateRoute>
                 <ParkingForm />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/main'
+            element={
+              <PrivateRoute>
+                <MainPage />
               </PrivateRoute>
             }
           />

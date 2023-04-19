@@ -212,7 +212,15 @@ export default function BookParking() {
   }, [selectedDate]);
 
   return (
-    <VStack spacing={4} p={0} mb={'40px'}>
+    <VStack spacing={4} p={0} mb={'60px'}>
+      <Text
+        mb={2}
+        bgGradient='linear-gradient(to left, #b928cacf, #553c9a)'
+        bgClip='text'
+        fontSize='5xl'
+        fontWeight='extrabold'>
+        ParkLink
+      </Text>
       {isParkingInfoLoading ? (
         <BookParkingSkeletor />
       ) : !showSummary ? (
