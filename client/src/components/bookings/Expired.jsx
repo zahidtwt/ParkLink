@@ -1,5 +1,5 @@
 import React from 'react';
-import { FcExpired } from 'react-icons/fc';
+import { BsSignNoParking } from 'react-icons/bs';
 const Expired = () => {
   return (
     <div
@@ -7,11 +7,11 @@ const Expired = () => {
         position: 'absolute',
         top: '0px',
         left: '0px',
-        padding: '6px 12px',
-        fontSize: '30px',
+        padding: '6px 6px',
+        fontSize: '40px',
         textTransform: 'uppercase',
       }}>
-      <FcExpired style={{ marginRight: '5px' }} />
+      <BsSignNoParking style={{ marginRight: '5px' }} color='#fa5151' />
     </div>
   );
 };

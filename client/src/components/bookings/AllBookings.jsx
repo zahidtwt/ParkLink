@@ -73,20 +73,20 @@ function AllBookings() {
           All Bookings
         </Button>
         <Button
-          colorScheme={activeButton === 'active' ? 'purple' : 'gray'}
+          colorScheme={activeButton === 'active' ? 'green' : 'gray'}
           onClick={() => handleFilterClick(false)}
           disabled={expiredButton}>
           Active
         </Button>
         <Button
-          colorScheme={activeButton === 'expired' ? 'purple' : 'gray'}
+          colorScheme={activeButton === 'expired' ? 'red' : 'gray'}
           onClick={() => handleFilterClick(true)}
           disabled={!expiredButton}>
           Expired
         </Button>
       </ButtonGroup>
       {filteredBookings.map((booking) => (
-        <MiniParkingInfo
+        <MiniParkingInfo 
           key={booking.bookingId}
           booking={booking}
           isExpired={booking.isExpired}

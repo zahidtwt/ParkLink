@@ -27,7 +27,7 @@ function MiniParkingInfo({ booking, isExpired }) {
 
   return (
     <>
-      <Container maxW={'container.xl'} mt={5}>
+      <Container maxW={'container.xl'} mt={'5!important'}>
         <VStack
           position='relative'
           boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
@@ -47,7 +47,7 @@ function MiniParkingInfo({ booking, isExpired }) {
               <Expired />
               <Center width='100%' height='100%'>
                 <Link to={`/book-parking/?parkingId=${booking.parking_id}`}>
-                  <Button color={'purple.500'}>
+                  <Button color={'purple.500'} shadow={'lg'}>
                     <Text>Book Again</Text>
                   </Button>
                 </Link>

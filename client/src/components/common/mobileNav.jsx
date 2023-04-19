@@ -37,29 +37,30 @@ function MobileBottomNavbar() {
   if (data)
     content = (
       <Flex
+        mx={9}
         zIndex={10}
         pos='fixed'
-        bottom={0}
+        bottom={10}
         left={0}
         right={0}
         align='center'
         justify='space-around'
-        py={3}
+        py={1.5}
         px={6}
-        borderRadius='30px 30px 0 0'
+        borderRadius='30px'
         bgColor={bgColor}
-        boxShadow={boxShadowColor}>
+        boxShadow={'0px 0px 20px -8px #6b46c1'}>
         <Link to='/dashboard'>
-          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+          <motion.div whileHover={{ scale: 1.4 }} whileTap={{ scale: 0.9 }}>
             <IconButton
               aria-label='Home'
-              icon={<AiOutlineHome size={28} />}
+              icon={<AiOutlineHome size={20} />}
               variant='ghost'
               size='lg'
               colorScheme={activeRoute === '/dashboard' ? 'gray' : 'blue'}
               color={activeRoute === '/dashboard' ? selectedColor : activeColor}
               transform={
-                activeRoute === '/dashboard' ? 'scale(1.2)' : 'scale(1.0)'
+                activeRoute === '/dashboard' ? 'scale(1.4)' : 'scale(1.0)'
               }
               bg={
                 activeRoute === '/dashboard' ? selectedBgColor : 'transparent'
@@ -71,6 +72,7 @@ function MobileBottomNavbar() {
                 bg: selectedBgColor,
               }}
               isRound
+              shadow='0px 0px 5px 2px rgba(0,0,0,0.1)'
             />
           </motion.div>
         </Link>
@@ -78,13 +80,13 @@ function MobileBottomNavbar() {
           <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             <IconButton
               aria-label='Search'
-              icon={<AiOutlineSearch size={28} />}
+              icon={<AiOutlineSearch size={20} />}
               variant='ghost'
               size='lg'
               colorScheme={activeRoute === '/search' ? 'gray' : 'blue'}
               color={activeRoute === '/search' ? selectedColor : activeColor}
               transform={
-                activeRoute === '/search' ? 'scale(1.2)' : 'scale(1.0)'
+                activeRoute === '/search' ? 'scale(1.4)' : 'scale(1.0)'
               }
               bg={activeRoute === '/search' ? selectedBgColor : 'transparent'}
               _active={{
@@ -94,6 +96,7 @@ function MobileBottomNavbar() {
                 bg: selectedBgColor,
               }}
               isRound
+              shadow='0px 0px 5px 2px rgba(0,0,0,0.1)'
             />
           </motion.div>
         </Link>
@@ -101,12 +104,12 @@ function MobileBottomNavbar() {
           <IconButton
             onClick={onOpen}
             aria-label='Profile'
-            icon={<AiOutlineMenuFold size={28} />}
+            icon={<AiOutlineMenuFold size={20} />}
             variant='ghost'
             size='lg'
             colorScheme={activeRoute === '/menu' ? 'gray' : 'blue'}
             color={activeRoute === '/menu' ? selectedColor : activeColor}
-            transform={activeRoute === '/menu' ? 'scale(1.2)' : 'scale(1.0)'}
+            transform={activeRoute === '/menu' ? 'scale(1.4)' : 'scale(1.0)'}
             bg={activeRoute === '/menu' ? selectedBgColor : 'transparent'}
             _active={{
               bg: selectedBgColor,
@@ -115,6 +118,7 @@ function MobileBottomNavbar() {
               bg: selectedBgColor,
             }}
             isRound
+            shadow='0px 0px 5px 2px rgba(0,0,0,0.1)'
           />{' '}
         </motion.div>
         <NavDrawer isOpen={isOpen} onClose={onClose} />

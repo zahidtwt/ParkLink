@@ -111,7 +111,7 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
 
   return (
     <>
-      <div ref={mapContainer} style={{ height: '100vh' }} />;
+      <div ref={mapContainer} style={{ height: '100vh' }} />
       <SearchLocation map={map} />
       <CenterButton map={map} latitude={latitude} longitude={longitude} />
       <ParkingInfo msg={msg} isOpen={isOpen} onClose={onClose} />

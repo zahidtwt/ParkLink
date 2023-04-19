@@ -10,7 +10,15 @@ import {
   Flex,
   Center,
 } from '@chakra-ui/react';
-import { FaCalendar, FaClock, FaMoneyBillAlt } from 'react-icons/fa';
+import {
+  FaMapMarkedAlt,
+  FaClock,
+  FaParking,
+  FaCartArrowDown,
+  FaRegEdit,
+  FaEye,
+  FaRegTrashAlt,
+} from 'react-icons/fa';
 import map from '../../assets/map.png';
 import { Link } from 'react-router-dom';
 
@@ -33,7 +41,7 @@ function ParkListingInfo({ parking, onHold }) {
           borderRadius={'xl'}
           spacing={2}
           p={3}>
-          {onHold && (
+          {parking.onHold && (
             <Flex
               position='absolute'
               top={0}
@@ -48,11 +56,11 @@ function ParkListingInfo({ parking, onHold }) {
                   Expired
                 </Text> */}
                 <Button
-                  colorScheme='purple'
+                  colorScheme='green'
                   variant={'outline'}
                   border={'2px solid '}
                   bg={'#f0f0f0d2'}>
-                  <Text>Active It</Text>
+                  <Text>Activate</Text>
                 </Button>
               </Center>
             </Flex>
@@ -62,7 +70,7 @@ function ParkListingInfo({ parking, onHold }) {
               <Image
                 borderRadius={'xl'}
                 shadow={'lg'}
-                src={map}
+                src={parking.images[parking.images.length - 1]}
                 alt={parking.address}
                 maxW={'120px'}
                 mr={1}
@@ -71,15 +79,16 @@ function ParkListingInfo({ parking, onHold }) {
             </Box>
             <Box ml={1}>
               <HStack>
-                <Text>parking ID:</Text>
+                <Text>Parking ID:</Text>
                 <Heading size={'sm'}>{parking.parkingId}</Heading>
               </HStack>
               <div>
                 <HStack>
-                  <FaCalendar color='var(--chakra-colors-purple-400)' />{' '}
+                  <FaMapMarkedAlt color='var(--chakra-colors-purple-400)' />{' '}
                   <p>
-                    {startDate.toLocaleDateString()}{' '}
-                    {endDate && `to ${endDate.toLocaleDateString()}`}
+                    {parking.location.address.length > 20
+                      ? parking.location.address.slice(0, 20) + '...'
+                      : parking.location.address}
                   </p>
                 </HStack>
 
@@ -92,8 +101,23 @@ function ParkListingInfo({ parking, onHold }) {
                 </HStack>
 
                 <HStack>
-                  <FaMoneyBillAlt color='var(--chakra-colors-purple-400)' />{' '}
-                  <p>{parking.cost} BDT</p>
+                  <FaParking color='var(--chakra-colors-purple-400)' />{' '}
+                  <p>
+                    <b>Slots</b> Bike: {parking.bikeSlot}{' '}
+                    {parking.carSlot ? `Car: ${parking.carSlot}` : ''}
+                  </p>
+                </HStack>
+                <HStack>
+                  <FaCartArrowDown color='var(--chakra-colors-purple-400)' />{' '}
+                  <p>
+                    <b>Booked</b>{' '}
+                    {parking?.booked?.bike
+                      ? `Bike: ${parking?.booked?.bike}`
+                      : ''}{' '}
+                    {parking?.booked?.car
+                      ? `Car: 4${parking?.booked?.car}`
+                      : ''}
+                  </p>
                 </HStack>
                 {/* Add more fields or elements as needed */}
               </div>
@@ -101,14 +125,27 @@ function ParkListingInfo({ parking, onHold }) {
           </HStack>
 
           <HStack mt={2}>
-            <Button size={'sm'} colorScheme='red' variant={'outline'}>
-              Cancel
+            {parking.onHold && (
+              <Button size={'sm'} colorScheme='red'>
+                Hold
+              </Button>
+            )}
+            {!parking.onHold && (
+              <Button size={'sm'} colorScheme='red' variant={'outline'}>
+                Hold
+              </Button>
+            )}
+            <Button size={'sm'} colorScheme='green' variant={'outline'}>
+              <FaEye />
             </Button>
             <Button size={'sm'} colorScheme='blue' variant={'outline'}>
-              Change Date/Time
+              <FaRegEdit />
             </Button>
-            <Button size={'sm'} colorScheme='green'>
-              Navigate
+            <Button size={'sm'} colorScheme='red' variant={'outline'}>
+              <FaRegTrashAlt />
+            </Button>
+            <Button size={'sm'} colorScheme='purple' variant={'outline'}>
+              Bookings
             </Button>
           </HStack>
         </VStack>

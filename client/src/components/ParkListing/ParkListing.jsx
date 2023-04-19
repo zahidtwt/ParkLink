@@ -14,8 +14,8 @@ function ParkListing() {
 
   const filteredBookings = parkings.filter((parking) => {
     if (activeButton === 'all') return true;
-    if (activeButton === 'active') return !parking.isHold;
-    if (activeButton === 'expired') return parking.isHold;
+    if (activeButton === 'active') return !parking.onHold;
+    if (activeButton === 'expired') return parking.onHold;
   });
   const handleFilterClick = (showExpired) => {
     setActiveButton(showExpired ? 'expired' : 'active');
@@ -42,24 +42,24 @@ function ParkListing() {
             setActiveButton('all');
             setExpiredButton(false);
           }}>
-          All Bookings
+          All Parkings
         </Button>
         <Button
-          colorScheme={activeButton === 'active' ? 'purple' : 'gray'}
+          colorScheme={activeButton === 'active' ? 'green' : 'gray'}
           onClick={() => handleFilterClick(false)}
           disabled={expiredButton}>
           Active
         </Button>
         <Button
-          colorScheme={activeButton === 'expired' ? 'purple' : 'gray'}
+          colorScheme={activeButton === 'expired' ? 'red' : 'gray'}
           onClick={() => handleFilterClick(true)}
           disabled={!expiredButton}>
-          Expired
+          On Hold
         </Button>
       </ButtonGroup>
       {filteredBookings.map((parking) => (
         <MiniParkingInfo
-          key={parking.parkignId}
+          key={parking._id}
           parking={parking}
           isExpired={parking.onHold}
         />

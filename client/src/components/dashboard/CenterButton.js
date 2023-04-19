@@ -10,14 +10,14 @@ export default function CenterButton({ map, latitude, longitude }) {
       onClick={handleClick}
       style={{
         position: 'absolute',
-        top: '700px',
-        right: '10px',
+        top: '670px',
+        right: '30px',
         zIndex: 1,
         background: 'purple',
-        padding: '10px',
+        padding: '9px',
         borderRadius: '50%',
       }}>
-      <BiCurrentLocation color='white' size={'30px'} />
+      <BiCurrentLocation color='white' size={'28px'} />
     </button>
   );
 }
