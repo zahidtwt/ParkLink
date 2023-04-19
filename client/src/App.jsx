@@ -6,6 +6,8 @@ import {
   Navigate,
 } from 'react-router-dom';
 
+import PullToRefresh from 'react-simple-pull-to-refresh';
+import { Spinner } from '@chakra-ui/react';
 import SplashScreenOne from './components/splash/splashScreenOne';
 import SplashScreenTwo from './components/splash/splashScreenTwo';
 import SplashScreenThree from './components/splash/splashScreenThree';
@@ -28,7 +30,14 @@ import SuccessParkingSubmission from './components/parking/ParkingForm/ParkingFo
 import BookingSuccess from './components/parking/booking/BookingSuccess';
 function App() {
   const authChecked = useAuthCheck();
-
+  const refresh = () => {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        console.log('Refresh completed successfully!');
+        resolve(); // <-- call resolve() to indicate that the refresh is completed successfully
+      }, 1000); // <-- simulate a delay of 2 seconds
+    });
+  };
   return !authChecked ? (
     <div>Checking authentication....</div>
   ) : (
@@ -70,7 +79,9 @@ function App() {
             path='/profile'
             element={
               <PrivateRoute>
-                <Profile />
+                <PullToRefresh onRefresh={refresh}>
+                  <Profile />
+                </PullToRefresh>
               </PrivateRoute>
             }
           />

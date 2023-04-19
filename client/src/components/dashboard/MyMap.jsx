@@ -39,6 +39,7 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
     // Add markers to the map.
     // if (!isLoading && !isError && parkings) {
     parkings.forEach((marker) => {
+      if (marker?.bikeSlot === 0 && marker?.carSlot === 0) return;
       // Create a DOM element for each marker.
       const el = document.createElement('div');
       // const width = marker.properties.iconSize[0];
