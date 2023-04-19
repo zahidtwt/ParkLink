@@ -27,7 +27,7 @@ export const authApi = apiSlice.injectEndpoints({
             'auth',
             JSON.stringify({
               accessToken: result.data.token,
-              user: result.data,
+              user: result.data.username,
             }),
             { expires: 1 } // 1 day
           );
@@ -36,14 +36,14 @@ export const authApi = apiSlice.injectEndpoints({
             'auth',
             JSON.stringify({
               accessToken: result.data.token,
-              user: result.data,
+              user: result.data.username,
             })
           );
 
           dispatch(
             userLoggedIn({
               accessToken: result.data.token,
-              user: result.data,
+              user: result.data.username,
             })
           );
         } catch (err) {

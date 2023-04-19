@@ -7,7 +7,9 @@ function SuccessParkingSubmission() {
   const parkingId = searchParams.get('parkingId');
 
   const handleClick = () => {
-    navigate('/dashboard');
+    setTimeout(() => {
+      navigate('/dashboard');
+    }, 0);
   };
   return (
     <Flex

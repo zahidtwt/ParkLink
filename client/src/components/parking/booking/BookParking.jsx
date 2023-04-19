@@ -15,6 +15,7 @@ import {
 } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
+import { SummaryPage } from './SummaryPage';
 
 export default function BookParking() {
   const [createBooking, { data, isLoading, error, isSuccess, isError }] =
@@ -26,7 +27,7 @@ export default function BookParking() {
   const parkingInfo = location.state?.parkingInfo;
   const minDate = new Date().toISOString().split('T')[0];
 
-  const [vehicleType, setVehicleType] = useState('bike');
+  const [vehicleType, setVehicleType] = useState('');
   const [selectedDate, setSelectedDate] = useState(minDate);
   const [fromTime, setFromTime] = useState('');
   const noAvailableTimeSlots = useRef(false);
@@ -34,6 +35,8 @@ export default function BookParking() {
   const [endDate, setEndDate] = useState('');
   const [showEndDate, setShowEndDate] = useState(false);
   const [cost, setCost] = useState(0);
+  const [formData, setFormData] = useState(null);
+  const [showSummary, setShowSummary] = useState(false);
 
   useEffect(() => {
     const fromHour = parseInt(fromTime.split(':')[0]);
@@ -46,7 +49,19 @@ export default function BookParking() {
       setToTime('');
     }
   }, [fromTime, parkingInfo.toTime]);
-
+  const handleReviewBooking = (e) => {
+    e.preventDefault();
+    setFormData({
+      cost,
+      vehicleType,
+      parking_id: parkingInfo._id,
+      selectedDate,
+      fromTime,
+      toTime,
+      ...(showEndDate && { endDate }),
+    });
+    setShowSummary(true);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const bookingInfo = {
@@ -80,8 +95,12 @@ export default function BookParking() {
     });
   }
   if (isSuccess) {
+    console.log(data);
     setTimeout(() => {
-      navigate('success?bookingId=' + data?.bookingId);
+      navigate('success', {
+        bookingInfo: data?.booking,
+        parkingInfo: parkingInfo,
+      });
     }, 0);
   }
 
@@ -187,93 +206,117 @@ export default function BookParking() {
   }, [selectedDate]);
 
   return (
-    <VStack spacing={4}>
-      <Image src={parkingInfo.images[0]} />
-      <Text>{parkingInfo.location.area}</Text>
-      <form onSubmit={handleSubmit}>
-        <VStack spacing={4}>
-          {(parkingInfo.bikeSlot > 0 || parkingInfo.carSlot > 0) && (
-            <FormControl isRequired>
-              <FormLabel>Vehicle Type</FormLabel>
-              <Select value={vehicleType} onChange={handleVehicleTypeChange}>
-                {parkingInfo.bikeSlot > 0 && <option value='bike'>Bike</option>}
-                {parkingInfo.carSlot > 0 && <option value='car'>Car</option>}
-              </Select>
-            </FormControl>
-          )}
-          <FormControl isRequired>
-            <FormLabel>Date</FormLabel>
-            <Input
-              type='date'
-              value={selectedDate}
-              min={minDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-            />
-          </FormControl>
-          <FormControl>
-            <Checkbox isChecked={showEndDate} onChange={toggleShowEndDate}>
-              More than 1 day
-            </Checkbox>
-          </FormControl>
-          {showEndDate && (
-            <FormControl isRequired>
-              <FormLabel>End Date</FormLabel>
-              <Input
-                type='date'
-                value={endDate}
-                min={selectedDate}
-                onChange={handleEndDateChange}
-              />
-            </FormControl>
-          )}
-          <HStack spacing={4}>
-            <FormControl isRequired>
-              <FormLabel>From</FormLabel>
-              <Select
-                value={fromTime}
-                onChange={(e) => setFromTime(e.target.value)}
-                placeholder='Start Time'>
-                {generateTimeOptions(
-                  parkingInfo.fromTime,
-                  parkingInfo.toTime,
-                  true
-                )}
-              </Select>
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>To</FormLabel>
-              <Select
-                value={toTime}
-                onChange={(e) => setToTime(e.target.value)}
-                placeholder='End Time'>
-                {generateTimeOptions(
-                  parkingInfo.fromTime,
-                  parkingInfo.toTime,
-                  true,
-                  fromTime
-                )}
-              </Select>
-            </FormControl>
-          </HStack>
-          {noAvailableTimeSlots.current && (
-            <Text color='red.500' mt={2}>
-              All time slots for today are unavailable.
-            </Text>
-          )}
-          <Text fontSize='xl' fontWeight='bold'>
-            Cost: ${cost}
-          </Text>
+    <VStack spacing={4} p={0}>
+      {!showSummary ? (
+        <>
+          <Image src={parkingInfo.images[0]} />
+          <Text>{parkingInfo.location.area}</Text>
+          <form onSubmit={handleReviewBooking}>
+            <VStack spacing={4}>
+              {(parkingInfo.bikeSlot > 0 || parkingInfo.carSlot > 0) && (
+                <FormControl isRequired>
+                  <FormLabel>Vehicle Type</FormLabel>
+                  <Select
+                    value={vehicleType}
+                    onChange={handleVehicleTypeChange}>
+                    {parkingInfo.bikeSlot > 0 && (
+                      <option value='bike'>Bike</option>
+                    )}
+                    {parkingInfo.carSlot > 0 && (
+                      <option value='car'>Car</option>
+                    )}
+                  </Select>
+                </FormControl>
+              )}
+              <FormControl isRequired>
+                <FormLabel>Date</FormLabel>
+                <Input
+                  type='date'
+                  value={selectedDate}
+                  min={minDate}
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <Checkbox isChecked={showEndDate} onChange={toggleShowEndDate}>
+                  More than 1 day
+                </Checkbox>
+              </FormControl>
+              {showEndDate && (
+                <FormControl isRequired>
+                  <FormLabel>End Date</FormLabel>
+                  <Input
+                    type='date'
+                    value={endDate}
+                    min={selectedDate}
+                    onChange={handleEndDateChange}
+                  />
+                </FormControl>
+              )}
+              <HStack spacing={4}>
+                <FormControl isRequired>
+                  <FormLabel>From</FormLabel>
+                  <Select
+                    value={fromTime}
+                    onChange={(e) => setFromTime(e.target.value)}
+                    placeholder='Start Time'>
+                    {generateTimeOptions(
+                      parkingInfo.fromTime,
+                      parkingInfo.toTime,
+                      true
+                    )}
+                  </Select>
+                </FormControl>
+                <FormControl isRequired>
+                  <FormLabel>To</FormLabel>
+                  <Select
+                    value={toTime}
+                    onChange={(e) => setToTime(e.target.value)}
+                    placeholder='End Time'>
+                    {generateTimeOptions(
+                      parkingInfo.fromTime,
+                      parkingInfo.toTime,
+                      true,
+                      fromTime
+                    )}
+                  </Select>
+                </FormControl>
+              </HStack>
+              {noAvailableTimeSlots.current && (
+                <Text color='red.500' mt={2}>
+                  All time slots for today are unavailable.
+                </Text>
+              )}
+              <Text
+                fontSize='xl'
+                fontWeight='bold'
+                border={'1px solid green'}
+                padding={'5px 10px'}
+                borderRadius={'md'}
+                bg={'green.100'}>
+                Cost: {cost} Taka
+              </Text>
 
-          <Button
-            loadingText='Booking...'
-            isLoading={isLoading}
-            type='submit'
-            colorScheme='purple'
-            isDisabled={noAvailableTimeSlots.current}>
-            Book Parking
-          </Button>
-        </VStack>
-      </form>
+              <Button
+                w='100%'
+                loadingText='Booking...'
+                isLoading={isLoading}
+                type='submit'
+                colorScheme='purple'
+                isDisabled={noAvailableTimeSlots.current}>
+                {showSummary ? 'Book Parking' : 'Review Booking'}
+              </Button>
+            </VStack>
+          </form>{' '}
+        </>
+      ) : (
+        <SummaryPage
+          formData={formData}
+          onSubmit={handleSubmit}
+          onEdit={() => setShowSummary(false)}
+          isLoading={isLoading}
+        />
+      )}
     </VStack>
   );
 }
