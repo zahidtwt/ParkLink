@@ -89,10 +89,10 @@ function NavDrawer({ isOpen, onClose }) {
               fontSize={'md'}
               fontWeight={400}
               pl={5}>
-              <Link to={'/'} onClick={handleLinkClick}>
-                Bookings
+              <Link to={'mybookings'} onClick={handleLinkClick}>
+                My Bookings
               </Link>
-              <Link to={'/'} onClick={handleLinkClick}>
+              <Link to={'myparklistings'} onClick={handleLinkClick}>
                 Manage Listing
               </Link>
               <Link to={'/'} onClick={handleLinkClick}>

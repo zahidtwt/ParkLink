@@ -57,7 +57,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   const selectedBgColor = useColorModeValue('purple.100', 'gray.700');
   // const selectedColor = useColorModeValue('purple.600', 'purple.200');
   const handleBooking = () => {
-    navigate('/booking', { state: { parkingInfo } });
+    navigate(`/book-parking?parkingId=${parkingInfo._id}`);
   };
   return (
     <>

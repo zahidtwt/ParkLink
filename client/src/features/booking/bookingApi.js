@@ -10,7 +10,7 @@ export const bookingApi = apiSlice.injectEndpoints({
       }),
     }),
     getBookingsByUserId: builder.query({
-      query: (userId) => `/app/bookings/${userId}`,
+      query: () => `/app/bookings/`,
     }),
     deleteBookingById: builder.mutation({
       query: (id) => ({

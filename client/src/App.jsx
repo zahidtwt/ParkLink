@@ -27,6 +27,9 @@ import BookParking from './components/parking/booking/BookParking';
 import ParkingForm from './components/parking/ParkingForm/ParkingForm/ParkingForm';
 import SuccessParkingSubmission from './components/parking/ParkingForm/ParkingForm/SuccessParkingSubmission';
 import BookingSuccess from './components/parking/booking/BookingSuccess';
+import AllBookings from './components/bookings/AllBookings';
+import { Spinner } from '@chakra-ui/react';
+import ParkListing from './components/ParkListing/ParkListing';
 function App() {
   const authChecked = useAuthCheck();
   const refresh = () => {
@@ -38,7 +41,7 @@ function App() {
     });
   };
   return !authChecked ? (
-    <div>Checking authentication....</div>
+    <Spinner size={'xl'}></Spinner>
   ) : (
     <>
       <Router>
@@ -85,10 +88,27 @@ function App() {
             }
           />
           <Route
-            path='/booking'
+            path='/book-parking'
             element={
               <PrivateRoute>
                 <BookParking />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path='/mybookings'
+            element={
+              <PrivateRoute>
+                <AllBookings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/myparklistings'
+            element={
+              <PrivateRoute>
+                <ParkListing />
               </PrivateRoute>
             }
           />
@@ -104,7 +124,7 @@ function App() {
             path='/listparking/success'
             element={<SuccessParkingSubmission />}
           />
-          <Route path='/booking/success' element={<BookingSuccess />} />
+          <Route path='/book-parking/success' element={<BookingSuccess />} />
           <Route path='*' element={<PageNotFound />} />
         </Routes>
         <MobileBottomNavbar />

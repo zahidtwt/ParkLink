@@ -13,18 +13,24 @@ import {
   Checkbox,
   useToast,
 } from '@chakra-ui/react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
 import { SummaryPage } from './SummaryPage';
+import { useGetParkingByIdQuery } from '../../../features/parking/parkingApi';
+import BookParkingSkeletor from './BookParkingSkeletor';
 
 export default function BookParking() {
   const [createBooking, { data, isLoading, error, isSuccess, isError }] =
     useCreateBookingMutation();
+
   const toast = useToast();
   const navigate = useNavigate();
-  const location = useLocation();
+  const searchParams = new URLSearchParams(window.location.search);
+  const parkingId = searchParams.get('parkingId');
 
-  const parkingInfo = location.state?.parkingInfo;
+  // const {data: } = useGet
+  const { data: parkingInfo, isLoading: isParkingInfoLoading } =
+    useGetParkingByIdQuery(parkingId);
   const minDate = new Date().toISOString().split('T')[0];
 
   const [vehicleType, setVehicleType] = useState('');
@@ -43,18 +49,18 @@ export default function BookParking() {
     const nextHour = (fromHour + 1) % 24;
     const nextHourString = `${nextHour < 10 ? '0' : ''}${nextHour}:00`;
 
-    if (nextHour <= parseInt(parkingInfo.toTime.split(':')[0])) {
+    if (nextHour <= parseInt(parkingInfo?.toTime.split(':')[0])) {
       setToTime(nextHourString);
     } else {
       setToTime('');
     }
-  }, [fromTime, parkingInfo.toTime]);
+  }, [fromTime, parkingInfo]);
   const handleReviewBooking = (e) => {
     e.preventDefault();
     setFormData({
       cost,
       vehicleType,
-      parking_id: parkingInfo._id,
+      parking_id: parkingInfo?._id,
       selectedDate,
       fromTime,
       toTime,
@@ -130,8 +136,8 @@ export default function BookParking() {
     fromTimeValue
   ) => {
     const options = [];
-    const start = parseInt(startTime.split(':')[0]);
-    const end = parseInt(endTime.split(':')[0]);
+    const start = parseInt(startTime?.split(':')[0]);
+    const end = parseInt(endTime?.split(':')[0]);
     const fromHour = fromTimeValue
       ? parseInt(fromTimeValue.split(':')[0])
       : null;
@@ -202,12 +208,14 @@ export default function BookParking() {
 
   useEffect(() => {
     noAvailableTimeSlots.current = false;
-    generateTimeOptions(parkingInfo.fromTime, parkingInfo.toTime, true);
+    generateTimeOptions(parkingInfo?.fromTime, parkingInfo?.toTime, true);
   }, [selectedDate]);
 
   return (
     <VStack spacing={4} p={0}>
-      {!showSummary ? (
+      {isParkingInfoLoading ? (
+        <BookParkingSkeletor />
+      ) : !showSummary ? (
         <>
           <Image src={parkingInfo.images[0]} />
           <Text>{parkingInfo.location.area}</Text>
