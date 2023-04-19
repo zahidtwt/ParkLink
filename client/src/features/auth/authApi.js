@@ -52,10 +52,17 @@ export const authApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
+    getUser: builder.query({
+      query: () => ({
+        url: '/auth/user',
+        method: 'GET',
+      }),
+    }),
   }),
 });
 
 export const {
+  useGetUserQuery,
   useRegisterMutation,
   useLoginMutation,
   useUpdateUserInfoMutation,

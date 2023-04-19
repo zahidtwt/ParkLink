@@ -57,13 +57,20 @@ function PriceBox({ parkingInfo }) {
                 </Td>
 
                 <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
-                  {bikeHourlyRate} <sub>/H</sub>
+                  {bikeHourlyRate && (
+                    <>
+                      {bikeHourlyRate} <sub>/H</sub>
+                    </>
+                  )}
                 </Td>
-                {bikeMonthlyRate && (
-                  <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
-                    {bikeMonthlyRate} <sub>/M</sub>
-                  </Td>
-                )}
+
+                <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
+                  {bikeMonthlyRate && (
+                    <>
+                      {bikeMonthlyRate} <sub>/M</sub>
+                    </>
+                  )}
+                </Td>
               </Tr>
             )}
             {carSlot > 0 && (
@@ -82,10 +89,18 @@ function PriceBox({ parkingInfo }) {
                 </Td>
 
                 <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  {carHourlyRate} <sub>/H</sub>
+                  {carHourlyRate && (
+                    <>
+                      {carHourlyRate} <sub>/H</sub>
+                    </>
+                  )}
                 </Td>
                 <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  {carMonthlyRate} <sub>/M</sub>
+                  {carMonthlyRate && (
+                    <>
+                      {carMonthlyRate} <sub>/M</sub>
+                    </>
+                  )}
                 </Td>
               </Tr>
             )}

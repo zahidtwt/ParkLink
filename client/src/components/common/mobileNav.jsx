@@ -49,7 +49,7 @@ function MobileBottomNavbar() {
         px={6}
         borderRadius='30px'
         bgColor={bgColor}
-        boxShadow={'0px 0px 20px -8px #6b46c1'}>
+        boxShadow={'0px 0px 15px -8px rgba(0,0,0,0.9)'}>
         <Link to='/dashboard'>
           <motion.div whileHover={{ scale: 1.4 }} whileTap={{ scale: 0.9 }}>
             <IconButton

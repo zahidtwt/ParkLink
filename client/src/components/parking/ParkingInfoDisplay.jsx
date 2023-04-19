@@ -24,15 +24,21 @@ import 'slick-carousel/slick/slick-theme.css';
 import DistanceCalculator from './DistanceCalculator';
 import InfoCheap from './InfoCheap';
 import { GrMapLocation, GrAlarm } from 'react-icons/gr';
-import { FaMotorcycle, FaCar } from 'react-icons/fa';
+import { FaMotorcycle, FaCar, FaCity } from 'react-icons/fa';
 import { ImClock } from 'react-icons/im';
 import { BiCctv } from 'react-icons/bi';
 import { CiWarning } from 'react-icons/ci';
-import { MdBookmarkAdd } from 'react-icons/md';
+import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
 import { GiPoliceOfficerHead } from 'react-icons/gi';
 
 import PriceBox from './PricerBox';
 import { useGetParkingByIdQuery } from '../../features/parking/parkingApi';
+import { useEffect, useState } from 'react';
+import {
+  useAddBookmarkMutation,
+  useRemoveBookmarkMutation,
+} from '../../features/booking/bookingApi';
+import { useGetUserQuery } from '../../features/auth/authApi';
 
 const settings = {
   dots: true,
@@ -44,8 +50,20 @@ const settings = {
 
 function ParkingInfo({ msg, onClose, isOpen }) {
   const { data: parkingInfo } = useGetParkingByIdQuery(msg._id);
+  const [addBookmark] = useAddBookmarkMutation();
+  const { data: user } = useGetUserQuery();
+  const [removeBookmark] = useRemoveBookmarkMutation();
   const navigate = useNavigate();
 
+  const [isBookmarked, setIsBookmarked] = useState(
+    user?.bookmarkedParkings?.some((p) => p === parkingInfo?._id) || false
+  );
+
+  useEffect(() => {
+    setIsBookmarked(
+      user?.bookmarkedParkings?.some((p) => p === parkingInfo?._id) || false
+    );
+  }, [user, parkingInfo]);
   const selectedLon = parkingInfo?.location?.longitude;
   const selectedLat = parkingInfo?.location?.latitude;
   const time =
@@ -58,6 +76,18 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   // const selectedColor = useColorModeValue('purple.600', 'purple.200');
   const handleBooking = () => {
     navigate(`/book-parking?parkingId=${parkingInfo._id}`);
+  };
+
+  const handleBookmark = () => {
+    if (isBookmarked) {
+      removeBookmark(msg._id)
+        .then(() => setIsBookmarked(false))
+        .catch((err) => console.error(err));
+    } else {
+      addBookmark(parkingInfo._id)
+        .then(() => setIsBookmarked(true))
+        .catch((err) => console.error(err));
+    }
   };
   return (
     <>
@@ -85,12 +115,29 @@ function ParkingInfo({ msg, onClose, isOpen }) {
             </Box>
             <HStack justifyContent={'space-between'}>
               <VStack align={'left'} mb={3}>
-                <Heading size={'md'}>Parking Space at Konabari</Heading>
+                <Heading size={'md'}>
+                  Parking Space at {parkingInfo?.location?.area}
+                </Heading>
                 <Text>{parkingInfo?.location?.address}</Text>
+                <HStack mt={'0!important'}>
+                  <FaCity /> <Text>{parkingInfo?.location?.ptype} Area</Text>
+                </HStack>
               </VStack>
 
               <Text pr={2} pb={5}>
-                <MdBookmarkAdd size={30} color='#6B46C1' />
+                {isBookmarked ? (
+                  <MdBookmark
+                    size={30}
+                    color='#6B46C1'
+                    onClick={handleBookmark}
+                  />
+                ) : (
+                  <MdBookmarkBorder
+                    size={30}
+                    color='#6B46C1'
+                    onClick={handleBookmark}
+                  />
+                )}
               </Text>
             </HStack>
             {/* DISTANCE */}

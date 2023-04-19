@@ -18,6 +18,25 @@ export const bookingApi = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
     }),
+    addBookmark: builder.mutation({
+      query: (id) => ({
+        url: `app/bookmarks/${id}`,
+        method: 'POST',
+      }),
+    }),
+
+    getAllBookmarkedParkings: builder.query({
+      query: () => ({
+        url: `app/bookmarks/`,
+      }),
+    }),
+
+    removeBookmark: builder.mutation({
+      query: (id) => ({
+        url: `app/bookmarks/${id}`,
+        method: 'DELETE',
+      }),
+    }),
   }),
 });
 
@@ -25,4 +44,7 @@ export const {
   useCreateBookingMutation,
   useGetBookingsByUserIdQuery,
   useDeleteBookingByIdMutation,
+  useAddBookmarkMutation,
+  useRemoveBookmarkMutation,
+  useGetAllBookmarkedParkingsQuery,
 } = bookingApi;
