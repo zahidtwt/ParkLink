@@ -57,6 +57,7 @@ export const parkingApi = apiSlice.injectEndpoints({
     // Get parking spots by user ID
     getParkingByUserId: builder.query({
       query: () => `/app/parkings`,
+      providesTags: ['Parking'],
     }),
 
     // Update a parking spot by ID
@@ -84,10 +85,27 @@ export const parkingApi = apiSlice.injectEndpoints({
         body,
       }),
     }),
+
+    // set onHold for parking spot
+    setOnHold: builder.mutation({
+      query: ({ parkingId, ...body }) => ({
+        url: `/app/parking/onhold/${parkingId}`,
+        method: 'PUT',
+      }),
+    }),
+    // remove onHold for parking spot
+    removeOnHold: builder.mutation({
+      query: ({ parkingId, ...body }) => ({
+        url: `/app/parking/removehold/${parkingId}`,
+        method: 'PUT',
+      }),
+    }),
   }),
 });
 
 export const {
+  useSetOnHoldMutation,
+  useRemoveOnHoldMutation,
   useGetNearbyParkingsQuery,
   useGetAllParkingQuery,
   useGetParkingByIdQuery,

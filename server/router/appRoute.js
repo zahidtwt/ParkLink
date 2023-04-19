@@ -19,6 +19,8 @@ const {
   getAllBookMarkedParkings,
   addBookmark,
   removeBookmark,
+  setOnHold,
+  removeHold,
 } = require('../controllers/appController');
 
 const appRouter = express.Router();
@@ -50,4 +52,7 @@ appRouter.post('/bookmarks/:parkingId', addBookmark);
 appRouter.delete('/bookmarks/:parkingId', removeBookmark);
 appRouter.get('/bookmarks/', getAllBookMarkedParkings);
 
+// OnHold endpoints
+appRouter.put('/parking/onhold/:parkingId', setOnHold);
+appRouter.put('/parking/removehold/:parkingId', removeHold);
 module.exports = appRouter;

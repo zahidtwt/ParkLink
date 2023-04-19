@@ -37,7 +37,7 @@ function NearbyParking() {
   const { latitude, longitude } = coordinates;
   const {
     data: parkings,
-    error,
+
     isLoading,
   } = useGetNearbyParkingsQuery(latitude, longitude);
   return (

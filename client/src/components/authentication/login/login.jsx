@@ -65,7 +65,7 @@ export default function Login() {
       console.log(error.data);
     }
     if (data) {
-      Navigate('/dashboard');
+      Navigate('/main');
     }
   }, [error, data, Navigate]);
 

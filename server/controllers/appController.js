@@ -424,6 +424,45 @@ const addBookmark = async (req, res) => {
   });
   res.status(200).json({ message: 'Bookmark added' });
 };
+const setOnHold = async (req, res) => {
+  try {
+    const parkingId = req.params.parkingId;
+
+    const updatedParking = await Parking.findOneAndUpdate(
+      { _id: parkingId },
+      { $set: { onHold: true } },
+      { new: true }
+    );
+
+    if (!updatedParking) {
+      return res.status(404).json({ message: 'Parking not found' });
+    }
+
+    res.status(200).json({ message: 'On hold status updated', updatedParking });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating on hold status', error });
+  }
+};
+
+const removeHold = async (req, res) => {
+  try {
+    const parkingId = req.params.parkingId;
+
+    const updatedParking = await Parking.findOneAndUpdate(
+      { _id: parkingId },
+      { $set: { onHold: false } },
+      { new: true }
+    );
+
+    if (!updatedParking) {
+      return res.status(404).json({ message: 'Parking not found' });
+    }
+
+    res.status(200).json({ message: 'On hold status removed', updatedParking });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating on hold status', error });
+  }
+};
 
 const removeBookmark = async (req, res) => {
   const parking_id = req.params.parkingId;
@@ -455,6 +494,8 @@ const getAllBookMarkedParkings = async (req, res) => {
 };
 
 module.exports = {
+  setOnHold,
+  removeHold,
   getNearbyParking,
   getAllBookMarkedParkings,
   addBookmark,

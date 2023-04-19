@@ -12,7 +12,6 @@ import React from 'react';
 
 import { FaArrowRight } from 'react-icons/fa';
 import DistanceCalculator from '../parking/DistanceCalculator';
-import { Link } from 'react-router-dom';
 import ParkingInfo from '../parking/ParkingInfoDisplay';
 function ParkingCart({ parking }) {
   const selectedLon = parking?.location?.longitude;
@@ -28,6 +27,7 @@ function ParkingCart({ parking }) {
       <ParkingInfo msg={parking} isOpen={isOpen} onClose={onClose} />
       {parking && (
         <Box
+          border={'1px solid #e1e1e1'}
           onClick={handleClick}
           position='relative'
           boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
@@ -36,11 +36,12 @@ function ParkingCart({ parking }) {
           w={60}>
           <HStack
             p={2}
+            pb={0}
             justifyContent={'space-between'}
             justifyItems={'space-between'}
             alignItems={'space-between'}
             alignContent={'space-between'}>
-            <VStack align={'left'}>
+            <VStack align={'left'} padding={1} mb={0}>
               <Heading size={'sm'}>
                 {parking?.location?.address?.length > 20
                   ? parking?.location?.address?.slice(0, 20) + '...'
@@ -52,7 +53,7 @@ function ParkingCart({ parking }) {
                 selectedLon={selectedLon}
               />
             </VStack>
-            <Box>
+            <Box padding={2}>
               <FaArrowRight />
             </Box>
           </HStack>

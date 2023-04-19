@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MiniParkingInfo from './ParkListingInfo';
 import { Button, ButtonGroup, Heading, VStack } from '@chakra-ui/react';
 import { useGetParkingByUserIdQuery } from '../../features/parking/parkingApi';
 
 function ParkListing() {
   // const { data: bookings, error, isLoading } = useGetBookingsByUserIdQuery();
-  const { data: parkings, error, isLoading } = useGetParkingByUserIdQuery();
+  const [forceRerenderKey, setForceRerenderKey] = useState(Date.now());
+
+  const {
+    data: parkings,
+    error,
+    isLoading,
+    refetch,
+  } = useGetParkingByUserIdQuery();
+
   const [activeButton, setActiveButton] = useState('all');
   const [expiredButton, setExpiredButton] = useState(false);
 
@@ -59,9 +67,10 @@ function ParkListing() {
       </ButtonGroup>
       {filteredBookings.map((parking) => (
         <MiniParkingInfo
+          onHold={parking.onHold}
+          triggerUpdate={() => setForceRerenderKey(Date.now())}
           key={parking._id}
           parking={parking}
-          isExpired={parking.onHold}
         />
       ))}
     </VStack>

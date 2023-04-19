@@ -19,13 +19,29 @@ import {
   FaEye,
   FaRegTrashAlt,
 } from 'react-icons/fa';
-import map from '../../assets/map.png';
 import { Link } from 'react-router-dom';
+import {
+  useRemoveOnHoldMutation,
+  useSetOnHoldMutation,
+} from '../../features/parking/parkingApi';
 
-function ParkListingInfo({ parking, onHold }) {
-  const startDate = new Date(parking.selectedDate);
-  const endDate = parking.endDate ? new Date(parking.endDate) : null;
-
+function ParkListingInfo({ parking, onHold, triggerUpdate }) {
+  const [setOnHold] = useSetOnHoldMutation({
+    onSuccess: () => {
+      triggerUpdate();
+    },
+  });
+  const [removeOnHold] = useRemoveOnHoldMutation({
+    onSuccess: () => {
+      triggerUpdate();
+    },
+  });
+  const setHold = () => {
+    setOnHold({ parkingId: parking._id });
+  };
+  const removeHold = () => {
+    removeOnHold({ parkingId: parking._id });
+  };
   const convertTo12Hour = (time) => {
     let hour = parseInt(time.split(':')[0]);
     const suffix = hour >= 12 ? 'PM' : 'AM';
@@ -56,6 +72,7 @@ function ParkListingInfo({ parking, onHold }) {
                   Expired
                 </Text> */}
                 <Button
+                  onClick={removeHold}
                   colorScheme='green'
                   variant={'outline'}
                   border={'2px solid '}
@@ -131,7 +148,11 @@ function ParkListingInfo({ parking, onHold }) {
               </Button>
             )}
             {!parking.onHold && (
-              <Button size={'sm'} colorScheme='red' variant={'outline'}>
+              <Button
+                size={'sm'}
+                colorScheme='red'
+                variant={'outline'}
+                onClick={setHold}>
                 Hold
               </Button>
             )}
