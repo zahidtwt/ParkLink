@@ -9,6 +9,7 @@ import {
   Heading,
   FormLabel,
   Select,
+  Avatar,
 } from '@chakra-ui/react';
 
 import { useForm } from 'react-hook-form';
@@ -47,7 +48,6 @@ export default function Profile() {
         gender: data.gender,
         profileImage,
       });
-      console.log(profileImage);
     } catch (err) {
       console.log(err);
     }
@@ -56,15 +56,17 @@ export default function Profile() {
   return (
     <FormControl>
       <Flex
-        height={'90vh'}
+        height={'100vh'}
         justifyContent={'center'}
         justifyItems={'center'}
-        alignItems={'center'}>
+        alignItems={'center'}
+        mb={40}>
         <VStack shadow={'md'} w='350px' p='10px' borderRadius={10}>
           <VStack h={15}></VStack>
           <form onSubmit={handleSubmit(onSubmit)}>
             <VStack spacing={5}>
               <Heading mb={10}>Update Your Profile</Heading>
+              <Avatar size='xl' src={user.profileImage} />
               <ProfileImageUploader onUploadSuccess={handleUploadSuccess} />
               <InputGroup>
                 <InputLeftAddon children='+880' />

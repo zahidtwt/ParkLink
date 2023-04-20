@@ -19,12 +19,14 @@ import {
   AlertIcon,
   AlertTitle,
   Alert,
+  Heading,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { verifyMobile } from '../../../features/verifyNumber/verifyNumberAuthSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect } from 'react';
+import ParkLink from '../../common/ParkLink';
 export default function InitialCheck() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -73,11 +75,15 @@ export default function InitialCheck() {
   return (
     <FormControl isRequired>
       <Flex
-        height={'90vh'}
+        height={'100vh'}
         justifyContent={'center'}
         justifyItems={'center'}
         alignItems={'center'}>
-        <VStack shadow={'md'} w='350px' p='10px' spacing={10} borderRadius={10}>
+        <VStack shadow={'md'} w='350px' p='10px' spacing={4} borderRadius={10}>
+          <VStack mb={10}>
+            <Heading>Welcome to </Heading>
+            <ParkLink />
+          </VStack>
           <WrapItem>
             <Avatar size='2xl' />
           </WrapItem>

@@ -383,7 +383,7 @@ const createBooking = async (req, res) => {
 const getUserBookings = async (req, res) => {
   try {
     const userId = req.user.id;
-    const bookings = await Booking.find({ userId });
+    const bookings = await Booking.find({ userId }).populate('parking_id');
 
     res.json(bookings);
   } catch (err) {
@@ -486,7 +486,7 @@ const getAllBookMarkedParkings = async (req, res) => {
       _id: { $in: user.bookmarkedParkings },
     });
 
-    res.status(200).json({ bookmarkedParkings });
+    res.status(200).json(bookmarkedParkings);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server Error' });

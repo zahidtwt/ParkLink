@@ -200,7 +200,9 @@ function ParkingInfo({ msg, onClose, isOpen }) {
             </HStack>
 
             <VStack align={'left'} mb={3} mt={5}>
-              <Heading size={'md'}>Parking Rules</Heading>
+              {parkingInfo?.rules && (
+                <Heading size={'md'}>Parking Rules</Heading>
+              )}
               <UnorderedList listStyleType='none'>
                 {parkingInfo?.rules
                   ? parkingInfo.rules.map((rule) => (

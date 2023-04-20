@@ -9,11 +9,13 @@ import {
   VStack,
   Flex,
   Center,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { FaCalendar, FaClock, FaMoneyBillAlt } from 'react-icons/fa';
 import map from '../../assets/map.png';
 import { Link } from 'react-router-dom';
 import Expired from './Expired';
+import ParkingInfo from '../parking/ParkingInfoDisplay';
 function MiniParkingInfo({ booking, isExpired }) {
   const startDate = new Date(booking.selectedDate);
   const endDate = booking.endDate ? new Date(booking.endDate) : null;
@@ -24,11 +26,23 @@ function MiniParkingInfo({ booking, isExpired }) {
     hour = hour % 12 || 12;
     return `${hour}:00 ${suffix}`;
   };
+  const mapImage =
+    booking?.parking_id?.images[booking?.parking_id?.images?.length - 1];
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
+  function handleClick() {
+    onOpen();
+  }
   return (
     <>
+      <ParkingInfo
+        msg={booking?.parking_id}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
       <Container maxW={'container.xl'} mt={'5!important'}>
         <VStack
+          onClick={handleClick}
           position='relative'
           boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
           borderRadius={'xl'}
@@ -59,7 +73,7 @@ function MiniParkingInfo({ booking, isExpired }) {
               <Image
                 borderRadius={'xl'}
                 shadow={'lg'}
-                src={map}
+                src={mapImage}
                 alt={booking.address}
                 maxW={'120px'}
                 mr={1}

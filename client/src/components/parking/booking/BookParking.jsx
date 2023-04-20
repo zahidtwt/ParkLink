@@ -12,6 +12,7 @@ import {
   Select,
   Checkbox,
   useToast,
+  Heading,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
@@ -120,7 +121,15 @@ export default function BookParking() {
     if (new Date(newEndDate) > new Date(selectedDate)) {
       setEndDate(newEndDate);
     } else {
-      alert('End date must be greater than the start date');
+      toast({
+        title: 'Invalid Input',
+        description: 'End date must be greater than the start date',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+        variant: 'left-accent',
+        position: 'top',
+      });
     }
   };
   const convertTo12Hour = (time) => {
@@ -212,34 +221,46 @@ export default function BookParking() {
   }, [selectedDate]);
 
   return (
-    <VStack spacing={4} p={0} mb={'60px'}>
-      <Text
-        mb={2}
-        bgGradient='linear-gradient(to left, #b928cacf, #553c9a)'
-        bgClip='text'
-        fontSize='5xl'
-        fontWeight='extrabold'>
-        ParkLink
-      </Text>
+    <VStack spacing={0} p={0} mb={'60px'}>
       {isParkingInfoLoading ? (
         <BookParkingSkeletor />
       ) : !showSummary ? (
         <>
-          <Image src={parkingInfo.images[0]} />
-          <Text>{parkingInfo.location.area}</Text>
+          <Heading
+            w={'100%'}
+            shadow={'lg'}
+            borderRadius={'lg'}
+            as='h2'
+            size='lg'
+            mb={4}
+            p={2}
+            textAlign={'center'}
+            borderBottom={'4px solid #CBC3E3'}>
+            Book Parking
+          </Heading>
+          <Image
+            src={parkingInfo.images[0]}
+            w={'80%'}
+            borderRadius={'2xl'}
+            shadow={'md'}
+          />
+          <Heading size='md' textAlign={'center'} my={'4!important'}>
+            {parkingInfo.location.address}
+          </Heading>
           <form onSubmit={handleReviewBooking}>
             <VStack spacing={4}>
               {(parkingInfo.bikeSlot > 0 || parkingInfo.carSlot > 0) && (
                 <FormControl isRequired>
                   <FormLabel>Vehicle Type</FormLabel>
                   <Select
+                    placeholder='Select Vehicle Type'
                     value={vehicleType}
                     onChange={handleVehicleTypeChange}>
                     {parkingInfo.bikeSlot > 0 && (
-                      <option value='bike'>Bike</option>
+                      <option value='Bike'>Bike</option>
                     )}
                     {parkingInfo.carSlot > 0 && (
-                      <option value='car'>Car</option>
+                      <option value='Car'>Car</option>
                     )}
                   </Select>
                 </FormControl>

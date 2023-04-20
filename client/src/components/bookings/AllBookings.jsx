@@ -7,7 +7,7 @@ function AllBookings() {
   const { data: bookings, error, isLoading } = useGetBookingsByUserIdQuery();
   const [activeButton, setActiveButton] = useState('all');
   const [expiredButton, setExpiredButton] = useState(false);
-
+  console.log(bookings);
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
@@ -86,7 +86,7 @@ function AllBookings() {
         </Button>
       </ButtonGroup>
       {filteredBookings.map((booking) => (
-        <MiniParkingInfo 
+        <MiniParkingInfo
           key={booking.bookingId}
           booking={booking}
           isExpired={booking.isExpired}

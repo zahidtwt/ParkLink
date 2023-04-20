@@ -19,7 +19,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
 import { useRegisterMutation } from '../../../features/auth/authApi';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Signup() {
   const [show, setShow] = useState(false);
@@ -161,6 +161,9 @@ export default function Signup() {
                 loadingText='Signing up'>
                 Sign up
               </Button>
+              <Link to='/login'>
+                <Text>Back to Login</Text>
+              </Link>
             </VStack>
           </form>
         </VStack>

@@ -12,6 +12,7 @@ import {
   HStack,
   Text,
   VStack,
+  useColorModeValue,
 } from '@chakra-ui/react';
 import SwitchDarkMode from './switchDarkMode';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,6 +22,7 @@ function NavDrawer({ isOpen, onClose }) {
   const { profileImage, firstName, lastName, due, balance } =
     useSelector((state) => state.auth.user) || {};
   const dispatch = useDispatch();
+  const selectedBgColor = useColorModeValue('purple.100', 'gray.700');
 
   const handleLinkClick = () => {
     onClose();
@@ -30,7 +32,7 @@ function NavDrawer({ isOpen, onClose }) {
     <Drawer isOpen={isOpen} onClose={onClose}>
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton borderRadius={50} bg={'gray.600'} size={'lg'} />
+        <DrawerCloseButton borderRadius={50} bg={selectedBgColor} size={'lg'} />
         <DrawerHeader>DASHBOARD</DrawerHeader>
 
         <DrawerBody>
@@ -95,22 +97,20 @@ function NavDrawer({ isOpen, onClose }) {
               <Link to={'myparklistings'} onClick={handleLinkClick}>
                 Manage Listing
               </Link>
-              <Link to={'/'} onClick={handleLinkClick}>
+              <Link to={'bookmarks'} onClick={handleLinkClick}>
                 Bookmarks
               </Link>
-              <Link to={'/'} onClick={handleLinkClick}>
-                History
-              </Link>
+
               <Link to={'/'} onClick={handleLinkClick}>
                 Payment
               </Link>
               <Link to={'/'} onClick={handleLinkClick}>
                 Withdraw
               </Link>
-              <Link to={'/'} onClick={handleLinkClick}>
+              <Link to={'support'} onClick={handleLinkClick}>
                 Support
               </Link>
-            </VStack>{' '}
+            </VStack>
           </VStack>
         </DrawerBody>
 

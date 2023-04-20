@@ -3,7 +3,7 @@ import { useGetNearbyParkingsQuery } from '../../features/parking/parkingApi';
 import Cookies from 'js-cookie';
 import ParkingCart from './ParkingCart';
 import Slider from 'react-slick';
-import { Heading } from '@chakra-ui/react';
+import { HStack, Heading, Skeleton } from '@chakra-ui/react';
 
 const settings = {
   dots: true,
@@ -45,6 +45,12 @@ function NearbyParking() {
       <Heading size={'lg'} m={5}>
         Nearby Parkings
       </Heading>
+      {isLoading && (
+        <HStack align={'center'} justifyContent={'center'}>
+          <Skeleton height={'200px'} width={'230px'} borderRadius={'xl'} />
+          <Skeleton height={'200px'} width={'100px'} borderRadius={'xl'} />
+        </HStack>
+      )}
       <Slider {...settings}>
         {parkings?.map((parking) => (
           <ParkingCart

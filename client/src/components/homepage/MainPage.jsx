@@ -20,7 +20,7 @@ function MainPage() {
   const { data: user } = useGetUserQuery();
   // console.log(user);
   return (
-    <VStack mt={3} spacing={4}>
+    <VStack mt={3} spacing={4} mb={'50px!important'}>
       <Container>
         <Text
           mb={2}

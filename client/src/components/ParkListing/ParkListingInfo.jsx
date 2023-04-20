@@ -9,6 +9,7 @@ import {
   VStack,
   Flex,
   Center,
+  useDisclosure,
 } from '@chakra-ui/react';
 import {
   FaMapMarkedAlt,
@@ -19,28 +20,39 @@ import {
   FaEye,
   FaRegTrashAlt,
 } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import {
   useRemoveOnHoldMutation,
   useSetOnHoldMutation,
 } from '../../features/parking/parkingApi';
+import ParkingInfo from '../parking/ParkingInfoDisplay';
 
-function ParkListingInfo({ parking, onHold, triggerUpdate }) {
+function ParkListingInfo({ parking, triggerUpdate, refetch }) {
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  function handleClick() {
+    onOpen();
+  }
   const [setOnHold] = useSetOnHoldMutation({
     onSuccess: () => {
-      triggerUpdate();
+      refetch();
     },
   });
   const [removeOnHold] = useRemoveOnHoldMutation({
     onSuccess: () => {
-      triggerUpdate();
+      refetch();
     },
   });
   const setHold = () => {
     setOnHold({ parkingId: parking._id });
+    setTimeout(() => {
+      refetch();
+    }, 150);
   };
   const removeHold = () => {
     removeOnHold({ parkingId: parking._id });
+    setTimeout(() => {
+      refetch();
+    }, 150);
   };
   const convertTo12Hour = (time) => {
     let hour = parseInt(time.split(':')[0]);
@@ -48,14 +60,17 @@ function ParkListingInfo({ parking, onHold, triggerUpdate }) {
     hour = hour % 12 || 12;
     return `${hour}:00 ${suffix}`;
   };
+
   return (
     <>
+      <ParkingInfo msg={parking} isOpen={isOpen} onClose={onClose} />
       <Container maxW={'container.xl'} mt={5}>
         <VStack
+          onClick={handleClick}
           position='relative'
           boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
           borderRadius={'xl'}
-          spacing={2}
+          spacing={4}
           p={3}>
           {parking.onHold && (
             <Flex
@@ -120,11 +135,12 @@ function ParkListingInfo({ parking, onHold, triggerUpdate }) {
                 <HStack>
                   <FaParking color='var(--chakra-colors-purple-400)' />{' '}
                   <p>
-                    <b>Slots</b> Bike: {parking.bikeSlot}{' '}
+                    <b>Slots </b>
+                    {parking.bikeSlot ? `Bike: ${parking.bikeSlot}` : ''}
                     {parking.carSlot ? `Car: ${parking.carSlot}` : ''}
                   </p>
                 </HStack>
-                <HStack>
+                {/* <HStack>
                   <FaCartArrowDown color='var(--chakra-colors-purple-400)' />{' '}
                   <p>
                     <b>Booked</b>{' '}
@@ -135,7 +151,7 @@ function ParkListingInfo({ parking, onHold, triggerUpdate }) {
                       ? `Car: 4${parking?.booked?.car}`
                       : ''}
                   </p>
-                </HStack>
+                </HStack> */}
                 {/* Add more fields or elements as needed */}
               </div>
             </Box>

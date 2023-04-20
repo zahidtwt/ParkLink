@@ -35,7 +35,7 @@ function MobileBottomNavbar() {
   if (data)
     content = (
       <Flex
-        mx={9}
+        mx={12}
         zIndex={10}
         pos='fixed'
         bottom={8}
@@ -43,13 +43,13 @@ function MobileBottomNavbar() {
         right={0}
         align='center'
         justify='space-around'
-        py={1.5}
+        py={1}
         px={6}
         borderRadius='30px'
         bgColor={bgColor}
         boxShadow={'0px 0px 15px -8px rgba(0,0,0,0.9)'}>
         <Link to='/main'>
-          <motion.div whileHover={{ scale: 1.4 }} whileTap={{ scale: 0.9 }}>
+          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
             <IconButton
               aria-label='Home'
               icon={<AiOutlineHome size={20} />}
@@ -57,7 +57,7 @@ function MobileBottomNavbar() {
               size='lg'
               colorScheme={activeRoute === '/main' ? 'gray' : 'blue'}
               color={activeRoute === '/main' ? selectedColor : activeColor}
-              transform={activeRoute === '/main' ? 'scale(1.4)' : 'scale(1.0)'}
+              transform={activeRoute === '/main' ? 'scale(1.2)' : 'scale(1.0)'}
               bg={activeRoute === '/main' ? selectedBgColor : 'transparent'}
               _active={{
                 bg: selectedBgColor,
@@ -80,7 +80,7 @@ function MobileBottomNavbar() {
               colorScheme={activeRoute === '/dashboard' ? 'gray' : 'blue'}
               color={activeRoute === '/dashboard' ? selectedColor : activeColor}
               transform={
-                activeRoute === '/dashboard' ? 'scale(1.4)' : 'scale(1.0)'
+                activeRoute === '/dashboard' ? 'scale(1.2)' : 'scale(1.0)'
               }
               bg={
                 activeRoute === '/dashboard' ? selectedBgColor : 'transparent'
@@ -105,7 +105,7 @@ function MobileBottomNavbar() {
             size='lg'
             colorScheme={activeRoute === '/menu' ? 'gray' : 'blue'}
             color={activeRoute === '/menu' ? selectedColor : activeColor}
-            transform={activeRoute === '/menu' ? 'scale(1.4)' : 'scale(1.0)'}
+            transform={activeRoute === '/menu' ? 'scale(1.2)' : 'scale(1.0)'}
             bg={activeRoute === '/menu' ? selectedBgColor : 'transparent'}
             _active={{
               bg: selectedBgColor,

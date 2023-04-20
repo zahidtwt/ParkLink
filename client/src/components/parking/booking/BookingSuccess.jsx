@@ -68,15 +68,15 @@ function BookingSuccess() {
             </Flex>
           </Heading>
         </Box>
-        <Box
+        {/* <Box
           bg={'whiteAlpha.500'}
           padding={'5px 10px'}
           borderRadius={'lg'}
           border={'4px dotted #d6bcfa'}>
           <Text fontSize='xl' color={'gray.500'}>
-            {/* Booking ID: <b>{bookingInfo?.bookingId}</b> */}
+            Booking ID: <b>{bookingInfo?.bookingId}</b>
           </Text>
-        </Box>
+        </Box> */}
 
         <Box maxW={'300px'} borderRadius={'20px'} transition={'ease-in'}>
           <Image src={parkingDone} borderRadius={'20px'}></Image>
