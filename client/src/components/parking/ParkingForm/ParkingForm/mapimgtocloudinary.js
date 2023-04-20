@@ -3,7 +3,7 @@ const mapbox_token =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
 
 const uploadMapboxImageToCloudinary = async (longitude, latitude) => {
-  const mapboxImageUrl = `https://api.mapbox.com/styles/v1/zahidtwt/clgnzmmmt00f301qm5m4m1hl4/static/pin-s+A020F0(${longitude},${latitude})/${longitude},${latitude},15,0/500x220?access_token=${mapbox_token}&icon-size=2`;
+  const mapboxImageUrl = `https://api.mapbox.com/styles/v1/zahidtwt/clgnzmmmt00f301qm5m4m1hl4/static/pin-s+A020F0(${longitude},${latitude})/${longitude},${latitude},13,0/390x215?access_token=${mapbox_token}&icon-size=2`;
   const cloudinaryUrl = `https://api.cloudinary.com/v1_1/di31yslny/image/upload`;
   const formData = new FormData();
   formData.append(

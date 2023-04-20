@@ -1,7 +1,8 @@
 import { BiCurrentLocation } from 'react-icons/bi';
 
-export default function CenterButton({ map, latitude, longitude }) {
+export default function CenterButton({ map, latitude, longitude, refetch }) {
   const handleClick = () => {
+    refetch();
     map.current.flyTo({ center: [longitude, latitude], zoom: 14 });
   };
 

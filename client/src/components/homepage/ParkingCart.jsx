@@ -2,9 +2,7 @@ import {
   Box,
   VStack,
   HStack,
-  Container,
   Image,
-  Text,
   Heading,
   useDisclosure,
 } from '@chakra-ui/react';

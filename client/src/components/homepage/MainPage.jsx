@@ -15,12 +15,13 @@ import { useGetUserQuery } from '../../features/auth/authApi';
 import PhotoWithOverlay from './PhotoWithOverlay';
 import BoxWithImage from './BoxWithImage';
 import NearbyParking from './NearbyParking';
+import CurrentBooking from './CurrentBooking';
 
 function MainPage() {
   const { data: user } = useGetUserQuery();
   // console.log(user);
   return (
-    <VStack mt={3} spacing={4} mb={'50px!important'}>
+    <VStack mt={3} spacing={4} mb={'50px!important'} h={'80vh!important'}>
       <Container>
         <Text
           mb={2}
@@ -52,6 +53,7 @@ function MainPage() {
         <PhotoWithOverlay />
         <BoxWithImage />
         <NearbyParking />
+        {/* <CurrentBooking /> */}
       </Container>
     </VStack>
   );

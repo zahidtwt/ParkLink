@@ -8,7 +8,7 @@ import SearchLocation from './searchLocation';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
 // coordinates: { latitude, longitude } }
-function MyMap({ parkings, coordinates: { latitude, longitude } }) {
+function MyMap({ refetch, parkings, coordinates: { latitude, longitude } }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   // const colorMode = localStorage.getItem('chakra-ui-color-mode');
   // const darkMap = 'mapbox://styles/zahidtwt/clgik0tz3006101qyeidl72vg';
@@ -37,7 +37,8 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
     // Add markers to the map.
     // if (!isLoading && !isError && parkings) {
     parkings.forEach((marker) => {
-      if (marker?.bikeSlot === 0 && marker?.carSlot === 0) return;
+      if ((marker?.bikeSlot === 0 && marker?.carSlot === 0) || marker?.onHold)
+        return;
       // Create a DOM element for each marker.
       const el = document.createElement('div');
       // const width = marker.properties.iconSize[0];
@@ -113,7 +114,12 @@ function MyMap({ parkings, coordinates: { latitude, longitude } }) {
     <>
       <div ref={mapContainer} style={{ height: '100vh' }} />
       <SearchLocation map={map} />
-      <CenterButton map={map} latitude={latitude} longitude={longitude} />
+      <CenterButton
+        map={map}
+        latitude={latitude}
+        longitude={longitude}
+        refetch={refetch}
+      />
       <ParkingInfo msg={msg} isOpen={isOpen} onClose={onClose} />
     </>
   );

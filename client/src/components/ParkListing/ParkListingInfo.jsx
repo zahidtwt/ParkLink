@@ -15,7 +15,6 @@ import {
   FaMapMarkedAlt,
   FaClock,
   FaParking,
-  FaCartArrowDown,
   FaRegEdit,
   FaEye,
   FaRegTrashAlt,
@@ -66,7 +65,6 @@ function ParkListingInfo({ parking, triggerUpdate, refetch }) {
       <ParkingInfo msg={parking} isOpen={isOpen} onClose={onClose} />
       <Container maxW={'container.xl'} mt={5}>
         <VStack
-          onClick={handleClick}
           position='relative'
           boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
           borderRadius={'xl'}
@@ -137,7 +135,7 @@ function ParkListingInfo({ parking, triggerUpdate, refetch }) {
                   <p>
                     <b>Slots </b>
                     {parking.bikeSlot ? `Bike: ${parking.bikeSlot}` : ''}
-                    {parking.carSlot ? `Car: ${parking.carSlot}` : ''}
+                    {parking.carSlot ? ` Car: ${parking.carSlot}` : ''}
                   </p>
                 </HStack>
                 {/* <HStack>
@@ -172,7 +170,11 @@ function ParkListingInfo({ parking, triggerUpdate, refetch }) {
                 Hold
               </Button>
             )}
-            <Button size={'sm'} colorScheme='green' variant={'outline'}>
+            <Button
+              size={'sm'}
+              colorScheme='green'
+              variant={'outline'}
+              onClick={handleClick}>
               <FaEye />
             </Button>
             <Button size={'sm'} colorScheme='blue' variant={'outline'}>

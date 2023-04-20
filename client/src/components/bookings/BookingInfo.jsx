@@ -12,7 +12,6 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FaCalendar, FaClock, FaMoneyBillAlt } from 'react-icons/fa';
-import map from '../../assets/map.png';
 import { Link } from 'react-router-dom';
 import Expired from './Expired';
 import ParkingInfo from '../parking/ParkingInfoDisplay';

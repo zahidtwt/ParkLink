@@ -3,7 +3,13 @@ import { useGetAllParkingQuery } from '../../features/parking/parkingApi';
 import MyMap from './MyMap';
 
 function MapPage() {
-  const { data: parkings, isLoading, isError, error } = useGetAllParkingQuery();
+  const {
+    data: parkings,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useGetAllParkingQuery();
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -33,7 +39,9 @@ function MapPage() {
     );
   }
   const coordinates = JSON.parse(cookieLocation).location;
-  return <MyMap parkings={parkings} coordinates={coordinates} />;
+  return (
+    <MyMap parkings={parkings} coordinates={coordinates} refetch={refetch} />
+  );
 }
 
 export default MapPage;
