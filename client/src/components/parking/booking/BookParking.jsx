@@ -239,27 +239,27 @@ export default function BookParking() {
             Book Parking
           </Heading>
           <Image
-            src={parkingInfo.images[0]}
+            src={parkingInfo?.images[0]}
             w={'80%'}
             borderRadius={'2xl'}
             shadow={'md'}
           />
           <Heading size='md' textAlign={'center'} my={'4!important'}>
-            {parkingInfo.location.address}
+            {parkingInfo?.location?.address}
           </Heading>
           <form onSubmit={handleReviewBooking}>
             <VStack spacing={4}>
-              {(parkingInfo.bikeSlot > 0 || parkingInfo.carSlot > 0) && (
+              {(parkingInfo?.bikeSlot > 0 || parkingInfo?.carSlot > 0) && (
                 <FormControl isRequired>
                   <FormLabel>Vehicle Type</FormLabel>
                   <Select
                     placeholder='Select Vehicle Type'
                     value={vehicleType}
                     onChange={handleVehicleTypeChange}>
-                    {parkingInfo.bikeSlot > 0 && (
+                    {parkingInfo?.bikeSlot > 0 && (
                       <option value='Bike'>Bike</option>
                     )}
-                    {parkingInfo.carSlot > 0 && (
+                    {parkingInfo?.carSlot > 0 && (
                       <option value='Car'>Car</option>
                     )}
                   </Select>
@@ -298,8 +298,8 @@ export default function BookParking() {
                     onChange={(e) => setFromTime(e.target.value)}
                     placeholder='Start Time'>
                     {generateTimeOptions(
-                      parkingInfo.fromTime,
-                      parkingInfo.toTime,
+                      parkingInfo?.fromTime,
+                      parkingInfo?.toTime,
                       true
                     )}
                   </Select>
@@ -311,8 +311,8 @@ export default function BookParking() {
                     onChange={(e) => setToTime(e.target.value)}
                     placeholder='End Time'>
                     {generateTimeOptions(
-                      parkingInfo.fromTime,
-                      parkingInfo.toTime,
+                      parkingInfo?.fromTime,
+                      parkingInfo?.toTime,
                       true,
                       fromTime
                     )}

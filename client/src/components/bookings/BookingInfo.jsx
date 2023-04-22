@@ -26,7 +26,7 @@ function MiniParkingInfo({ booking, isExpired }) {
     return `${hour}:00 ${suffix}`;
   };
   const mapImage =
-    booking?.parking_id?.images[booking?.parking_id?.images?.length - 1];
+    booking?.parking?.images[booking?.parking?.images?.length - 1];
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   function handleClick() {
@@ -34,11 +34,7 @@ function MiniParkingInfo({ booking, isExpired }) {
   }
   return (
     <>
-      <ParkingInfo
-        msg={booking?.parking_id}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
+      <ParkingInfo msg={booking?.parking} isOpen={isOpen} onClose={onClose} />
       <Container maxW={'container.xl'} mt={'5!important'}>
         <VStack
           onClick={handleClick}
@@ -59,7 +55,7 @@ function MiniParkingInfo({ booking, isExpired }) {
               zIndex={1}>
               <Expired />
               <Center width='100%' height='100%'>
-                <Link to={`/book-parking/?parkingId=${booking.parking_id}`}>
+                <Link to={`/book-parking/?parkingId=${booking?.parking?._id}`}>
                   <Button color={'purple.500'} shadow={'lg'}>
                     <Text>Book Again</Text>
                   </Button>

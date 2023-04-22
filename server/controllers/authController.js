@@ -119,6 +119,7 @@ module.exports = authController = {
         msg: 'Successfully logged in',
 
         user: {
+          id: user._id,
           username: user.username,
           firstName: user.firstName,
           lastName: user.lastName,

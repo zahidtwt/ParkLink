@@ -56,8 +56,8 @@ export const parkingApi = apiSlice.injectEndpoints({
 
     // Get parking spots by user ID
     getParkingByUserId: builder.query({
-      query: () => `/app/parkings`,
-      providesTags: ['Parking'],
+      query: (id) => `/app/parkings/user/${id}`,
+      method: 'GET',
     }),
 
     // Update a parking spot by ID

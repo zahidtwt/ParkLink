@@ -110,10 +110,9 @@ async function getParkingByLocation(req, res) {
 
 async function getParkingByUserId(req, res) {
   try {
-    const userId = req.params.id; // Get the user ID from the request parameters
-
+    const _id = req.params.userId; // Get the user ID from the request parameters
     // Find the parking spots that belong to the user and populate the user field
-    const parkings = await Parking.find({ user: userId }).populate('user');
+    const parkings = await Parking.find({ user: _id }).populate('user');
 
     // Return the parking spots as the response
     res.json(parkings);
@@ -331,6 +330,7 @@ const createBooking = async (req, res) => {
       vehicleType,
       cost,
     } = req.body;
+    console.log(parking_id);
     const user = req.user._id;
 
     // Check if the parking spot exists
@@ -342,7 +342,7 @@ const createBooking = async (req, res) => {
     const parkingUser = await User.findById(parkingInfo.user);
     const bookingUser = await User.findById(user);
     const availableSlots =
-      vehicleType == 'bike' ? parkingInfo.bikeSlot : parkingInfo.carSlot;
+      vehicleType == 'Bike' ? parkingInfo.bikeSlot : parkingInfo.carSlot;
 
     if (availableSlots === 0) {
       throw new Error('This parking spot is currently full');
@@ -352,7 +352,7 @@ const createBooking = async (req, res) => {
     await parkingUser.save();
     await bookingUser.save();
     const booking = new Booking({
-      parking_id,
+      parking: parking_id,
       selectedDate,
       fromTime,
       toTime,
@@ -364,7 +364,7 @@ const createBooking = async (req, res) => {
 
     const savedBooking = await booking.save();
     // Decrement the number of available slots for the selected vehicle type
-    if (vehicleType === 'bike') {
+    if (vehicleType === 'Bike') {
       parkingInfo.bikeSlot--;
     } else {
       parkingInfo.carSlot--;
@@ -382,8 +382,9 @@ const createBooking = async (req, res) => {
 // Get all bookings for a user
 const getUserBookings = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const bookings = await Booking.find({ userId }).populate('parking_id');
+    const user = req.user._id;
+    console.log(user);
+    const bookings = await Booking.find({ user }).populate('parking');
 
     res.json(bookings);
   } catch (err) {

@@ -3,16 +3,18 @@ import MiniParkingInfo from './ParkListingInfo';
 import { Button, ButtonGroup, Heading, VStack } from '@chakra-ui/react';
 import { useGetParkingByUserIdQuery } from '../../features/parking/parkingApi';
 import PullToRefresh from 'react-simple-pull-to-refresh';
+import { useSelector } from 'react-redux';
 
 function ParkListing() {
   // const { data: bookings, error, isLoading } = useGetBookingsByUserIdQuery();
+  const { user } = useSelector((state) => state.auth);
 
   const {
     data: parkings,
     error,
     isLoading,
     refetch,
-  } = useGetParkingByUserIdQuery();
+  } = useGetParkingByUserIdQuery(user.id);
   const refresh = () => {
     return new Promise((resolve, reject) => {
       refetch();

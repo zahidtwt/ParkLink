@@ -2,19 +2,21 @@ import { ArrowForwardIcon } from '@chakra-ui/icons';
 import GirlWithCarSVG from './svg/girlWithCar';
 import { Box, Button, Text, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
+import ParkLink from '../common/ParkLink';
 
 function SplashScreenOne() {
   return (
     <VStack
       spacing={10}
-      p={5}
+      p={1}
       textAlign={'center'}
-      h={'100vh'}
+      h={'90vh'}
       alignItems={'center'}
       justifyContent={'space-between'}
       bgGradient='linear(to-r, purple.500, pink.500)'
       bgClip='text'>
       <VStack h={20}></VStack>
+      <ParkLink />
       <GirlWithCarSVG />
       <Text as='b' fontSize={'2xl'}>
         Best Parking Spots

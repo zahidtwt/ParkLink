@@ -37,7 +37,7 @@ appRouter.get('/parkings/rating', getParkingByRating);
 // Private endpoints
 appRouter.use(authMiddleware); // Requires authentication for all routes below this line
 appRouter.post('/parkings', createParking);
-appRouter.get('/parkings/:userId', getParkingByUserId);
+appRouter.get('/parkings/user/:userId', getParkingByUserId);
 appRouter.put('/parkings/:id', updateParkingById);
 appRouter.delete('/parkings/:id', deleteParkingById);
 appRouter.post('/parkings/ratings', createParkingRating);
