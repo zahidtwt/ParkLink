@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import { useGetAllParkingQuery } from '../../features/parking/parkingApi';
 import MyMap from './MyMap';
+import { useSelector } from 'react-redux';
 
 function MapPage() {
   const {
@@ -10,7 +11,8 @@ function MapPage() {
     error,
     refetch,
   } = useGetAllParkingQuery();
-
+  const { user } = useSelector((state) => state.auth);
+  console.log(user);
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -40,7 +42,12 @@ function MapPage() {
   }
   const coordinates = JSON.parse(cookieLocation).location;
   return (
-    <MyMap parkings={parkings} coordinates={coordinates} refetch={refetch} />
+    <MyMap
+      parkings={parkings}
+      coordinates={coordinates}
+      refetch={refetch}
+      profileImage={user.profileImage}
+    />
   );
 }
 

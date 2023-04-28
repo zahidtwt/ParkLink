@@ -197,7 +197,7 @@ export default function BookParking() {
       const startDateObj = new Date(selectedDate);
       const endDateObj = new Date(endDate);
       const diffInDays = Math.ceil(
-        (endDateObj - startDateObj) / (1000 * 60 * 60 * 24)
+        (endDateObj - startDateObj + 1) / (1000 * 60 * 60 * 24)
       );
       days = diffInDays;
     }

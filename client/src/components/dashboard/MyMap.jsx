@@ -8,7 +8,12 @@ import SearchLocation from './searchLocation';
 mapboxgl.accessToken =
   'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
 // coordinates: { latitude, longitude } }
-function MyMap({ refetch, parkings, coordinates: { latitude, longitude } }) {
+function MyMap({
+  refetch,
+  parkings,
+  coordinates: { latitude, longitude },
+  profileImage,
+}) {
   const { isOpen, onClose, onOpen } = useDisclosure();
   // const colorMode = localStorage.getItem('chakra-ui-color-mode');
   // const darkMap = 'mapbox://styles/zahidtwt/clgik0tz3006101qyeidl72vg';
@@ -21,6 +26,7 @@ function MyMap({ refetch, parkings, coordinates: { latitude, longitude } }) {
   // const [error, setError] = useState(null);
 
   /// user location
+  console.log(profileImage);
 
   useEffect(() => {
     // console.log();
@@ -63,7 +69,7 @@ function MyMap({ refetch, parkings, coordinates: { latitude, longitude } }) {
 
     const userLocationEl = document.createElement('div');
     userLocationEl.className = 'user-location-marker';
-    userLocationEl.style.backgroundImage = `url('https://raw.githubusercontent.com/zahidtwt/zahidlive/main/277801721_1146010236235641_4251157026316733609_n.jpg')`;
+    userLocationEl.style.backgroundImage = `url(${profileImage})`;
     userLocationEl.style.width = '30px';
     userLocationEl.style.height = '30px';
     userLocationEl.style.backgroundSize = '100%';

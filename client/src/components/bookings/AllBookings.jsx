@@ -11,7 +11,6 @@ function AllBookings() {
     isLoading,
     refetch,
   } = useGetBookingsByUserIdQuery();
-  console.log(bookings);
   const [activeButton, setActiveButton] = useState('all');
   const [expiredButton, setExpiredButton] = useState(false);
 
