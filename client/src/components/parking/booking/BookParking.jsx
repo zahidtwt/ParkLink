@@ -1,24 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useEffect, useRef, useState } from 'react';
 import {
-  Text,
-  Image,
-  VStack,
-  HStack,
+  Button,
+  Checkbox,
   FormControl,
   FormLabel,
-  Input,
-  Button,
-  Select,
-  Checkbox,
-  useToast,
+  HStack,
   Heading,
+  Image,
+  Input,
+  Select,
+  Text,
+  VStack,
+  useToast,
 } from '@chakra-ui/react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
-import { SummaryPage } from './SummaryPage';
 import { useGetParkingByIdQuery } from '../../../features/parking/parkingApi';
 import BookParkingSkeletor from './BookParkingSkeletor';
+import { SummaryPage } from './SummaryPage';
 
 export default function BookParking() {
   const [createBooking, { data, isLoading, error, isSuccess, isError }] =
