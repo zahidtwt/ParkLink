@@ -1,20 +1,22 @@
 import {
-  Heading,
-  HStack,
   Box,
-  Image,
-  Container,
-  Text,
   Button,
-  VStack,
-  Flex,
   Center,
+  Container,
+  Flex,
+  HStack,
+  Heading,
+  Image,
+  Text,
+  VStack,
   useDisclosure,
 } from '@chakra-ui/react';
+import Cookies from 'js-cookie';
 import { FaCalendar, FaClock, FaMoneyBillAlt } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Expired from './Expired';
 import ParkingInfo from '../parking/ParkingInfoDisplay';
+import Expired from './Expired';
+
 function MiniParkingInfo({ booking, isExpired }) {
   const startDate = new Date(booking.selectedDate);
   const endDate = booking.endDate ? new Date(booking.endDate) : null;
@@ -34,27 +36,31 @@ function MiniParkingInfo({ booking, isExpired }) {
   }
   return (
     <>
-      <ParkingInfo msg={booking?.parking} isOpen={isOpen} onClose={onClose} />
+      {booking?.parking && (
+        <ParkingInfo msg={booking?.parking} isOpen={isOpen} onClose={onClose} />
+      )}
       <Container maxW={'container.xl'} mt={'5!important'}>
         <VStack
           onClick={handleClick}
-          position='relative'
-          boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
+          position="relative"
+          boxShadow="0px 11px 23px -3px rgba(0,0,0,0.2)"
           borderRadius={'xl'}
           spacing={2}
-          p={3}>
+          p={3}
+        >
           {isExpired && (
             <Flex
-              position='absolute'
+              position="absolute"
               top={0}
               left={0}
               right={0}
               bottom={0}
-              backgroundColor='rgba(128,128,128,0.4)'
+              backgroundColor="rgba(128,128,128,0.4)"
               borderRadius={'xl'}
-              zIndex={1}>
+              zIndex={1}
+            >
               <Expired />
-              <Center width='100%' height='100%'>
+              <Center width="100%" height="100%">
                 <Link to={`/book-parking/?parkingId=${booking?.parking?._id}`}>
                   <Button color={'purple.500'} shadow={'lg'}>
                     <Text>Book Again</Text>
@@ -82,7 +88,7 @@ function MiniParkingInfo({ booking, isExpired }) {
               </HStack>
               <div>
                 <HStack>
-                  <FaCalendar color='var(--chakra-colors-purple-400)' />{' '}
+                  <FaCalendar color="var(--chakra-colors-purple-400)" />{' '}
                   <p>
                     {startDate.toLocaleDateString()}{' '}
                     {endDate && `to ${endDate.toLocaleDateString()}`}
@@ -90,7 +96,7 @@ function MiniParkingInfo({ booking, isExpired }) {
                 </HStack>
 
                 <HStack>
-                  <FaClock color='var(--chakra-colors-purple-400)' />{' '}
+                  <FaClock color="var(--chakra-colors-purple-400)" />{' '}
                   <p>
                     {convertTo12Hour(booking?.fromTime)} to{' '}
                     {convertTo12Hour(booking?.toTime)}
@@ -98,7 +104,7 @@ function MiniParkingInfo({ booking, isExpired }) {
                 </HStack>
 
                 <HStack>
-                  <FaMoneyBillAlt color='var(--chakra-colors-purple-400)' />{' '}
+                  <FaMoneyBillAlt color="var(--chakra-colors-purple-400)" />{' '}
                   <p>{booking.cost} BDT</p>
                 </HStack>
                 {/* Add more fields or elements as needed */}
