@@ -203,7 +203,7 @@ export default function BookParking() {
     }
 
     const hourlyRate =
-      vehicleType === 'bike'
+      vehicleType.toLowerCase() === 'bike'
         ? parkingInfo.bikeHourlyRate
         : parkingInfo.carHourlyRate;
     const calculatedCost = totalHours * hourlyRate * days;
@@ -230,12 +230,13 @@ export default function BookParking() {
             w={'100%'}
             shadow={'lg'}
             borderRadius={'lg'}
-            as='h2'
-            size='lg'
+            as="h2"
+            size="lg"
             mb={4}
             p={2}
             textAlign={'center'}
-            borderBottom={'4px solid #CBC3E3'}>
+            borderBottom={'4px solid #CBC3E3'}
+          >
             Book Parking
           </Heading>
           <Image
@@ -244,7 +245,7 @@ export default function BookParking() {
             borderRadius={'2xl'}
             shadow={'md'}
           />
-          <Heading size='md' textAlign={'center'} my={'4!important'}>
+          <Heading size="md" textAlign={'center'} my={'4!important'}>
             {parkingInfo?.location?.address}
           </Heading>
           <form onSubmit={handleReviewBooking}>
@@ -253,14 +254,15 @@ export default function BookParking() {
                 <FormControl isRequired>
                   <FormLabel>Vehicle Type</FormLabel>
                   <Select
-                    placeholder='Select Vehicle Type'
+                    placeholder="Select Vehicle Type"
                     value={vehicleType}
-                    onChange={handleVehicleTypeChange}>
+                    onChange={handleVehicleTypeChange}
+                  >
                     {parkingInfo?.bikeSlot > 0 && (
-                      <option value='Bike'>Bike</option>
+                      <option value="Bike">Bike</option>
                     )}
                     {parkingInfo?.carSlot > 0 && (
-                      <option value='Car'>Car</option>
+                      <option value="Car">Car</option>
                     )}
                   </Select>
                 </FormControl>
@@ -268,7 +270,7 @@ export default function BookParking() {
               <FormControl isRequired>
                 <FormLabel>Date</FormLabel>
                 <Input
-                  type='date'
+                  type="date"
                   value={selectedDate}
                   min={minDate}
                   onChange={(e) => setSelectedDate(e.target.value)}
@@ -283,7 +285,7 @@ export default function BookParking() {
                 <FormControl isRequired>
                   <FormLabel>End Date</FormLabel>
                   <Input
-                    type='date'
+                    type="date"
                     value={endDate}
                     min={selectedDate}
                     onChange={handleEndDateChange}
@@ -296,7 +298,8 @@ export default function BookParking() {
                   <Select
                     value={fromTime}
                     onChange={(e) => setFromTime(e.target.value)}
-                    placeholder='Start Time'>
+                    placeholder="Start Time"
+                  >
                     {generateTimeOptions(
                       parkingInfo?.fromTime,
                       parkingInfo?.toTime,
@@ -309,7 +312,8 @@ export default function BookParking() {
                   <Select
                     value={toTime}
                     onChange={(e) => setToTime(e.target.value)}
-                    placeholder='End Time'>
+                    placeholder="End Time"
+                  >
                     {generateTimeOptions(
                       parkingInfo?.fromTime,
                       parkingInfo?.toTime,
@@ -320,28 +324,30 @@ export default function BookParking() {
                 </FormControl>
               </HStack>
               {noAvailableTimeSlots.current && (
-                <Text color='red.500' mt={2}>
+                <Text color="red.500" mt={2}>
                   All time slots for today are unavailable.
                 </Text>
               )}
               <Text
-                fontSize='xl'
-                fontWeight='bold'
+                fontSize="xl"
+                fontWeight="bold"
                 border={'1px solid green'}
                 padding={'5px 10px'}
                 borderRadius={'md'}
-                bg={'green.100'}>
+                bg={'green.100'}
+              >
                 Cost: {cost} Taka
               </Text>
 
               <Button
                 mb={'20!important'}
-                w='100%'
-                loadingText='Booking...'
+                w="100%"
+                loadingText="Booking..."
                 isLoading={isLoading}
-                type='submit'
-                colorScheme='purple'
-                isDisabled={noAvailableTimeSlots.current}>
+                type="submit"
+                colorScheme="purple"
+                isDisabled={noAvailableTimeSlots.current}
+              >
                 {showSummary ? 'Book Parking' : 'Review Booking'}
               </Button>
             </VStack>
