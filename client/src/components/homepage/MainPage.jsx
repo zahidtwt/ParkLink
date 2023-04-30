@@ -36,7 +36,7 @@ function MainPage() {
     fetchLocations(latitude, longitude).then((res) => {
       setCity(res.places[0].city);
       setArea(res.places[0].area);
-      console.log(res);
+      // console.log(res);
     });
   }, []);
 
