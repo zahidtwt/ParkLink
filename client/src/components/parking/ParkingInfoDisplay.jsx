@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Drawer,
   DrawerBody,
@@ -6,39 +7,38 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  Box,
-  Image,
   HStack,
   Heading,
+  Image,
+  ListItem,
   Text,
+  UnorderedList,
   VStack,
   useColorModeValue,
-  UnorderedList,
-  ListItem,
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import DistanceCalculator from './DistanceCalculator';
-import InfoCheap from './InfoCheap';
-import { GrMapLocation, GrAlarm } from 'react-icons/gr';
-import { FaMotorcycle, FaCar, FaCity } from 'react-icons/fa';
-import { ImClock } from 'react-icons/im';
 import { BiCctv } from 'react-icons/bi';
 import { CiWarning } from 'react-icons/ci';
-import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
+import { FaCar, FaCity, FaMotorcycle } from 'react-icons/fa';
 import { GiPoliceOfficerHead } from 'react-icons/gi';
+import { GrAlarm, GrMapLocation } from 'react-icons/gr';
+import { ImClock } from 'react-icons/im';
+import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick-theme.css';
+import 'slick-carousel/slick/slick.css';
+import DistanceCalculator from './DistanceCalculator';
+import InfoCheap from './InfoCheap';
 
-import PriceBox from './PricerBox';
-import { useGetParkingByIdQuery } from '../../features/parking/parkingApi';
 import { useEffect, useState } from 'react';
+import { useGetUserQuery } from '../../features/auth/authApi';
 import {
   useAddBookmarkMutation,
   useRemoveBookmarkMutation,
 } from '../../features/booking/bookingApi';
-import { useGetUserQuery } from '../../features/auth/authApi';
+import { useGetParkingByIdQuery } from '../../features/parking/parkingApi';
+import PriceBox from './PricerBox';
 
 const settings = {
   dots: true,
@@ -89,9 +89,11 @@ function ParkingInfo({ msg, onClose, isOpen }) {
         .catch((err) => console.error(err));
     }
   };
+
+  if (!parkingInfo) return;
   return (
     <>
-      <Drawer placement='bottom' onClose={onClose} isOpen={isOpen}>
+      <Drawer placement="bottom" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent borderTopLeftRadius={20} borderTopRightRadius={20}>
           <DrawerCloseButton
@@ -100,11 +102,11 @@ function ParkingInfo({ msg, onClose, isOpen }) {
             size={'lg'}
           />
 
-          <DrawerHeader borderBottomWidth='1px'>Parking Details</DrawerHeader>
+          <DrawerHeader borderBottomWidth="1px">Parking Details</DrawerHeader>
           <DrawerBody>
             {/* SLIDER */}
 
-            <Box maxW='500px' mx='1' mt={8}>
+            <Box maxW="500px" mx="1" mt={8}>
               <Slider {...settings}>
                 {parkingInfo?.images?.map((image, index) => (
                   <Box key={index} mb={4}>
@@ -128,20 +130,20 @@ function ParkingInfo({ msg, onClose, isOpen }) {
                 {isBookmarked ? (
                   <MdBookmark
                     size={30}
-                    color='#6B46C1'
+                    color="#6B46C1"
                     onClick={handleBookmark}
                   />
                 ) : (
                   <MdBookmarkBorder
                     size={30}
-                    color='#6B46C1'
+                    color="#6B46C1"
                     onClick={handleBookmark}
                   />
                 )}
               </Text>
             </HStack>
             {/* DISTANCE */}
-            <HStack flexWrap='wrap' mb={2}>
+            <HStack flexWrap="wrap" mb={2}>
               <InfoCheap
                 text={
                   <DistanceCalculator
@@ -183,7 +185,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
               />
               {parkingInfo?.cctv ? (
                 <InfoCheap
-                  text='CCTV'
+                  text="CCTV"
                   color={'blue'}
                   icon={BiCctv}
                   size={'md'}
@@ -191,7 +193,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
               ) : null}
               {parkingInfo?.guard ? (
                 <InfoCheap
-                  text='Guard'
+                  text="Guard"
                   color={'blue'}
                   icon={GiPoliceOfficerHead}
                   size={'md'}
@@ -203,12 +205,12 @@ function ParkingInfo({ msg, onClose, isOpen }) {
               {parkingInfo?.rules && (
                 <Heading size={'md'}>Parking Rules</Heading>
               )}
-              <UnorderedList listStyleType='none'>
+              <UnorderedList listStyleType="none">
                 {parkingInfo?.rules
                   ? parkingInfo.rules.map((rule) => (
                       <HStack key={rule}>
                         <Text display={'inline'}>
-                          {<CiWarning color='red' />}
+                          {<CiWarning color="red" />}
                         </Text>
                         <ListItem mb={1}>{rule}</ListItem>
                       </HStack>
@@ -220,11 +222,12 @@ function ParkingInfo({ msg, onClose, isOpen }) {
 
             <Button
               onClick={handleBooking}
-              colorScheme='purple'
+              colorScheme="purple"
               w={'100%'}
               borderRadius={20}
               mb={5}
-              mt={2}>
+              mt={2}
+            >
               Book Parking
             </Button>
           </DrawerBody>
