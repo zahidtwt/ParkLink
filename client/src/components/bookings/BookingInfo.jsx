@@ -113,13 +113,45 @@ function MiniParkingInfo({ booking, isExpired }) {
           </HStack>
 
           <HStack mt={2}>
-            <Button size={'sm'} colorScheme='red' variant={'outline'}>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              size={'sm'}
+              colorScheme="red"
+              variant={'outline'}
+            >
               Cancel
             </Button>
-            <Button size={'sm'} colorScheme='blue' variant={'outline'}>
-              Change Date/Time
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpen();
+              }}
+              size={'sm'}
+              colorScheme="blue"
+              variant={'outline'}
+            >
+              View Details
             </Button>
-            <Button size={'sm'} colorScheme='green'>
+            <Button
+              onClick={(e) => {
+                e.stopPropagation();
+                const {
+                  location: { latitude, longitude },
+                } = JSON.parse(Cookies.get('location'));
+
+                const { address } = booking.parking.location;
+
+                window.open(
+                  `https://google.com/maps/dir/${latitude},${longitude}/${
+                    address.split(',')[0]
+                  },`
+                );
+              }}
+              size={'sm'}
+              colorScheme="green"
+            >
               Navigate
             </Button>
           </HStack>
