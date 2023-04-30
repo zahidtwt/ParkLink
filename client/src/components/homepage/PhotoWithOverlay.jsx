@@ -32,8 +32,14 @@ export default function PhotoWithOverlay() {
         <HStack>
           <Greeting />
           <Text>
-            {user.username[0].toUpperCase() +
-              user.username.slice(1).toLowerCase()}
+            {user ? (
+              <>
+                {user.username[0].toUpperCase() +
+                  user.username.slice(1).toLowerCase()}
+              </>
+            ) : (
+              <></>
+            )}
           </Text>
         </HStack>
         <Heading size={'lg'} mt={5} fontWeight={'500'}>
