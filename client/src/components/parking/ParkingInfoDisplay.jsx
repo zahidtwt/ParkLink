@@ -35,6 +35,7 @@ import { useEffect, useState } from 'react';
 import { useGetUserQuery } from '../../features/auth/authApi';
 import {
   useAddBookmarkMutation,
+  useGetAllBookmarkedParkingsQuery,
   useRemoveBookmarkMutation,
 } from '../../features/booking/bookingApi';
 import { useGetParkingByIdQuery } from '../../features/parking/parkingApi';
@@ -54,16 +55,18 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   const { data: user } = useGetUserQuery();
   const [removeBookmark] = useRemoveBookmarkMutation();
   const navigate = useNavigate();
+  const { refetch, data: bookmarks } = useGetAllBookmarkedParkingsQuery();
 
-  const [isBookmarked, setIsBookmarked] = useState(
-    user?.bookmarkedParkings?.some((p) => p === parkingInfo?._id) || false
-  );
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
-    setIsBookmarked(
-      user?.bookmarkedParkings?.some((p) => p === parkingInfo?._id) || false
-    );
-  }, [user, parkingInfo]);
+    for (let bookmark of bookmarks) {
+      if (bookmark._id === parkingInfo._id) {
+        setIsBookmarked(true);
+      }
+    }
+  }, [bookmarks, parkingInfo]);
+
   const selectedLon = parkingInfo?.location?.longitude;
   const selectedLat = parkingInfo?.location?.latitude;
   const time =
@@ -88,6 +91,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
         .then(() => setIsBookmarked(true))
         .catch((err) => console.error(err));
     }
+    refetch();
   };
 
   if (!parkingInfo) return;
