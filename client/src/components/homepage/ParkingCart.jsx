@@ -21,24 +21,25 @@ function ParkingCart({ parking }) {
 
   return (
     <>
-      {' '}
       <ParkingInfo msg={parking} isOpen={isOpen} onClose={onClose} />
       {parking && (
         <Box
           border={'1px solid #e1e1e1'}
           onClick={handleClick}
-          position='relative'
-          boxShadow='0px 11px 23px -3px rgba(0,0,0,0.2)'
+          position="relative"
+          boxShadow="0px 11px 23px -3px rgba(0,0,0,0.2)"
           borderRadius={'xl'}
           spacing={2}
-          w={60}>
+          w={60}
+        >
           <HStack
             p={2}
             pb={0}
             justifyContent={'space-between'}
             justifyItems={'space-between'}
             alignItems={'space-between'}
-            alignContent={'space-between'}>
+            alignContent={'space-between'}
+          >
             <VStack align={'left'} padding={1} mb={0}>
               <Heading size={'sm'}>
                 {parking?.location?.address?.length > 20

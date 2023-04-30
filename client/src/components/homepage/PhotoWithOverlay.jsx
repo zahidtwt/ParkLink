@@ -29,7 +29,7 @@ export default function PhotoWithOverlay() {
       <Box style={overlayStyles} padding={4}>
         <HStack>
           <Greeting />
-          <Text>Zahid!</Text>
+          <Text>Pollock!</Text>
         </HStack>
         <Heading size={'lg'} mt={5} fontWeight={'500'}>
           Find the best Parking & <br /> Post your Parking for free!

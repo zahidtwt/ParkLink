@@ -19,8 +19,7 @@ function Greeting() {
 
   return (
     <>
-      {' '}
-      <Text colorScheme='white'>{greeting}</Text>
+      <Text colorScheme="white">{greeting}</Text>
     </>
   );
 }
