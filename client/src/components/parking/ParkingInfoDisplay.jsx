@@ -32,7 +32,6 @@ import DistanceCalculator from './DistanceCalculator';
 import InfoCheap from './InfoCheap';
 
 import { useEffect, useState } from 'react';
-import { useGetUserQuery } from '../../features/auth/authApi';
 import {
   useAddBookmarkMutation,
   useGetAllBookmarkedParkingsQuery,
@@ -52,7 +51,6 @@ const settings = {
 function ParkingInfo({ msg, onClose, isOpen }) {
   const { data: parkingInfo } = useGetParkingByIdQuery(msg._id);
   const [addBookmark] = useAddBookmarkMutation();
-  const { data: user } = useGetUserQuery();
   const [removeBookmark] = useRemoveBookmarkMutation();
   const navigate = useNavigate();
   const { refetch, data: bookmarks } = useGetAllBookmarkedParkingsQuery();
@@ -60,6 +58,7 @@ function ParkingInfo({ msg, onClose, isOpen }) {
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
+    if (!bookmarks) return;
     for (let bookmark of bookmarks) {
       if (bookmark._id === parkingInfo._id) {
         setIsBookmarked(true);
