@@ -1,31 +1,31 @@
 import {
+  Alert,
   AlertDialog,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogContent,
   AlertDialogOverlay,
-  useDisclosure,
-  Flex,
-  Input,
-  VStack,
-  Button,
-  InputGroup,
-  FormControl,
-  InputLeftAddon,
-  WrapItem,
-  Avatar,
-  Box,
   AlertIcon,
   AlertTitle,
-  Alert,
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  FormControl,
   Heading,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  VStack,
+  WrapItem,
+  useDisclosure,
 } from '@chakra-ui/react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { verifyMobile } from '../../../features/verifyNumber/verifyNumberAuthSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect } from 'react';
+import { verifyMobile } from '../../../features/verifyNumber/verifyNumberAuthSlice';
 import ParkLink from '../../common/ParkLink';
 export default function InitialCheck() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -78,17 +78,18 @@ export default function InitialCheck() {
         height={'100vh'}
         justifyContent={'center'}
         justifyItems={'center'}
-        alignItems={'center'}>
-        <VStack shadow={'md'} w='350px' p='10px' spacing={4} borderRadius={10}>
+        alignItems={'center'}
+      >
+        <VStack shadow={'md'} w="350px" p="10px" spacing={4} borderRadius={10}>
           <VStack mb={10}>
             <Heading>Welcome to </Heading>
             <ParkLink />
           </VStack>
           <WrapItem>
-            <Avatar size='2xl' />
+            <Avatar size="2xl" />
           </WrapItem>
           {isSignupSuccess && (
-            <Alert status='success'>
+            <Alert status="success">
               <AlertIcon />
               Sign Up Successful, Please Login!
             </Alert>
@@ -98,19 +99,19 @@ export default function InitialCheck() {
             <Box h={'30'}></Box>
             <Box mb={10}>
               {errors.number && (
-                <Alert status='error' mb={5} borderRadius={10}>
+                <Alert status="error" mb={5} borderRadius={10}>
                   <AlertIcon />
                   <AlertTitle>{errors.number.message}</AlertTitle>
                 </Alert>
               )}
               <InputGroup>
-                <InputLeftAddon fontSize={'lg'} children='+880' />
+                <InputLeftAddon fontSize={'lg'} children="+880" />
                 <Input
                   {...(signedMobile ? { value: signedMobile } : {})}
                   fontSize={'lg'}
-                  type='tel'
-                  placeholder='Mobile number'
-                  name='number'
+                  type="tel"
+                  placeholder="Mobile number"
+                  name="number"
                   {...register('number', {
                     required: 'Type Valid Mobile No',
                     minLength: {
@@ -123,12 +124,13 @@ export default function InitialCheck() {
             </Box>
             <Button
               isLoading={isLoading}
-              loadingText='Checking'
-              size='lg'
-              colorScheme='purple'
+              loadingText="Checking"
+              size="lg"
+              colorScheme="purple"
               w={'100%'}
-              type='submit'
-              mb={5}>
+              type="submit"
+              mb={5}
+            >
               Next
             </Button>
           </form>
@@ -138,17 +140,17 @@ export default function InitialCheck() {
         <AlertDialog isOpen={isOpen} onClose={onClose} isCentered>
           <AlertDialogOverlay>
             <AlertDialogContent m={5}>
-              <AlertDialogHeader fontSize='2xl' fontWeight='bold'>
+              <AlertDialogHeader fontSize="2xl" fontWeight="bold">
                 New User?
               </AlertDialogHeader>
 
-              <AlertDialogBody fontSize='xl'>
+              <AlertDialogBody fontSize="xl">
                 Your number isn't registered with us.
               </AlertDialogBody>
 
               <AlertDialogFooter>
                 <Button onClick={onClose}>Try Again</Button>
-                <Button colorScheme='green' onClick={handleClick} ml={3}>
+                <Button colorScheme="green" onClick={handleClick} ml={3}>
                   Create Account
                 </Button>
               </AlertDialogFooter>
