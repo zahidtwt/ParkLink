@@ -1,7 +1,7 @@
 import { Text } from '@chakra-ui/react';
 import Cookies from 'js-cookie';
 import React, { useEffect, useState } from 'react';
-import claculateDistance from '../../utils/calculateDistance';
+import claculateDistance from '../../utils/calculateDistance/calculateDistance';
 
 function DistanceCalculator({ selectedLat, selectedLon }) {
   const [isGeolocationRetrieved, setIsGeolocationRetrieved] = useState(false);

@@ -19,7 +19,7 @@ import { useCreateBookingMutation } from '../../../features/booking/bookingApi';
 import { useGetParkingByIdQuery } from '../../../features/parking/parkingApi';
 import BookParkingSkeletor from './BookParkingSkeletor';
 import { SummaryPage } from './SummaryPage';
-
+import convertTo12Hour from '../../../utils/convetTo12Hour/convertTo12Hour';
 export default function BookParking() {
   const [createBooking, { data, isLoading, error, isSuccess, isError }] =
     useCreateBookingMutation();
@@ -132,12 +132,12 @@ export default function BookParking() {
       });
     }
   };
-  const convertTo12Hour = (time) => {
-    let hour = parseInt(time.split(':')[0]);
-    const suffix = hour >= 12 ? 'PM' : 'AM';
-    hour = hour % 12 || 12;
-    return `${hour}:00 ${suffix}`;
-  };
+  // const convertTo12Hour = (time) => {
+  //   let hour = parseInt(time.split(':')[0]);
+  //   const suffix = hour >= 12 ? 'PM' : 'AM';
+  //   hour = hour % 12 || 12;
+  //   return `${hour}:00 ${suffix}`;
+  // };
   const generateTimeOptions = (
     startTime,
     endTime,
