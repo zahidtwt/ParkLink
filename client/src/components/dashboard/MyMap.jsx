@@ -43,7 +43,7 @@ function MyMap({
     // Add markers to the map.
     // if (!isLoading && !isError && parkings) {
     parkings.forEach((marker) => {
-      if ((marker?.bikeSlot === 0 && marker?.carSlot === 0) || marker?.onHold)
+      if (((marker.bikeSlot == 0||marker.bikeSlot == null) && (marker.carSlot == 0|| marker.carSlot == null) ) || marker?.onHold)
         return;
       // Create a DOM element for each marker.
       const el = document.createElement('div');

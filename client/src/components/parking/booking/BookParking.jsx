@@ -29,7 +29,6 @@ export default function BookParking() {
   const searchParams = new URLSearchParams(window.location.search);
   const parkingId = searchParams.get('parkingId');
 
-  // const {data: } = useGet
   const { data: parkingInfo, isLoading: isParkingInfoLoading } =
     useGetParkingByIdQuery(parkingId);
   const minDate = new Date().toISOString().split('T')[0];
@@ -104,10 +103,7 @@ export default function BookParking() {
   if (isSuccess) {
     console.log(data);
     setTimeout(() => {
-      navigate('success', {
-        bookingInfo: data?.booking,
-        parkingInfo: parkingInfo,
-      });
+      navigate('success', {parkingInfo});
     }, 0);
   }
 

@@ -8,20 +8,8 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import parkingDone from '../../../assets/parkingDone.gif';
-import { useLocation, useNavigate } from 'react-router-dom';
-const navigate = useNavigate;
+import Cookies from 'js-cookie';
 function BookingSuccess() {
-  const location = useLocation();
-
-  const parkingInfo = location?.parkingInfo;
-  const latitude = parkingInfo?.location?.latitude;
-  const longitude = parkingInfo?.location?.longitude;
-  const navLink = `https://maps.google.com/?q=${latitude},${longitude}`;
-  const handleClick = () => {
-    setTimeout(() => {
-      navigate('/dashboard');
-    }, 0);
-  };
   return (
     <Flex
       direction="column"
@@ -81,11 +69,20 @@ function BookingSuccess() {
               Go to Dashboard
             </Button>
           </a>
-          <a href={navLink}>
-            <Button w={'100%'} colorScheme="purple">
+    
+            {/* <Button onClick={(e) => {
+                e.stopPropagation();
+                const {
+                  location: { latitude, longitude },
+                } = JSON.parse(Cookies.get('location'));
+
+
+              
+                );
+              }} w={'100%'} colorScheme="purple" >
               Navigate to Parking
-            </Button>
-          </a>
+            </Button> */}
+       
         </VStack>
       </VStack>
     </Flex>

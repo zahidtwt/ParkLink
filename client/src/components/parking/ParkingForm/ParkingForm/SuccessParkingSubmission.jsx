@@ -1,7 +1,6 @@
 import { Box, Button, Flex, Heading, Text, VStack } from '@chakra-ui/react';
 import succesVideo from '../../../../assets/success.mp4';
 import { useNavigate } from 'react-router-dom';
-const navigate = useNavigate;
 function SuccessParkingSubmission() {
   const searchParams = new URLSearchParams(window.location.search);
   const parkingId = searchParams.get('parkingId');

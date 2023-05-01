@@ -52,8 +52,6 @@ function App() {
 
   useEffect(() => {
     const cookieLocation = Cookies.get('location');
-
-    console.log(cookieLocation);
     if (cookieLocation) return setLocationAllowed(true);
 
     navigator.geolocation.getCurrentPosition(
