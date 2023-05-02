@@ -1,12 +1,27 @@
 const mongoose = require('mongoose');
+const { MONGO_URI } = require('../config');
 
-const uri = 'mongodb+srv://zahid:zahid@testingdb.ifnogcp.mongodb.net/parklink';
+mongoose.connection
+  .on('open', () => console.log('Conneced with database'))
+  .on('error', (error) => {
+    console.log(error);
+  });
 
-try {
-  mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-  console.log('🍀  MongoDB connected');
-} catch (err) {
-  console.error('Error connecting to MongoDB:', err.message);
+async function connectToDatabase(db = 'parklink') {
+  await mongoose.connect(`${MONGO_URI}/${db}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
 }
 
-module.exports = mongoose;
+async function disconnectFromDatabase(db = 'parklink') {
+  await mongoose.connect(`${MONGO_URI}/${db}`, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+}
+
+module.exports = {
+  connectToDatabase,
+  disconnectFromDatabase,
+};
