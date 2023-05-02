@@ -7,18 +7,15 @@ mongoose.connection
     console.log(error);
   });
 
-async function connectToDatabase(db = 'parklink') {
-  await mongoose.connect(`${MONGO_URI}/${db}`, {
+async function connectToDatabase() {
+  await mongoose.connect(MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });
 }
 
-async function disconnectFromDatabase(db = 'parklink') {
-  await mongoose.connect(`${MONGO_URI}/${db}`, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function disconnectFromDatabase() {
+  await mongoose.disconnect();
 }
 
 module.exports = {
