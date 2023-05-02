@@ -1,10 +1,10 @@
-// https://barikoi.xyz/v2/api/search/nearby/NDY2Njo0Q1NGM05IS00w/0.5/10?longitude=90.3222635&latitude=24.0138635
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { BARI_KOI_API_KEY } from '../../config';
 
 const fetchLocations = async (latitude, longitude) => {
   const response = await axios.get(
-    `https://barikoi.xyz/v2/api/search/nearby/NDY2Njo0Q1NGM05IS00w/0.5/1?longitude=${longitude}&latitude=${latitude}`
+    `https://barikoi.xyz/v2/api/search/nearby/${BARI_KOI_API_KEY}/0.5/1?longitude=${longitude}&latitude=${latitude}`
   );
 
   return response.data;

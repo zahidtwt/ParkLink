@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
 import { Box, Text, useColorModeValue } from '@chakra-ui/react';
 import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { BARI_KOI_API_KEY } from '../../../../config';
 import AddressInput from './AddressInput';
 
 function DebouncedAddress({ setLocationValue, addressValue }) {
@@ -23,7 +24,7 @@ function DebouncedAddress({ setLocationValue, addressValue }) {
     }
     const fetchLocations = async () => {
       const response = await axios.get(
-        `https://barikoi.xyz/v1/api/search/verify/autocomplete/NDY2Njo0Q1NGM05IS00w/place?q=${searchValue}`
+        `https://barikoi.xyz/v1/api/search/verify/autocomplete/${BARI_KOI_API_KEY}/place?q=${searchValue}`
       );
       setLocations(response.data);
     };
@@ -44,11 +45,11 @@ function DebouncedAddress({ setLocationValue, addressValue }) {
           border={'2px solid lightgray'}
           overflow={'scroll'}
           borderRadius={'xl'}
-          position='fixed'
-          left='50%'
-          transform='translate(-50%, -50%)'
+          position="fixed"
+          left="50%"
+          transform="translate(-50%, -50%)"
           zIndex={10}
-          top='430px'
+          top="430px"
           minWidth={'300px'}
           maxWidth={'300px'}
           minHeight={'40px'}
@@ -58,21 +59,23 @@ function DebouncedAddress({ setLocationValue, addressValue }) {
             '&::-webkit-scrollbar': {
               display: 'none',
             },
-          }}>
+          }}
+        >
           {locations?.places?.map((location) => (
             <Text
               key={location.id}
               px={4}
               py={2}
               borderBottom={'1px solid #ccc'}
-              cursor='pointer'
+              cursor="pointer"
               _hover={{
                 bg: { searchIcon },
                 color: { hoverTextColor },
               }}
               onClick={() => {
                 handleSelect(location);
-              }}>
+              }}
+            >
               {location.address}
             </Text>
           ))}

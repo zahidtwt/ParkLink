@@ -1,12 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import parking from './parking.svg';
-import ParkingInfo from '../parking/ParkingInfoDisplay';
 import { useDisclosure } from '@chakra-ui/react';
+import mapboxgl from 'mapbox-gl';
+import { useEffect, useRef, useState } from 'react';
+import { MAP_BOX_TOKEN } from '../../config';
+import ParkingInfo from '../parking/ParkingInfoDisplay';
 import CenterButton from './CenterButton';
+import parking from './parking.svg';
 import SearchLocation from './searchLocation';
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
+
+mapboxgl.accessToken = MAP_BOX_TOKEN;
 // coordinates: { latitude, longitude } }
 function MyMap({
   refetch,
@@ -15,22 +16,14 @@ function MyMap({
   profileImage,
 }) {
   const { isOpen, onClose, onOpen } = useDisclosure();
-  // const colorMode = localStorage.getItem('chakra-ui-color-mode');
-  // const darkMap = 'mapbox://styles/zahidtwt/clgik0tz3006101qyeidl72vg';
+
   const lightMap = 'mapbox://styles/zahidtwt/clgienaqi005u01o1d5rzcmgi';
   const mapStyle = lightMap;
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [msg, setMsg] = useState(''); // <- add this line to store the message
-  // const [currentLocation, setCurrentLocation] = useState(null);
-  // const [error, setError] = useState(null);
-
-  /// user location
-  console.log(profileImage);
 
   useEffect(() => {
-    // console.log();
-
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
       container: mapContainer.current,

@@ -7,14 +7,15 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import { IoLocationSharp } from 'react-icons/io5';
-import { useGetUserQuery } from '../../features/auth/authApi';
-import PhotoWithOverlay from './PhotoWithOverlay';
-import BoxWithImage from './BoxWithImage';
-import NearbyParking from './NearbyParking';
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { IoLocationSharp } from 'react-icons/io5';
+import { BARI_KOI_API_KEY } from '../../config';
+import { useGetUserQuery } from '../../features/auth/authApi';
+import BoxWithImage from './BoxWithImage';
+import NearbyParking from './NearbyParking';
+import PhotoWithOverlay from './PhotoWithOverlay';
 
 function MainPage() {
   const { data: user } = useGetUserQuery();
@@ -26,7 +27,7 @@ function MainPage() {
 
   const fetchLocations = async (latitude, longitude) => {
     const response = await axios.get(
-      `https://barikoi.xyz/v2/api/search/nearby/NDY2Njo0Q1NGM05IS00w/0.1/1?longitude=${longitude}&latitude=${latitude}`
+      `https://barikoi.xyz/v2/api/search/nearby/${BARI_KOI_API_KEY}/0.1/1?longitude=${longitude}&latitude=${latitude}`
     );
 
     return response.data;

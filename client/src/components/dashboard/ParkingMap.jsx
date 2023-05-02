@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
+import React, { useEffect, useRef } from 'react';
+import { MAP_BOX_TOKEN } from '../../config';
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiemFoaWR0d3QiLCJhIjoiY2xnaWV0YXB1MHVzNDNwbXk4NmdjZDBzZiJ9.7yB9lTwtcki0wvg2BQHNaw';
+mapboxgl.accessToken = MAP_BOX_TOKEN;
 
 const GeoJSON = {
   type: 'FeatureCollection',
