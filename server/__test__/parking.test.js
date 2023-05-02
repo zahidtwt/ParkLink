@@ -1,15 +1,18 @@
 const request = require('supertest');
-const app = require('../server');
+const app = require('../app');
 const mongoose = require('mongoose');
+const {
+  connectToDatabase,
+  disconnectFromDatabase,
+} = require('../database/connection');
 
 describe('Test Parking API', () => {
-  beforeAll((done) => {
-    done();
+  beforeAll(async () => {
+    await connectToDatabase();
   });
 
-  afterAll((done) => {
-    mongoose.connection.close();
-    done();
+  afterAll(async () => {
+    await disconnectFromDatabase();
   });
 
   describe('GET All Parkings', () => {
