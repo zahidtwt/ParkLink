@@ -19,9 +19,15 @@ cloudinary.config({
 
 //***middleware */
 app.use(express.json());
-app.use(cors());
-app.use(morgan('tiny')); // tiny log of my requests
-app.disable('x-powered-by'); // less hackers know about our stack
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+    optionSuccessStatus: 200,
+  })
+);
+// app.use(morgan('tiny')); // tiny log of my requests
+// app.disable('x-powered-by'); // less hackers know about our stack
 
 app.post('/upload', async (req, res) => {
   // console.log(req);
