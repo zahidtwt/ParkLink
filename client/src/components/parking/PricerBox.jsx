@@ -24,86 +24,89 @@ function PriceBox({ parkingInfo }) {
   return (
     <VStack mb={2}>
       <TableContainer w={'100%'} borderRadius={'xl'}>
-        <Table typeof='purple' size={''} fontWeight={400}>
+        <Table typeof="purple" size={''} fontWeight={400}>
           <Thead bg={'#805ad52b'}>
             <Tr>
               <Th
-                textAlign='center'
+                textAlign="center"
                 padding={'4px'}
-                width='25%'
-                colSpan={1}></Th>
-              <Th textAlign='center' padding={'4px'} width='15%'>
+                width="25%"
+                colSpan={1}
+              ></Th>
+              <Th textAlign="center" padding={'4px'} width="15%">
                 Slots
               </Th>
-              <Th textAlign='center' width='60%' colSpan={2}>
+              <Th textAlign="center" width="60%" colSpan={2}>
                 Rate <sub>(BDT)</sub>
               </Th>
             </Tr>
           </Thead>
           <Tbody>
-            {bikeSlot > 0 && (
-              <Tr>
-                <Td
-                  textAlign='center'
-                  width='20%'
-                  bg={'#c1e0ff57'}
-                  fontWeight={'bold'}>
-                  <HStack justifyContent={'center'}>
-                    <Text>Bike</Text>
-                  </HStack>
-                </Td>
-                <Td textAlign='center' width='20%' bg={'#c1e0ff57'}>
-                  {bikeSlot}
-                </Td>
+            <Tr>
+              <Td
+                textAlign="center"
+                width="20%"
+                bg={'#c1e0ff57'}
+                fontWeight={'bold'}
+              >
+                <HStack justifyContent={'center'}>
+                  <Text>Bike</Text>
+                </HStack>
+              </Td>
+              <Td
+                data-test-id="bike-slot"
+                textAlign="center"
+                width="20%"
+                bg={'#c1e0ff57'}
+              >
+                {bikeSlot || 0}
+              </Td>
 
-                <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
-                  {bikeHourlyRate && (
-                    <>
-                      {bikeHourlyRate} <sub>/H</sub>
-                    </>
-                  )}
-                </Td>
+              <Td textAlign="center" width="30%" bg={'#c1e0ff57'}>
+                {
+                  <>
+                    {bikeHourlyRate || 0} <sub>/H</sub>
+                  </>
+                }
+              </Td>
 
-                <Td textAlign='center' width='30%' bg={'#c1e0ff57'}>
-                  {bikeMonthlyRate && (
-                    <>
-                      {bikeMonthlyRate} <sub>/M</sub>
-                    </>
-                  )}
-                </Td>
-              </Tr>
-            )}
-            {carSlot > 0 && (
-              <Tr>
-                <Td
-                  textAlign='center'
-                  width='20%'
-                  bg={'#f76ba21f'}
-                  fontWeight={'bold'}>
-                  <HStack justifyContent={'center'}>
-                    <Text>Car</Text>
-                  </HStack>
-                </Td>
-                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  20
-                </Td>
+              <Td textAlign="center" width="30%" bg={'#c1e0ff57'}>
+                {bikeMonthlyRate && (
+                  <>
+                    {bikeMonthlyRate} <sub>/M</sub>
+                  </>
+                )}
+              </Td>
+            </Tr>
 
-                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  {carHourlyRate && (
-                    <>
-                      {carHourlyRate} <sub>/H</sub>
-                    </>
-                  )}
-                </Td>
-                <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  {carMonthlyRate && (
-                    <>
-                      {carMonthlyRate} <sub>/M</sub>
-                    </>
-                  )}
-                </Td>
-              </Tr>
-            )}
+            <Tr>
+              <Td
+                textAlign="center"
+                width="20%"
+                bg={'#f76ba21f'}
+                fontWeight={'bold'}
+              >
+                <HStack justifyContent={'center'}>
+                  <Text>Car</Text>
+                </HStack>
+              </Td>
+              <Td textAlign="center" width="25%" bg={'#f76ba21f'}>
+                {carSlot || 0}
+              </Td>
+
+              <Td textAlign="center" width="25%" bg={'#f76ba21f'}>
+                <>
+                  {carHourlyRate || 0} <sub>/H</sub>
+                </>
+              </Td>
+              <Td textAlign="center" width="25%" bg={'#f76ba21f'}>
+                {carMonthlyRate && (
+                  <>
+                    {carMonthlyRate} <sub>/M</sub>
+                  </>
+                )}
+              </Td>
+            </Tr>
           </Tbody>
         </Table>
       </TableContainer>

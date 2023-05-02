@@ -254,6 +254,7 @@ export default function BookParking() {
                 <FormControl isRequired>
                   <FormLabel>Vehicle Type</FormLabel>
                   <Select
+                    data-test-id="booking-select"
                     placeholder="Select Vehicle Type"
                     value={vehicleType}
                     onChange={handleVehicleTypeChange}
@@ -296,6 +297,7 @@ export default function BookParking() {
                 <FormControl isRequired>
                   <FormLabel>From</FormLabel>
                   <Select
+                    data-test-id="start-time-select"
                     value={fromTime}
                     onChange={(e) => setFromTime(e.target.value)}
                     placeholder="Start Time"
@@ -310,6 +312,7 @@ export default function BookParking() {
                 <FormControl isRequired>
                   <FormLabel>To</FormLabel>
                   <Select
+                    data-test-id="end-time-select"
                     value={toTime}
                     onChange={(e) => setToTime(e.target.value)}
                     placeholder="End Time"
