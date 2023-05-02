@@ -24,7 +24,7 @@ function SearchLocation({ map }) {
     }
     const fetchLocations = async () => {
       const response = await axios.get(
-        `https://barikoi.xyz/v1/api/search/verify/autocomplete/NDY2Njo0Q1NGM05IS00w/place?q=${searchValue}`
+        `https://barikoi.xyz/v1/api/search/verify/autocomplete/NDY5OTo5T1VLUDVSMjJL/place?q=${searchValue}`
       );
       setLocations(response.data);
     };
