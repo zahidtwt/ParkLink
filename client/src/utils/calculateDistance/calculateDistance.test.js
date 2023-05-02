@@ -16,7 +16,7 @@ describe('Calculate Distance.', () => {
     expect(result).toBe(mock.testCase1.output);
     expect(typeof result).toBe('number');
   });
-  test('it should return 0.', () => {
+  test('it should return 2088.', () => {
     const result = claculateDistance(...mock.testCase2.input);
     expect(Math.floor(result)).toBe(mock.testCase2.output);
     expect(typeof result).toBe('number');
