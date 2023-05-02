@@ -85,7 +85,7 @@ function PriceBox({ parkingInfo }) {
                   </HStack>
                 </Td>
                 <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
-                  20
+                  {carSlot}
                 </Td>
 
                 <Td textAlign='center' width='25%' bg={'#f76ba21f'}>
