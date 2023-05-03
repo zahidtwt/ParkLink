@@ -1,0 +1,26 @@
+{
+  "include": ["src/**/*"],
+  "exclude": [
+    "cypress",
+    "cypress.config.js",
+    "src/app/*",
+    "tsconfig.json",
+    "node_modules",
+    "build"
+  ],
+  "compilerOptions": {
+    "outDir": "./build/",
+    "sourceMap": true,
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "target": "es5",
+    "lib": ["dom", "es2015", "es2016"],
+    "allowJs": true,
+    "baseUrl": ".",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
+    "paths": {
+      "*": ["src/*"]
+    }
+  }
+}
